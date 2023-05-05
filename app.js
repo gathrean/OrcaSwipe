@@ -19,6 +19,11 @@ app.get('/login', (req, res) => {
   res.render('login');
 })
 
+app.post('/settings', (req, res) => {
+  // update the user's name and pod proximity in our database
+  // not sure how to implement just yet
+});
+
 app.get('*', (req, res) => {
     res.status(404);
     res.render("404");
