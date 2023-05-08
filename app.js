@@ -3,7 +3,7 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const Joi = require("joi");
 const bcrypt = require("bcrypt");
-const { MongoClient } = require("mongodb");
+const { MongoClient, ObjectId } = require("mongodb");
 const url = require("url");
 require("dotenv").config();
 const ejs = require("ejs");
@@ -70,7 +70,6 @@ app.post("/signup", async (req, res) => {
     email: Joi.string().email().required(),
     password: Joi.string().min(6).max(50).required(),
   });
-
   const validationResult = schema.validate(req.body);
 
   if (validationResult.error) {
@@ -82,10 +81,12 @@ app.post("/signup", async (req, res) => {
         name: req.body.name,
         email: req.body.email,
         password: hashedPassword,
+        admin: false
       };
       const result = await usersCollection.insertOne(newUser);
       req.session.loggedIn = true;
       req.session.username = newUser.name;
+      req.session.email = newUser.email;
       res.redirect("/");
     } catch (error) {
       res.status(500).send("Error signing up.");
@@ -113,6 +114,7 @@ app.post("/login", async (req, res) => {
       if (user && (await bcrypt.compare(req.body.password, user.password))) {
         req.session.loggedIn = true;
         req.session.username = user.name;
+        req.session.email = user.email;
         res.redirect("/");
       } else {
         res.status(401).send("Incorrect email or password.<br><a href='/login'>Go back to log in</a>");
@@ -133,6 +135,41 @@ app.get("/logout", (req, res) => {
     }
   });
 });
+
+app.get("/admin", async (req, res) => {
+  if (req.session.loggedIn) {
+    const currentUser = await usersCollection.findOne({ email: req.session.email });
+    if (currentUser && currentUser.admin) {
+      const users = await usersCollection.find({}).toArray();
+      res.render("admin", { users: users });
+    } else {
+      res.status(403).send("You must be an admin to access this page.<br><a href='/'>Go back to home page</a>");
+    }
+  } else {
+    res.status(403).send("You must be logged in to access this page.<br><a href='/'>Go back to home page</a>");
+  }
+});
+
+app.get("/promote/:userId", async (req, res) => {
+  const userId = req.params.userId;
+  try {
+    await usersCollection.updateOne({ _id: new ObjectId(userId) }, { $set: { admin: true } });
+    res.redirect("/admin");
+  } catch (error) {
+    res.status(500).send("Error promoting user.");
+  }
+});
+
+app.get("/demote/:userId", async (req, res) => {
+  const userId = req.params.userId;
+  try {
+    await usersCollection.updateOne({ _id: new ObjectId(userId) }, { $set: { admin: false } });
+    res.redirect("/admin");
+  } catch (error) {
+    res.status(500).send("Error demoting user.");
+  }
+});
+
 
 app.post('/settings', (req, res) => {
   // update the user's name and pod proximity in our database
