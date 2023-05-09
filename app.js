@@ -96,8 +96,8 @@ app.post('/sendResetEmail', async (req, res) => {
   if (validationResult.error) {
     res.render('error.ejs', {link: 'resetPassword', error: validationResult.error});
   } else {
-    const user = await usersCollection.findOne({ email: email });
-    if (user.length != 1) {
+    const user = await usersCollection.find({ email: email });
+    if (user == null) {
       res.render('error', { link: 'resetPassword', error: 'Email is not registered.' })
     } else {
       const resetCode = Math.random().toString(36).substring(2, 8);;
@@ -107,11 +107,14 @@ app.post('/sendResetEmail', async (req, res) => {
         to: email,
         subject: 'OrcaSwipe - Reset Your Password',
         html: `<a href="${target}">Reset Your Password</a>`
+        
       };
-      await user.updateOne({ resetCode: resetCode, resetExpiry: Date.now() + resetExpiryTime });
+      await usersCollection.updateOne(
+        {email: email},
+        {$set: {resetCode: resetCode, resetExpiry: Date.now() + resetExpiryTime}});
       await mailer.sendMail(mailOptions, function (error, info) {
         var result = error ? error : 'Email sent! Check your inbox.'
-        res.render('resetEmailSent');
+        res.render('resetEmailSent', {result: result});
       });
     }
   }
