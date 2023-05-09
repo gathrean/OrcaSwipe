@@ -1,8 +1,11 @@
 <%- include("templates/header") %>
 
 <div class="tabs">
-  <a href="/yourpods" class="tab <%= activeTab === 'yourpods' ? 'active' : '' %>">Your Pods</a>
-  <a href="/createdpods" class="tab <%= activeTab === 'createdpods' ? 'active' : '' %>">Pods You've Created</a>
+  <div style="display: flex; justify-content: space-between; width: 100%;">
+    <a href="/yourpods" class="btn <%= activeTab === 'yourpods' ? 'btn-primary active' : 'btn-secondary' %>" style="flex: 1;">Your Pods</a>
+    <a href="/createdpods" class="btn <%= activeTab === 'createdpods' ? 'btn-primary active' : 'btn-secondary' %>" style="flex: 1;">Pods You've Created</a>
+  </div>
+  
 </div>
 
 <div class="content">
