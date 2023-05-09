@@ -8,6 +8,24 @@ const url = require("url");
 require("dotenv").config();
 const ejs = require("ejs");
 
+const nodemailer = require('nodemailer');
+const appEmail = process.env.EMAIL;
+const appEmailPW = process.env.EMAIL_PASSWORD;
+const mailer = nodemailer.createTransport({
+  service:'gmail',
+  auth:{
+    user: appEmail,
+    pass: appEmailPW
+  }
+});
+
+var mailOptions = {
+  from: appEmail,
+  to: 'asichitiu@my.bcit.ca',
+  subject: 'Sending Email using Node.js',
+  text: 'That was easy!'
+};
+
 const app = express();
 let usersCollection;
 
@@ -64,9 +82,17 @@ app.get("/signup", (req, res) => {
   res.render("signup");
 });
 
-app.get('/reset', async (req, res) => {
-  res.render('reset-password');
-})
+app.get('/resetPassword', async (req, res) => {
+  res.render('resetPassword');
+  mailer.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent:');
+    }
+  });
+});
+
 
 app.post("/signup", async (req, res) => {
   const schema = Joi.object({
