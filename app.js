@@ -171,10 +171,21 @@ app.get("/demote/:userId", async (req, res) => {
 });
 
 
-app.post('/settings', (req, res) => {
-  // update the user's name and pod proximity in our database
-  // not sure how to implement just yet
+app.get("/settings", async (req, res) => {
+  if (req.session.loggedIn) {
+    try {
+      const user = await usersCollection.findOne({ email: req.session.email });
+      res.render("settings", { user: user, currentPage: 'settings' });
+    } catch (error) {
+      res.status(500).send("Error retrieving user data.");
+    }
+  } else {
+    res.status(403).send("You must be logged in to access this page.<br><a href='/'>Go back to home page</a>");
+  }
 });
+
+
+
 
 app.get("/members", (req, res) => {
   if (req.session.loggedIn) {
@@ -202,10 +213,6 @@ app.get("/createdpods", (req, res) => {
 
 // app.get("/profile", (req, res) => {
 //   res.render("profile", { currentPage: 'profile', currentPage: 'profile' });
-// });
-
-// app.get("/settings", (req, res) => {
-//   res.render("settings", { currentPage: 'settings', currentPage: 'settings' });
 // });
 
 app.get('*', (req, res) => {
