@@ -19,13 +19,6 @@ const mailer = nodemailer.createTransport({
   }
 });
 
-var mailOptions = {
-  from: appEmail,
-  to: 'asichitiu@my.bcit.ca',
-  subject: 'Sending Email using Node.js',
-  text: 'That was easy!'
-};
-
 const app = express();
 let usersCollection;
 
@@ -52,7 +45,7 @@ MongoClient.connect(uri, { useUnifiedTopology: true })
   });
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
 app.use(express.static("public"));
 
 var mongoStore = MongoStore.create({
@@ -84,12 +77,27 @@ app.get("/signup", (req, res) => {
 
 app.get('/resetPassword', async (req, res) => {
   res.render('resetPassword');
-  mailer.sendMail(mailOptions, function(error, info){
+});
+
+app.post('/sendResetEmail', async (req, res) => {
+  const email = req.body.resetEmail;
+  console.log(email);
+
+  var mailOptions = {
+    from: appEmail,
+    to: email,
+    subject: 'OrcaSwipe - Reset Your Password',
+    html: '<a href="/login"></a>'
+  };
+
+  await mailer.sendMail(mailOptions, function(error, info){
+    var result;
     if (error) {
-      console.log(error);
+      result = error;
     } else {
-      console.log('Email sent:');
+      result = 'Email sent! Check your inbox.'
     }
+    res.render('resetEmailSent', {result: result});
   });
 });
 
