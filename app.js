@@ -185,12 +185,8 @@ app.get("/members", (req, res) => {
 });
 
 
-app.get("/yourpods", (req, res) => {
-  res.render("pods", { activeTab: "yourpods" });
-});
-
-app.get("/createdpods", (req, res) => {
-  res.render("pods", { activeTab: "createdpods" });
+app.get("/pods", (req, res) => {
+  res.render("pods");
 });
 
 
