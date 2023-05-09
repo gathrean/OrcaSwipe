@@ -184,6 +184,17 @@ app.get("/members", (req, res) => {
   }
 });
 
+
+app.get("/yourpods", (req, res) => {
+  res.render("pods", { activeTab: "yourpods" });
+});
+
+app.get("/createdpods", (req, res) => {
+  res.render("pods", { activeTab: "createdpods" });
+});
+
+
+
 app.get('*', (req, res) => {
   res.status(404);
   res.render("404");
