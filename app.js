@@ -64,6 +64,10 @@ app.get("/signup", (req, res) => {
   res.render("signup");
 });
 
+app.get('/reset', async (req, res) => {
+  res.render('reset-password');
+})
+
 app.post("/signup", async (req, res) => {
   const schema = Joi.object({
     name: Joi.string().max(50).required(),
