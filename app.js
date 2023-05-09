@@ -70,11 +70,11 @@ app.use(
 );
 
 app.get("/", (req, res) => {
-  res.render("home", { loggedIn: req.session.loggedIn, username: req.session.username });
+  res.render("home", { loggedIn: req.session.loggedIn, username: req.session.username, currentPage: 'home' });
 });
 
 app.get("/signup", (req, res) => {
-  res.render("signup");
+  res.render("signup", { currentPage: 'signup' });
 });
 
 app.get('/resetPassword', (req, res) => {
@@ -191,8 +191,9 @@ app.post("/signup", async (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-  res.render("login");
+  res.render("login", { currentPage: 'login' });
 });
+
 
 app.post("/login", async (req, res) => {
   const schema = Joi.object({
@@ -267,10 +268,21 @@ app.get("/demote/:userId", async (req, res) => {
 });
 
 
-app.post('/settings', (req, res) => {
-  // update the user's name and pod proximity in our database
-  // not sure how to implement just yet
+app.get("/settings", async (req, res) => {
+  if (req.session.loggedIn) {
+    try {
+      const user = await usersCollection.findOne({ email: req.session.email });
+      res.render("settings", { user: user, currentPage: 'settings' });
+    } catch (error) {
+      res.status(500).send("Error retrieving user data.");
+    }
+  } else {
+    res.status(403).send("You must be logged in to access this page.<br><a href='/'>Go back to home page</a>");
+  }
 });
+
+
+
 
 app.get("/members", (req, res) => {
   if (req.session.loggedIn) {
@@ -279,6 +291,26 @@ app.get("/members", (req, res) => {
     res.status(403).send("You must be logged in to access the members area.<br><a href='/'>Go back to home page</a>");
   }
 });
+
+
+app.get("/pods", (req, res) => {
+  res.render("pods", { activeTab: 'yourpods', currentPage: 'pods' });
+});
+
+
+
+app.get("/yourpods", (req, res) => {
+  res.render("pods", { activeTab: 'yourpods', currentPage: 'pods' });
+});
+
+app.get("/createdpods", (req, res) => {
+  res.render("pods", { activeTab: 'createdpods', currentPage: 'pods' });
+});
+
+
+// app.get("/profile", (req, res) => {
+//   res.render("profile", { currentPage: 'profile', currentPage: 'profile' });
+// });
 
 app.get('*', (req, res) => {
   res.status(404);

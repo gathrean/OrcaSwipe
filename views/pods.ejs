@@ -1,0 +1,21 @@
+<%- include("templates/header") %>
+
+<div class="tabs">
+  <div style="display: flex; justify-content: space-between; width: 100%;">
+    <a href="/yourpods" class="btn <%= activeTab === 'yourpods' ? 'btn-primary active' : 'btn-secondary' %>" style="flex: 1;">Your Pods</a>
+    <a href="/createdpods" class="btn <%= activeTab === 'createdpods' ? 'btn-primary active' : 'btn-secondary' %>" style="flex: 1;">Pods You've Created</a>
+  </div>
+  
+</div>
+
+<div class="content">
+  <% if (activeTab === 'yourpods') { %>
+    <h1>Your Pods</h1>
+   <!-- content to be added later-->
+  <% } else { %>
+    <h1>Pods You've Created</h1>
+   <!-- content to be added later-->
+  <% } %>
+</div>
+
+<%- include("templates/footer") %>
