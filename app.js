@@ -11,9 +11,11 @@ const ejs = require("ejs");
 const nodemailer = require('nodemailer');
 const appEmail = process.env.EMAIL;
 const appEmailPW = process.env.EMAIL_APP_PASSWORD;
+const hostURL = process.env.HOST_URL
+const resetExpiryTime = 10 * 60 * 1000;
 const mailer = nodemailer.createTransport({
-  service:'gmail',
-  auth:{
+  service: 'gmail',
+  auth: {
     user: appEmail,
     pass: appEmailPW
   }
@@ -68,38 +70,58 @@ app.use(
 );
 
 app.get("/", (req, res) => {
-  res.render("home", {loggedIn: req.session.loggedIn, username: req.session.username});
+  res.render("home", { loggedIn: req.session.loggedIn, username: req.session.username });
 });
 
 app.get("/signup", (req, res) => {
   res.render("signup");
 });
 
-app.get('/resetPassword', async (req, res) => {
+app.get('/resetPassword', (req, res) => {
   res.render('resetPassword');
 });
 
+app.post('updatePassword', async (req, res) => {
+  var email = req.params.email;
+  var code = req.params.code;
+})
+
 app.post('/sendResetEmail', async (req, res) => {
   const email = req.body.resetEmail;
-  console.log(email);
-
-  var mailOptions = {
-    from: appEmail,
-    to: email,
-    subject: 'OrcaSwipe - Reset Your Password',
-    html: '<a href="/login"></a>'
-  };
-
-  await mailer.sendMail(mailOptions, function(error, info){
-    var result;
-    if (error) {
-      result = error;
-    } else {
-      result = 'Email sent! Check your inbox.'
-    }
-    res.render('resetEmailSent', {result: result});
+  const schema = Joi.object({
+    resetEmail: Joi.string().email().required().max(50)
   });
+  const validationResult = schema.validate(req.body);
+
+  if (validationResult.error) {
+    res.render('error.ejs', {link: 'resetPassword', error: validationResult.error});
+  } else {
+    const user = await usersCollection.findOne({ email: email });
+    if (user.length != 1) {
+      res.render('error', { link: 'resetPassword', error: 'Email is not registered.' })
+    } else {
+      const resetCode = Math.random().toString(36).substring(2, 8);;
+      const target = `${hostURL}updatePassword?email=${email}&code=${resetCode}`;
+      var mailOptions = {
+        from: appEmail,
+        to: email,
+        subject: 'OrcaSwipe - Reset Your Password',
+        html: `<a href="${target}">Reset Your Password</a>`
+      };
+      await user.updateOne({ resetCode: resetCode, resetExpiry: Date.now() + resetExpiryTime });
+      await mailer.sendMail(mailOptions, function (error, info) {
+        var result = error ? error : 'Email sent! Check your inbox.'
+        res.render('resetEmailSent');
+      });
+    }
+  }
 });
+
+app.get('/updatePassword', async (req, res) => {
+  res.render('updatePassword');
+})
+
+
 
 
 app.post("/signup", async (req, res) => {
@@ -216,7 +238,7 @@ app.post('/settings', (req, res) => {
 
 app.get("/members", (req, res) => {
   if (req.session.loggedIn) {
-    res.render("members", {username: req.session.username });
+    res.render("members", { username: req.session.username });
   } else {
     res.status(403).send("You must be logged in to access the members area.<br><a href='/'>Go back to home page</a>");
   }
@@ -230,4 +252,3 @@ app.get('*', (req, res) => {
 app.listen(3000, () => {
   console.log('server is running on port 3000');
 });
-
