@@ -81,9 +81,40 @@ app.get('/resetPassword', (req, res) => {
   res.render('resetPassword');
 });
 
-app.post('updatePassword', async (req, res) => {
+app.get('/createNewPassword', async (req, res) => {
   var email = req.params.email;
   var code = req.params.code;
+  res.render('createNewPassword', {code: code, email: email});
+})
+
+app.post('/submitPassword', async (req, res) => {
+  const email = req.body.email;
+  console.log(email)
+  const code = req.body.code;
+  const password = req.body.password;
+  const schema = Joi.object({
+    email: Joi.string().email().required().max(50),
+    code: Joi.string().required().max(50),
+    password: Joi.string().required().max(50)
+  });
+  const validationResult = schema.validate(req.body);
+  if (validationResult.error){
+    res.render('error', {link: 'createNewPassword', error: validationResult.error});
+  } else {
+    
+    const user = await usersCollection.findOne({
+      $and: [
+      {email: email},
+      {resetCode: code}
+      ]});
+    if (Date.now() < user.resetExpiry){
+      var newPassword = await bcrypt.hash(req.body.password, 10);
+      await usersCollection.updateOne({email: email}, {$set: {password: newPassword}});
+      res.redirect('/login');
+    } else {
+      res.render('error', {link: "/resetPassword", error: 'Reset has expired, please try again.'})
+    }
+  }
 })
 
 app.post('/sendResetEmail', async (req, res) => {
@@ -98,7 +129,7 @@ app.post('/sendResetEmail', async (req, res) => {
   } else {
     const user = await usersCollection.find({ email: email });
     if (user == null) {
-      res.render('error', { link: 'resetPassword', error: 'Email is not registered.' })
+      res.render('error', {link: 'resetPassword', error: 'Email is not registered.'})
     } else {
       const resetCode = Math.random().toString(36).substring(2, 8);;
       const target = `${hostURL}updatePassword?email=${email}&code=${resetCode}`;
@@ -121,7 +152,9 @@ app.post('/sendResetEmail', async (req, res) => {
 });
 
 app.get('/updatePassword', async (req, res) => {
-  res.render('updatePassword');
+  const code = req.query.code;
+  const email = req.query.email;
+  res.render('updatePassword', {code: code, email: email});
 })
 
 
