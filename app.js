@@ -10,7 +10,7 @@ const ejs = require("ejs");
 
 const nodemailer = require('nodemailer');
 const appEmail = process.env.EMAIL;
-const appEmailPW = process.env.EMAIL_PASSWORD;
+const appEmailPW = process.env.EMAIL_APP_PASSWORD;
 const mailer = nodemailer.createTransport({
   service:'gmail',
   auth:{
