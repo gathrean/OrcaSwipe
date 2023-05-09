@@ -61,8 +61,9 @@ app.get("/", (req, res) => {
 });
 
 app.get("/signup", (req, res) => {
-  res.render("signup");
+  res.render("signup", { currentPage: 'signup' });
 });
+
 
 app.post("/signup", async (req, res) => {
   const schema = Joi.object({
@@ -95,8 +96,9 @@ app.post("/signup", async (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-  res.render("login");
+  res.render("login", { currentPage: 'login' });
 });
+
 
 app.post("/login", async (req, res) => {
   const schema = Joi.object({
