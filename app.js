@@ -57,7 +57,7 @@ app.use(
 );
 
 app.get("/", (req, res) => {
-  res.render("home", {loggedIn: req.session.loggedIn, username: req.session.username});
+  res.render("home", { loggedIn: req.session.loggedIn, username: req.session.username, currentPage: 'home' });
 });
 
 app.get("/signup", (req, res) => {
@@ -186,19 +186,27 @@ app.get("/members", (req, res) => {
 
 
 app.get("/pods", (req, res) => {
-  res.render("pods", { activeTab: 'yourpods' });
+  res.render("pods", { activeTab: 'yourpods', currentPage: 'pods' });
 });
+
 
 
 app.get("/yourpods", (req, res) => {
-  res.render("pods", { activeTab: 'yourpods' });
+  res.render("pods", { activeTab: 'yourpods', currentPage: 'pods' });
 });
 
 app.get("/createdpods", (req, res) => {
-  res.render("pods", { activeTab: 'createdpods' });
+  res.render("pods", { activeTab: 'createdpods', currentPage: 'pods' });
 });
 
 
+// app.get("/profile", (req, res) => {
+//   res.render("profile", { currentPage: 'profile', currentPage: 'profile' });
+// });
+
+// app.get("/settings", (req, res) => {
+//   res.render("settings", { currentPage: 'settings', currentPage: 'settings' });
+// });
 
 app.get('*', (req, res) => {
   res.status(404);
