@@ -108,6 +108,9 @@ app.post('/submitPassword', async (req, res) => {
       {email: email},
       {resetCode: code}
       ]});
+    if (user == null){
+      res.render('error', {link: "/resetPassword", error: 'Reset code is invalid, please try again.'});;
+    }
     if (Date.now() < user.resetExpiry){
       var newPassword = await bcrypt.hash(req.body.password, 10);
       await usersCollection.updateOne({email: email}, {$set: {password: newPassword}});
@@ -116,6 +119,7 @@ app.post('/submitPassword', async (req, res) => {
       res.render('error', {link: "/resetPassword", error: 'Reset has expired, please try again.'})
     }
   }
+  
 })
 
 app.post('/sendResetEmail', async (req, res) => {
