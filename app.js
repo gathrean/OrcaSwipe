@@ -266,7 +266,7 @@ app.get("/admin", async (req, res) => {
     const currentUser = await usersCollection.findOne({ email: req.session.email });
     if (currentUser && currentUser.admin) {
       const users = await usersCollection.find({}).toArray();
-      res.render("admin", { users: users });
+      res.render("admin", { users: users, currentPage: 'admin' });
     } else {
       res.status(403).send("You must be an admin to access this page.<br><a href='/'>Go back to home page</a>");
     }
@@ -309,12 +309,9 @@ app.get("/settings", async (req, res) => {
   }
 });
 
-
-
-
 app.get("/members", (req, res) => {
   if (req.session.loggedIn) {
-    res.render("members", { username: req.session.username });
+    res.render("members", { username: req.session.username, currentPage: 'members' });
   } else {
     res.status(403).send("You must be logged in to access the members area.<br><a href='/'>Go back to home page</a>");
   }
