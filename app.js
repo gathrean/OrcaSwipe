@@ -118,7 +118,7 @@ app.post('/submitPassword', async (req, res) => {
 })
 
 app.post('/sendResetEmail', async (req, res) => {
-  const email = req.body.resetEmail;
+  const email = req.body.rese4tEmail;
   const schema = Joi.object({
     resetEmail: Joi.string().email().required().max(50)
   });
@@ -157,6 +157,34 @@ app.get('/updatePassword', async (req, res) => {
   res.render('updatePassword', {code: code, email: email});
 })
 
+app.post("/updateSettings", async (req, res) => {
+  if (req.session.loggedIn) {
+    const schema = Joi.object({
+      name: Joi.string().max(50).required(),
+      podProximity: Joi.number().min(0).max(1000).required(),
+    });
+
+    const validationResult = schema.validate(req.body);
+
+    if (validationResult.error) {
+      res.status(400).send(validationResult.error.details[0].message + "<br><a href='/settings'>Go back to settings</a>");
+    } else {
+      try {
+        const updatedUser = {
+          name: req.body.name,
+          podProximity: req.body.podProximity,
+        };
+        await usersCollection.updateOne({ email: req.session.email }, { $set: updatedUser });
+        req.session.username = updatedUser.name;
+        res.redirect("/settings");
+      } catch (error) {
+        res.status(500).send("Error updating user settings.<br><a href='/settings'>Go back to settings</a>");
+      }
+    }
+  } else {
+    res.status(403).send("You must be logged in to update your settings.<br><a href='/'>Go back to home page</a>");
+  }
+});
 
 
 
