@@ -31,6 +31,7 @@ const mongodb_database = process.env.MONGODB_DATABASE;
 const node_session_secret = process.env.NODE_SESSION_SECRET;
 const mongodb_session_secret = process.env.MONGODB_SESSION_SECRET;
 const hashedPassword = process.env.HASHED_PASSWORD;
+const PORT = process.env.PORT || 3000;
 
 app.set("view engine", "ejs");
 
@@ -342,6 +343,6 @@ app.get('*', (req, res) => {
   res.render("404");
 });
 
-app.listen(3000, () => {
+app.listen(PORT, () => {
   console.log('server is running on port 3000');
 });
