@@ -1,6 +1,6 @@
 <%- include("templates/header") %>
 <header class="d-flex justify-content-center py-3">
-    <form action="/login" method="post">
+    <form>
         <div class="mb-3">
           <label class="form-label">Email address</label>
           <input type="email" class="form-control" name="email">
@@ -10,7 +10,8 @@
           <label class="form-label">Password</label>
           <input type="password" class="form-control" name="password">
         </div>
-        <button type="submit" class="btn btn-primary" value="Submit">Log In</button>
-      </form>
-</header>
+        <button type="submit" class="btn btn-primary" value="Submit" formaction="/login" formmethod="post">Log In</button>
+        <button type="submit" class="btn btn-primary" formaction="/resetPassword" formmethod="get">Forgot Your Password?</button>
+    </form>
+  </header>
 <%- include("templates/footer") %>
