@@ -119,7 +119,7 @@ app.post('/submitPassword', async (req, res) => {
 })
 
 app.post('/sendResetEmail', async (req, res) => {
-  const email = req.body.rese4tEmail;
+  const email = req.body.resetEmail;
   const schema = Joi.object({
     resetEmail: Joi.string().email().required().max(50)
   });
