@@ -25,7 +25,9 @@
     <input type="password" id="newPassword" name="newPassword"><br> -->
 
     <label for="birthday">Birthday:</label><br>
-    <input type="date" id="birthday" name="birthday" value="<%= user.birthday instanceof Date ? user.birthday.toISOString().split('T')[0] : '' %>">
+<input type="date" id="birthday" name="birthday" value="<%= user.birthday instanceof Date ? user.birthday.toISOString().split('T')[0] : '' %>">
+<p id="formattedBirthday"><%= user.birthday instanceof Date ? user.birthday.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : '' %></p>
+
 
     <br>
 

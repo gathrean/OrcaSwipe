@@ -366,6 +366,21 @@ app.get("/editProfile", async (req, res) => {
 });
 
 
+app.get("/viewProfile", async (req, res) => {
+  if (req.session.loggedIn) {
+    try {
+      const user = await usersCollection.findOne({ email: req.session.email });
+      res.render('viewProfile', { user: user });
+
+    } catch (error) {
+      res.status(500).send("Error retrieving user data.");
+    }
+  } else {
+    res.status(403).send("You must be logged in to access this page.<br><a href='/'>Go back to home page</a>");
+  }
+});
+
+
 app.post("/updateProfile", async (req, res) => {
   if (req.session.loggedIn) {
     const schema = Joi.object({
