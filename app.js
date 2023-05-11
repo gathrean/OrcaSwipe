@@ -195,6 +195,7 @@ app.post("/updateSettings", async (req, res) => {
 
 app.post("/signup", async (req, res) => {
   const schema = Joi.object({
+    username: Joi.string().max(50).required(),
     name: Joi.string().max(50).required(),
     email: Joi.string().email().required(),
     password: Joi.string().min(6).max(50).required(),
@@ -207,6 +208,7 @@ app.post("/signup", async (req, res) => {
     try {
       const hashedPassword = await bcrypt.hash(req.body.password, 10);
       const newUser = {
+        username: req.body.username,
         name: req.body.name,
         email: req.body.email,
         password: hashedPassword,
@@ -230,7 +232,7 @@ app.get("/login", (req, res) => {
 
 app.post("/login", async (req, res) => {
   const schema = Joi.object({
-    email: Joi.string().email().required(),
+    username: Joi.string().required(),
     password: Joi.string().min(6).max(50).required(),
   });
 
@@ -240,14 +242,14 @@ app.post("/login", async (req, res) => {
     res.status(400).send(validationResult.error.details[0].message + "<br><a href='/login'>Go back to log in</a>");
   } else {
     try {
-      const user = await usersCollection.findOne({ email: req.body.email });
+      const user = await usersCollection.findOne({ username: req.body.username });
       if (user && (await bcrypt.compare(req.body.password, user.password))) {
         req.session.loggedIn = true;
         req.session.username = user.name;
         req.session.email = user.email;
         res.redirect("/");
       } else {
-        res.status(401).send("Incorrect email or password.<br><a href='/login'>Go back to log in</a>");
+        res.status(401).send("Incorrect username and password.<br><a href='/login'>Go back to log in</a>");
       }
     } catch (error) {
       res.status(500).send("Error logging in.<br><a href='/login'>Go back to log in</a>");
