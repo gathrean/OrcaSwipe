@@ -388,7 +388,7 @@ app.post("/updateProfile", async (req, res) => {
             name: req.body.name,
             username: req.body.username,
             email: req.body.email,
-            birthday: req.body.birthday,
+            birthday: new Date(req.body.birthday),
             pronouns: req.body.pronouns,
           };
           await usersCollection.updateOne({ email: req.session.email }, { $set: updatedUser });
