@@ -58,6 +58,9 @@ var mongoStore = MongoStore.create({
   },
 });
 
+// Serve static files from the "views/splash" directory
+app.use('/splash', express.static('views/splash'));
+
 app.use(
   session({
     secret: node_session_secret,
@@ -74,6 +77,27 @@ app.get("/", (req, res) => {
   res.render("home", { loggedIn: req.session.loggedIn, username: req.session.username, currentPage: 'home' });
 });
 
+app.get("/splash", (req, res) => {
+  res.render("splash/splash", { loggedIn: req.session.loggedIn, username: req.session.username, currentPage: 'splash' });
+});
+
+app.post("/splash", (req, res) => {
+  const { action } = req.body;
+
+  if (action === "signup") {
+    // Handle signup logic
+    res.redirect("/signup"); // Redirect to the signup page
+  } else if (action === "login") {
+    // Handle login logic
+    res.redirect("/login"); // Redirect to the login page
+  } else {
+    res.status(400).send("Invalid action");
+  }
+});
+
+
+
+
 app.get("/signup", (req, res) => {
   res.render("splash/signup", { currentPage: 'signup' });
 });
@@ -85,7 +109,7 @@ app.get('/resetPassword', (req, res) => {
 app.get('/createNewPassword', async (req, res) => {
   var email = req.params.email;
   var code = req.params.code;
-  res.render('createNewPassword', {code: code, email: email});
+  res.render('createNewPassword', { code: code, email: email });
 })
 
 app.post('/submitPassword', async (req, res) => {
@@ -99,27 +123,28 @@ app.post('/submitPassword', async (req, res) => {
     password: Joi.string().required().max(50)
   });
   const validationResult = schema.validate(req.body);
-  if (validationResult.error){
-    res.render('error', {link: 'createNewPassword', error: validationResult.error});
+  if (validationResult.error) {
+    res.render('error', { link: 'createNewPassword', error: validationResult.error });
   } else {
-    
+
     const user = await usersCollection.findOne({
       $and: [
-      {email: email},
-      {resetCode: code}
-      ]});
-    if (user == null){
-      res.render('error', {link: "/resetPassword", error: 'Reset code is invalid, please try again.'});;
+        { email: email },
+        { resetCode: code }
+      ]
+    });
+    if (user == null) {
+      res.render('error', { link: "/resetPassword", error: 'Reset code is invalid, please try again.' });;
     }
-    if (Date.now() < user.resetExpiry){
+    if (Date.now() < user.resetExpiry) {
       var newPassword = await bcrypt.hash(req.body.password, 10);
-      await usersCollection.updateOne({email: email}, {$set: {password: newPassword}});
+      await usersCollection.updateOne({ email: email }, { $set: { password: newPassword } });
       res.redirect('/login');
     } else {
-      res.render('error', {link: "/resetPassword", error: 'Reset has expired, please try again.'})
+      res.render('error', { link: "/resetPassword", error: 'Reset has expired, please try again.' })
     }
   }
-  
+
 })
 
 app.post('/sendResetEmail', async (req, res) => {
@@ -130,11 +155,11 @@ app.post('/sendResetEmail', async (req, res) => {
   const validationResult = schema.validate(req.body);
 
   if (validationResult.error) {
-    res.render('error.ejs', {link: 'resetPassword', error: validationResult.error});
+    res.render('error.ejs', { link: 'resetPassword', error: validationResult.error });
   } else {
     const user = await usersCollection.find({ email: email });
     if (user == null) {
-      res.render('error', {link: 'resetPassword', error: 'Email is not registered.'})
+      res.render('error', { link: 'resetPassword', error: 'Email is not registered.' })
     } else {
       const resetCode = Math.random().toString(36).substring(2, 8);;
       const target = `${hostURL}updatePassword?email=${email}&code=${resetCode}`;
@@ -143,14 +168,14 @@ app.post('/sendResetEmail', async (req, res) => {
         to: email,
         subject: 'OrcaSwipe - Reset Your Password',
         html: `<a href="${target}">Reset Your Password</a>`
-        
+
       };
       await usersCollection.updateOne(
-        {email: email},
-        {$set: {resetCode: resetCode, resetExpiry: Date.now() + resetExpiryTime}});
+        { email: email },
+        { $set: { resetCode: resetCode, resetExpiry: Date.now() + resetExpiryTime } });
       await mailer.sendMail(mailOptions, function (error, info) {
         var result = error ? error : 'Email sent! Check your inbox.'
-        res.render('resetEmailSent', {result: result});
+        res.render('resetEmailSent', { result: result });
       });
     }
   }
@@ -159,7 +184,7 @@ app.post('/sendResetEmail', async (req, res) => {
 app.get('/updatePassword', async (req, res) => {
   const code = req.query.code;
   const email = req.query.email;
-  res.render('updatePassword', {code: code, email: email});
+  res.render('updatePassword', { code: code, email: email });
 })
 
 app.post("/updateSettings", async (req, res) => {
