@@ -1,27 +1,31 @@
 <%- include("splash-header") %>
+    <div class="container">
+        <header class="d-flex justify-content-center py-3">
+            <form class="login-form">
+                <h1>Let's get started</h1>
+                <div class="mb-3">
+                    <label class="form-label">Username</label>
+                    <input type="text" class="form-control" name="name" placeholder="Username">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Email address</label>
+                    <input type="email" class="form-control" name="email">
+                    <div class="form-text">We'll never share your email with anyone else.</div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-control" name="password">
+                </div>
+            </form>
+        </header>
 
-    <header class="d-flex justify-content-center py-3">
-        <form>
-            <h1>Let's get started</h1>
+        <header class="d-flex justify-content-center py-3">
+            <button type="submit" class="btn white-button" value="Sign up" formmethod="post">Sign up</button>
+        </header>
 
-            <div class="mb-3">
-                <label class="form-label">Username</label>
-                <input type="text" class="form-control" name="name" placeholder="Username">
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Email address</label>
-                <input type="email" class="form-control" name="email">
-                <div class="form-text">We'll never share your email with anyone else.</div>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Password</label>
-                <input type="password" class="form-control" name="password">
-            </div>
-
-            <input type="submit" value="Create account" class="btn btn-primary">
-
-        </form>
-    </header>
+        <div class="d-flex justify-content-center">
+            <a href="/splash" class="btn btn-link return-button">Go back</a>
+        </div>
+        <br>
+    </div>
     <%- include("splash-footer") %>
