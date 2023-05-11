@@ -75,7 +75,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/signup", (req, res) => {
-  res.render("signup", { currentPage: 'signup' });
+  res.render("splash/signup", { currentPage: 'signup' });
 });
 
 app.get('/resetPassword', (req, res) => {
@@ -224,7 +224,7 @@ app.post("/signup", async (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-  res.render("login", { currentPage: 'login' });
+  res.render("splash/login", { currentPage: 'login' });
 });
 
 
