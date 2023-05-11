@@ -1,13 +1,24 @@
 <%- include("templates/header") %>
-    <h1>Profile</h1>
+    <h1>User Profile</h1>
 
-    <form id="profile-form" action="/updateProfile" method="POST">
+  <div class="user-profile">
+    <h2><%= user.name %></h2>
+    <h3><%= user.username %></h3>
+    <h4><%= user.pronouns %></h4>
+  </div>
+
+  <div class="profile-actions">
+    <button onclick="window.location.href='/profileDetails'">View Profile Details</button>
+    <button onclick="window.location.href='/editProfile'">Edit Profile Details</button>
+  </div>
+
+    <!-- <form id="profile-form" action="/updateProfile" method="POST">
         <div>
             <label for="name">Edit Name:</label>
             <input type="text" id="name" name="name" value="<%= user.name %>" required>
         </div>
 
-        <button type="submit">Save Changes</button>
+
     </form>
 
     <div id="user-info">
@@ -18,5 +29,9 @@
         <p><strong>Email:</strong> <%= user.email %></p>
         <p><strong>Age:</strong> <%= user.age %></p>
     </div>
+
+    <button type="submit">Save Changes</button> -->
+
+
 
 <%- include("templates/footer") %>
