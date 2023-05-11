@@ -339,6 +339,10 @@ app.get("/createdpods", (req, res) => {
   res.render("pods", { activeTab: 'createdpods', currentPage: 'pods' });
 });
 
+app.get("/findPods", (req, res) => {
+  res.render('findPods');
+})
+
 
 // app.get("/profile", (req, res) => {
 //   res.render("profile", { currentPage: 'profile', currentPage: 'profile' });
