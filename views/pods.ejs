@@ -9,13 +9,22 @@
 </div>
 
 <div class="content">
-  <% if (activeTab === 'yourpods') { %>
-    <h1>Your Pods</h1>
-   <!-- content to be added later-->
+  <% if (activeTab === 'createdpods') { %>
+    <h1>Pods you've created!</h1>
+    <a href="/createpod"><button>Create a pod!</button></a>
+  
+    <% createdPods.forEach(function(pod) { %>
+      <div class="card">
+        <h2><%= pod.name %></h2>
+        <p><%= pod.eventDescription %></p>
+        <!-- add more pod details here -->
+      </div>
+    <% }); %>
+  
   <% } else { %>
-    <h1>Pods You've Created</h1>
-   <!-- content to be added later-->
-  <% } %>
+    <h1>Pods you're attending!</h1>
+    <!-- content to be added later -->
+  <% } %>  
 </div>
 
 <%- include("templates/footer") %>
