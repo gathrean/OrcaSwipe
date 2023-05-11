@@ -347,7 +347,10 @@ app.get("/findPods", (req, res) => {
 
 app.get('/getPods', async (req, res) => {
   var pods = await podsCollection.find().project().toArray();
-  res.json(JSON.stringify(pods));
+  for (var i = 0; i < pods.length; i++){
+    pods[i] = JSON.stringify(pods[i]);
+  }
+  res.json(pods);
 })
 
 

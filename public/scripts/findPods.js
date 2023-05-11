@@ -104,9 +104,8 @@ function loadPods(){
     xhttp.onload = () => {
         var fetchedPods = JSON.parse(xhttp.responseText);
         for (var i = 0; i < fetchedPods.length; i++){
-            pods.push(fetchedPods[i]);
+            pods.push(JSON.parse(fetchedPods[i]));
         }
-        console.log(pods);
         populateStack();
     }
     xhttp.open("GET", "getPods");
@@ -120,12 +119,9 @@ function populateStack(){
         var card = `<div class="tinder--card">
                         <img>
                         <h3>${pods[i].name}</h3>
-                        <p>This is a demo for Tinder like swipe cards</p>
+                        <p>${pods[i].eventDescription}</p>
                     </div>`
-        console.log(card);
         $('#stack').append(card);
     }
     initCards();
-    
-
 }
