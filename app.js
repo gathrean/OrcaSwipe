@@ -466,13 +466,6 @@ app.post("/updateProfile", async (req, res) => {
   }
 });
 
-
-
-
-
-
-
-
 app.get('*', (req, res) => {
   res.status(404);
   res.render("404");
