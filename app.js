@@ -259,7 +259,7 @@ app.post("/login", async (req, res) => {
   const schema = Joi.object({
     username: Joi.string().required(),
     password: Joi.string().min(6).max(50).required(),
-  }) = req.body;
+  });
 
   const validationResult = schema.validate(req.body);
 
