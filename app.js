@@ -71,7 +71,7 @@ app.use(
 );
 
 app.get("/", (req, res) => {
-  res.render("home", { loggedIn: req.session.loggedIn, username: req.session.username, currentPage: 'home' });
+  res.render("home", { loggedIn: req.session.loggedIn, name: req.session.name, currentPage: 'home' });
 });
 
 app.get("/signup", (req, res) => {
@@ -180,7 +180,7 @@ app.post("/updateSettings", async (req, res) => {
           podProximity: req.body.podProximity,
         };
         await usersCollection.updateOne({ email: req.session.email }, { $set: updatedUser });
-        req.session.username = updatedUser.name;
+        req.session.name = updatedUser.name;
         res.redirect("/settings");
       } catch (error) {
         res.status(500).send("Error updating user settings.<br><a href='/settings'>Go back to settings</a>");
@@ -216,7 +216,7 @@ app.post("/signup", async (req, res) => {
       };
       const result = await usersCollection.insertOne(newUser);
       req.session.loggedIn = true;
-      req.session.username = newUser.name;
+      req.session.name = newUser.name;
       req.session.email = newUser.email;
       res.redirect("/");
     } catch (error) {
@@ -245,7 +245,7 @@ app.post("/login", async (req, res) => {
       const user = await usersCollection.findOne({ username: req.body.username });
       if (user && (await bcrypt.compare(req.body.password, user.password))) {
         req.session.loggedIn = true;
-        req.session.username = user.name;
+        req.session.name = user.name;
         req.session.email = user.email;
         res.redirect("/");
       } else {
@@ -318,7 +318,7 @@ app.get("/settings", async (req, res) => {
 
 app.get("/members", (req, res) => {
   if (req.session.loggedIn) {
-    res.render("members", { username: req.session.username, currentPage: 'members' });
+    res.render("members", { name: req.session.name, currentPage: 'members' });
   } else {
     res.status(403).send("You must be logged in to access the members area.<br><a href='/'>Go back to home page</a>");
   }
