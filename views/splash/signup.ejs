@@ -1,7 +1,7 @@
 <%- include("splash-header") %>
     <div class="container">
         <header class="d-flex justify-content-center py-3">
-            <form class="login-form">
+            <form action="/signup" method="post" class="login-form">
                 <h1>Let's get started</h1>
                 <div class="mb-3">
                     <label class="form-label">Username</label>
@@ -20,6 +20,7 @@
                     <label class="form-label">Password</label>
                     <input type="password" class="form-control" name="password">
                 </div>
+                <button type="submit" class="btn white-button" value="Sign up" formmethod="post">Sign up</button>
             </form>
         </header>
 
