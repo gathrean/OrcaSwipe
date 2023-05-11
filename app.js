@@ -74,7 +74,7 @@ app.use(
 );
 
 app.get("/", (req, res) => {
-  res.render("home", { loggedIn: req.session.loggedIn, username: req.session.username, currentPage: 'home' });
+  res.render("home", { loggedIn: req.session.loggedIn, name: req.session.name, currentPage: 'home' });
 });
 
 app.get("/splash", (req, res) => {
@@ -205,7 +205,7 @@ app.post("/updateSettings", async (req, res) => {
           podProximity: req.body.podProximity,
         };
         await usersCollection.updateOne({ email: req.session.email }, { $set: updatedUser });
-        req.session.username = updatedUser.name;
+        req.session.name = updatedUser.name;
         res.redirect("/settings");
       } catch (error) {
         res.status(500).send("Error updating user settings.<br><a href='/settings'>Go back to settings</a>");
@@ -220,6 +220,7 @@ app.post("/updateSettings", async (req, res) => {
 
 app.post("/signup", async (req, res) => {
   const schema = Joi.object({
+    username: Joi.string().max(50).required(),
     name: Joi.string().max(50).required(),
     email: Joi.string().email().required(),
     password: Joi.string().min(6).max(50).required(),
@@ -232,6 +233,7 @@ app.post("/signup", async (req, res) => {
     try {
       const hashedPassword = await bcrypt.hash(req.body.password, 10);
       const newUser = {
+        username: req.body.username,
         name: req.body.name,
         email: req.body.email,
         password: hashedPassword,
@@ -239,7 +241,7 @@ app.post("/signup", async (req, res) => {
       };
       const result = await usersCollection.insertOne(newUser);
       req.session.loggedIn = true;
-      req.session.username = newUser.name;
+      req.session.name = newUser.name;
       req.session.email = newUser.email;
       res.redirect("/");
     } catch (error) {
@@ -255,9 +257,9 @@ app.get("/login", (req, res) => {
 
 app.post("/login", async (req, res) => {
   const schema = Joi.object({
-    email: Joi.string().email().required(),
+    username: Joi.string().required(),
     password: Joi.string().min(6).max(50).required(),
-  });
+  }) = req.body;
 
   const validationResult = schema.validate(req.body);
 
@@ -265,14 +267,14 @@ app.post("/login", async (req, res) => {
     res.status(400).send(validationResult.error.details[0].message + "<br><a href='/login'>Go back to log in</a>");
   } else {
     try {
-      const user = await usersCollection.findOne({ email: req.body.email });
+      const user = await usersCollection.findOne({ username: req.body.username });
       if (user && (await bcrypt.compare(req.body.password, user.password))) {
         req.session.loggedIn = true;
-        req.session.username = user.name;
+        req.session.name = user.name;
         req.session.email = user.email;
         res.redirect("/");
       } else {
-        res.status(401).send("Incorrect email or password.<br><a href='/login'>Go back to log in</a>");
+        res.status(401).send("Incorrect username and password.<br><a href='/login'>Go back to log in</a>");
       }
     } catch (error) {
       res.status(500).send("Error logging in.<br><a href='/login'>Go back to log in</a>");
@@ -341,7 +343,7 @@ app.get("/settings", async (req, res) => {
 
 app.get("/members", (req, res) => {
   if (req.session.loggedIn) {
-    res.render("members", { username: req.session.username, currentPage: 'members' });
+    res.render("members", { name: req.session.name, currentPage: 'members' });
   } else {
     res.status(403).send("You must be logged in to access the members area.<br><a href='/'>Go back to home page</a>");
   }
@@ -362,10 +364,73 @@ app.get("/createdpods", (req, res) => {
   res.render("pods", { activeTab: 'createdpods', currentPage: 'pods' });
 });
 
+app.get("/profile", async (req, res) => {
+  if (req.session.loggedIn) {
+    try {
+      const user = await usersCollection.findOne({ email: req.session.email });
+      res.render("profile", { user: user, currentPage: 'profile' });
+    } catch (error) {
+      res.status(500).send("Error retrieving user data.");
+    }
+  } else {
+    res.status(403).send("You must be logged in to access this page.<br><a href='/'>Go back to home page</a>");
+  }
+});
 
-// app.get("/profile", (req, res) => {
-//   res.render("profile", { currentPage: 'profile', currentPage: 'profile' });
-// });
+app.get("/editProfile", async (req, res) => {
+  if (req.session.loggedIn) {
+    try {
+      const user = await usersCollection.findOne({ email: req.session.email });
+      res.render("editProfile", { user: user, currentPage: 'editProfile' });
+    } catch (error) {
+      res.status(500).send("Error retrieving user data.");
+    }
+  } else {
+    res.status(403).send("You must be logged in to access this page.<br><a href='/'>Go back to home page</a>");
+  }
+});
+
+
+app.post("/updateProfile", async (req, res) => {
+  if (req.session.loggedIn) {
+    const schema = Joi.object({
+      name: Joi.string().max(50).optional(),
+      username: Joi.string().max(50).optional(),
+      email: Joi.string().email().optional(),
+      birthday: Joi.date().optional(),
+      pronouns: Joi.string().max(50).optional()
+    });
+
+    const validationResult = schema.validate(req.body);
+
+    if (validationResult.error) {
+      res.status(400).send(validationResult.error.details[0].message + "<br><a href='/editProfile'>Go back to edit profile</a>");
+    } else {
+      try {
+        const user = await usersCollection.findOne({ email: req.session.email });
+        if (user) {
+          const updatedUser = {
+            name: req.body.name,
+            username: req.body.username,
+            email: req.body.email,
+            birthday: new Date(req.body.birthday),
+            pronouns: req.body.pronouns,
+          };
+          await usersCollection.updateOne({ email: req.session.email }, { $set: updatedUser });
+          req.session.name = updatedUser.name;
+          req.session.email = updatedUser.email;
+          res.redirect("/profile");
+        } else {
+          res.status(401).send("User not found.<br><a href='/editProfile'>Go back to edit profile</a>");
+        }
+      } catch (error) {
+        res.status(500).send("Error updating profile.<br><a href='/editProfile'>Go back to edit profile</a>");
+      }
+    }
+  } else {
+    res.status(403).send("You must be logged in to update your profile.<br><a href='/'>Go back to home page</a>");
+  }
+});
 
 app.get('*', (req, res) => {
   res.status(404);
