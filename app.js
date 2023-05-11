@@ -23,6 +23,7 @@ const mailer = nodemailer.createTransport({
 
 const app = express();
 let usersCollection;
+let podsCollection;
 
 const mongodb_user = process.env.MONGODB_USER;
 const mongodb_password = process.env.MONGODB_PASSWORD;
@@ -42,6 +43,7 @@ MongoClient.connect(uri, { useUnifiedTopology: true })
     console.log("Connected to MongoDB");
     const db = client.db("OrcaDB");
     usersCollection = db.collection("users");
+    podsCollection = db.collection('pods');
   })
   .catch((error) => {
     console.error("Error connecting to MongoDB", error);
@@ -341,6 +343,11 @@ app.get("/createdpods", (req, res) => {
 
 app.get("/findPods", (req, res) => {
   res.render('findPods');
+})
+
+app.get('/getPods', async (req, res) => {
+  var pods = await podsCollection.find().project().toArray();
+  res.json(JSON.stringify(pods));
 })
 
 

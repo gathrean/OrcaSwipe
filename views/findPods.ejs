@@ -1,13 +1,44 @@
 <%- include("templates/header") %>
 <link rel="stylesheet" href="/style/findPods.css">
-<header class="d-flex justify-content-center py-3">
-    <div class="stack">
-        <div class="card">Card 1</div>
-        <div class="card">Card 2</div>
-        <div class="card">Card 3</div>
-        <div class="card">Card 4</div>
-        <div class="card">Card 5</div>
+<div class="tinder">
+    <div class="tinder--status">
+      <i class="fa fa-remove"></i>
+      <i class="fa fa-heart"></i>
     </div>
-</header>
+  
+    <div id='stack' class="tinder--cards">
+      <div class="tinder--card">
+        <img>
+        <h3>Demo card 1</h3>
+        <p>This is a demo for Tinder like swipe cards</p>
+      </div>
+      <div class="tinder--card">
+        <img>
+        <h3>Demo card 2</h3>
+        <p>This is a demo for Tinder like swipe cards</p>
+      </div>
+      <div class="tinder--card">
+        <img>
+        <h3>Demo card 3</h3>
+        <p>This is a demo for Tinder like swipe cards</p>
+      </div>
+      <div class="tinder--card">
+        <img>
+        <h3>Demo card 4</h3>
+        <p>This is a demo for Tinder like swipe cards</p>
+      </div>
+      <div class="tinder--card">
+        <img>
+        <h3>Demo card 5</h3>
+        <p>This is a demo for Tinder like swipe cards</p>
+      </div>
+    </div>
+  
+    <div class="tinder--buttons">
+      <button id="nope"><i class="fa fa-remove"></i></button>
+      <button id="love"><i class="fa fa-heart"></i></button>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/hammerjs/2.0.8/hammer.min.js"></script>
 <script src="/scripts/findPods.js"></script>
-    <%- include("templates/footer") %>
+<%- include("templates/footer") %>
