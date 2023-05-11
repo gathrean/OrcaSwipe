@@ -23,6 +23,7 @@ const mailer = nodemailer.createTransport({
 
 const app = express();
 let usersCollection;
+let podsCollection;
 
 const mongodb_user = process.env.MONGODB_USER;
 const mongodb_password = process.env.MONGODB_PASSWORD;
@@ -42,6 +43,7 @@ MongoClient.connect(uri, { useUnifiedTopology: true })
     console.log("Connected to MongoDB");
     const db = client.db("OrcaDB");
     usersCollection = db.collection("users");
+    podsCollection = db.collection("pods");
   })
   .catch((error) => {
     console.error("Error connecting to MongoDB", error);
@@ -191,8 +193,6 @@ app.post("/updateSettings", async (req, res) => {
   }
 });
 
-
-
 app.post("/signup", async (req, res) => {
   const schema = Joi.object({
     username: Joi.string().max(50).required(),
@@ -324,19 +324,78 @@ app.get("/members", (req, res) => {
   }
 });
 
-
-app.get("/pods", (req, res) => {
-  res.render("pods", { activeTab: 'yourpods', currentPage: 'pods' });
-});
-
-
-
 app.get("/yourpods", (req, res) => {
-  res.render("pods", { activeTab: 'yourpods', currentPage: 'pods' });
+  if(req.session.loggedIn) {
+    res.render("pods", { activeTab: 'yourpods', currentPage: 'pods' });
+  } else {
+    res.status(403).send("You must be logged in to access the pods page.<br><a href='/'>Go back to home page</a>")
+  }
 });
 
-app.get("/createdpods", (req, res) => {
-  res.render("pods", { activeTab: 'createdpods', currentPage: 'pods' });
+app.get("/createdpods", async (req, res) => {
+  if(req.session.loggedIn) {
+    try {
+      const createdPods = await podsCollection.find({ creator: req.session.email }).toArray();
+      res.render("pods", { activeTab: 'createdpods', currentPage: 'pods', createdPods: createdPods });
+    } catch (error) {
+      res.status(500).send("Error retrieving created pods.<br><a href='/'>Go back to home page</a>")
+    }
+  } else {
+    res.status(403).send("You must be logged in to access the create pods page.<br><a href='/'>Go back to home page</a>")
+  }
+});
+
+
+app.get("/createpod", (req, res) => {
+  if(req.session.loggedIn) {
+    res.render("createpod", { currentPage: 'pods'});
+  }
+});
+
+app.post("/createpod", async (req, res) => {
+  if(req.session.loggedIn) {
+    let { name, event1, event2, event3, eventDescription } = req.body;
+
+    // If the event is in req.body, it was checked. Otherwise, it was not.
+    const tags = {
+      outdoors: !!event1,
+      music: !!event2,
+      sports: !!event3
+    };
+
+    const creator = req.session.email;
+    let attenders = 0;
+
+    const newPod = { name, tags, eventDescription, attenders, creator };
+    
+    // use Joi to validate data
+    const schema = Joi.object({
+      name: Joi.string().required(),
+      tags: Joi.object({
+        outdoors: Joi.boolean(),
+        music: Joi.boolean(),
+        sports: Joi.boolean()
+      }),
+      eventDescription: Joi.string().required(),
+      attenders: Joi.number().integer().min(0),
+      creator: Joi.string()
+    });
+
+    const validationResult = schema.validate(newPod);
+
+    if (validationResult.error) {
+      res.status(400).send(validationResult.error.details[0].message + "<br><a href='/createpod'>Go back</a>");
+    } else {
+      try {
+        const result = await podsCollection.insertOne(newPod);
+        res.redirect("/yourpods");
+      } catch (error) {
+        res.status(500).send("Error creating pod.<br><a href='/createpod'>Go back</a>");
+      }
+    }
+  } else {
+    res.status(403).send("You must be logged in to create a pod.<br><a href='/'>Go back to home page</a>");
+  }
 });
 
 app.get("/profile", async (req, res) => {
