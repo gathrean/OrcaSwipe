@@ -1,0 +1,16 @@
+<%- include("templates/header") %>
+
+    <form class="form" action="/createpod" method="post">
+        <h4>Enter pod information:</h4>
+        <input type="text" name="name" placeholder="Name of the pod"><br>
+        <input type="checkbox" id="event1" name="event1">
+        <label for="event1"> Outdoor activity</label><br>
+        <input type="checkbox" id="event2" name="event2">
+        <label for="event2"> Music Festival</label><br>
+        <input type="checkbox" id="event3" name="event3">
+        <label for="event3"> Sport activity</label><br>
+        <textarea name="eventDescription" placeholder="Enter event description"></textarea><br>
+        <input class="btn blue-button" type="submit" value="Create!">
+    </form>
+
+    <%- include("templates/footer") %>

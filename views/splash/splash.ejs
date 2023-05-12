@@ -1,0 +1,49 @@
+<%- include("splash-header.ejs") %>
+    <div class="container-initial">
+        <div class="animate">
+            <img src="https://cdn.discordapp.com/attachments/1101692795921645680/1106310966070755388/OrcaSwipe_Logo.png"
+                alt="logo" class="logo">
+            <h1 class="splash-text">OrcaSwipe</h1>
+        </div>
+
+        <h3 class="animate-2"><i>Link up with your Pod!</i></h3>
+
+        <form method="POST" action="/splash">
+            <button class="btn white-button  animate-3" type="submit" name="action" value="signup">Create
+                account</button><br><br>
+            <button class="btn animate-4" type="submit" name="action" value="login">Log in</button>
+        </form>
+    </div>
+    <%- include("splash-footer.ejs") %>
+
+        <style>
+            h3 {
+                color: white;
+            }
+
+            h3.animate-2 {
+                padding-top: 50px;
+                /* Adjust the value as needed */
+                padding-bottom: 50px;
+                /* Adjust the value as needed */
+            }
+
+
+            .animate-2 {
+                opacity: 0;
+                transform: translateX(-50px);
+                animation: swipe-right-and-fade-in 0.5s ease 0.5s forwards;
+            }
+
+            .animate-3 {
+                opacity: 0;
+                transform: translateX(-50px);
+                animation: swipe-right-and-fade-in 0.5s ease 1s forwards;
+            }
+
+            .animate-4 {
+                opacity: 0;
+                transform: translateX(-50px);
+                animation: swipe-right-and-fade-in 0.5s ease 1.5s forwards;
+            }
+        </style>

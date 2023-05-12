@@ -1,0 +1,73 @@
+<%- include("templates/header") %>
+
+
+
+  <div class="user-profile form">
+    <div class="profile-photo">
+      <img src="https://cdn.discordapp.com/attachments/828116217285836825/1106489564949925948/orca_pfp.jpg"
+        alt="Profile Photo">
+    </div>
+    <div class="profile-details">
+      <h1 class="profile-name">
+        <%= user.name %>
+      </h1>
+      <h4 class="pronouns">
+        (<%= user.pronouns %>)
+      </h4>
+    </div>
+    <h4 class="username">@<%= user.username %>
+    </h4>
+    <div class="profile-actions">
+      <div class="action-button">
+        <button class="btn blue-button" onclick="window.location.href='/viewProfile'">View Details</button>
+      </div>
+      <div class="action-button">
+        <button class="btn blue-button" onclick="window.location.href='/editProfile'">Edit Details</button>
+      </div>
+    </div>
+    <form class="form" action="/updateProfile" method="post">
+      <label for="email">Email</label>
+      <input class="form-control" id="disabledInput" type="text" placeholder="<%= user.email %>" disabled>
+      <br>
+      <label for="birthday">Birthday</label>
+      <input class="form-control" id="disabledInput" type="text"
+        placeholder="<%= user.birthday instanceof Date ? user.birthday.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'America/Los_Angeles' }) : '' %> "
+        disabled>
+    </form>
+  </div>
+
+
+
+  <!-- <form id="profile-form" action="/updateProfile" method="POST">
+        <div>
+            <label for="name">Edit Name:</label>
+            <input type="text" id="name" name="name" value="<%= user.name %>" required>
+        </div>
+
+
+    </form>
+
+    <div id="user-info">
+        <h2>User Information</h2>
+        <p><strong>Name:</strong> <%= user.name %></p>
+        <p><strong>Username:</strong> <%= user.username %></p>
+        <p><strong>Password:</strong> Hidden for security</p>
+        <p><strong>Email:</strong> <%= user.email %></p>
+        <p><strong>Age:</strong> <%= user.age %></p>
+    </div>
+
+    <button type="submit">Save Changes</button> -->
+
+
+
+  <%- include("templates/footer") %>
+
+    <style>
+      .profile-actions {
+        display: flex;
+      }
+
+      .action-button {
+        margin-right: 10px;
+      }
+    </style>

@@ -1,0 +1,36 @@
+<%- include("templates/header") %>
+
+  <div class="tabs">
+    <div style="display: flex; justify-content: space-between; width: 100%;">
+      <a href="/yourpods" class="btn <%= activeTab === 'yourpods' ? 'btn-primary active' : 'btn-secondary' %>"
+        style="flex: 1;">Your Pods</a>
+      <a href="/createdpods" class="btn <%= activeTab === 'createdpods' ? 'btn-primary active' : 'btn-secondary' %>"
+        style="flex: 1;">Pods You've Created</a>
+    </div>
+
+  </div>
+  <br>
+  <div class="content form">
+    <% if (activeTab==='createdpods' ) { %>
+      <h1>Pods you've created!</h1>
+      <a href="/createpod"><button class="btn blue-button">Create a pod!</button></a>
+
+      <% createdPods.forEach(function(pod) { %>
+        <div class="card">
+          <h2>
+            <%= pod.name %>
+          </h2>
+          <p>
+            <%= pod.eventDescription %>
+          </p>
+          <!-- add more pod details here -->
+        </div>
+        <% }); %>
+
+          <% } else { %>
+            <h1>Pods you're attending!</h1>
+            <!-- content to be added later -->
+            <% } %>
+  </div>
+
+  <%- include("templates/footer") %>

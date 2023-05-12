@@ -1,0 +1,21 @@
+<%- include("templates/header") %>
+
+<h1>User Profile Details</h1>
+
+  <div class="user-profile-details form">
+    <br>
+    <h2>Hello, <%= user.name %></h2>
+    <br>
+    <h3>Username: <%= user.username %></h3>
+    <br>
+    <h3>Pronouns: <%= user.pronouns %></h3>
+    <br>
+    <h3>Email: <%= user.email %></h3>
+    <br>
+    <h3>Birthday: <%= user.birthday instanceof Date ? user.birthday.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : '' %></h3>
+
+  </div>
+
+
+
+<%- include("templates/footer") %>
