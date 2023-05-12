@@ -1,18 +1,41 @@
 <%- include("templates/header") %>
-    <h1>User Profile</h1>
 
-  <div class="user-profile">
-    <h2><%= user.name %></h2>
-    <h3><%= user.username %></h3>
-    <h4><%= user.pronouns %></h4>
+
+  <div class="user-profile form">
+    <div class="profile-photo">
+      <img src="https://cdn.discordapp.com/attachments/828116217285836825/1106489564949925948/orca_pfp.jpg"
+        alt="Profile Photo">
+    </div>
+    <div class="profile-details">
+      <h1 class="profile-name">
+        <%= user.name %>
+      </h1>
+      <h4 class="pronouns">
+        (<%= user.pronouns %>)
+      </h4>
+    </div>
+    <h4 class="username">@<%= user.username %>
+    </h4>
+    <form class="form" action="/updateProfile" method="post">
+      <label for="email">Email</label>
+      <input class="form-control" id="disabledInput" type="text" placeholder="<%= user.email %>" disabled>
+      <br>
+
+      <label for="birthday">Birthday</label>
+      <input class="form-control" id="disabledInput" type="text" placeholder="<%= user.birthday instanceof Date ? user.birthday.toLocaleDateString('en-US', { weekday: 'long' ,
+    year: 'numeric' , month: 'long' , day: 'numeric' }) : '' %>" disabled>
+    </form>
+    <hr>
+    <div class="profile-actions">
+      <!-- <button class="btn blue-button" onclick="window.location.href='/viewProfile'">View Profile Details</button>
+    <hr> -->
+      <button class="btn blue-button" onclick="window.location.href='/editProfile'">Edit Profile Details</button>
+    </div>
+
   </div>
 
-  <div class="profile-actions">
-    <button onclick="window.location.href='/viewProfile'">View Profile Details</button>
-    <button onclick="window.location.href='/editProfile'">Edit Profile Details</button>
-  </div>
 
-    <!-- <form id="profile-form" action="/updateProfile" method="POST">
+  <!-- <form id="profile-form" action="/updateProfile" method="POST">
         <div>
             <label for="name">Edit Name:</label>
             <input type="text" id="name" name="name" value="<%= user.name %>" required>
@@ -34,4 +57,4 @@
 
 
 
-<%- include("templates/footer") %>
+  <%- include("templates/footer") %>

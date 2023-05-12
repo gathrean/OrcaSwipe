@@ -1,48 +1,60 @@
 <%- include("templates/header") %>
 
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Edit Profile</title>
-</head>
-<body>
-  <h1>Edit Profile</h1>
-
-  <form action="/updateProfile" method="post">
-    <label for="name">Name:</label><br>
-    <input type="text" id="name" name="name" value="<%= user.name %>"><br>
-
-    <label for="username">Username:</label><br>
-    <input type="text" id="username" name="username" value="<%= user.username %>"><br>
-
-    <label for="email">Email:</label><br>
-    <input type="email" id="email" name="email" value="<%= user.email %>"><br>
-
-    <!-- <label for="currentPassword">Current Password:</label><br>
-    <input type="password" id="currentPassword" name="currentPassword"><br>
-
-    <label for="newPassword">New Password:</label><br>
-    <input type="password" id="newPassword" name="newPassword"><br> -->
-
-    <label for="birthday">Birthday:</label><br>
-<input type="date" id="birthday" name="birthday" value="<%= user.birthday instanceof Date ? user.birthday.toISOString().split('T')[0] : '' %>">
-<p id="formattedBirthday"><%= user.birthday instanceof Date ? user.birthday.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : '' %></p>
+  <div class="user-profile form">
+    <div class="profile-photo">
+      <img src="https://cdn.discordapp.com/attachments/828116217285836825/1106489564949925948/orca_pfp.jpg"
+        alt="Profile Photo">
+    </div>
 
 
-    <br>
+    <div class="profile-details">
+      <h1 class="profile-name">
+        <%= user.name %>
+      </h1>
+      <h4 class="pronouns">
+        (<%= user.pronouns %>)
+      </h4>
+    </div>
+    <h4 class="username">@<%= user.username %>
+    </h4>
 
-    <label for="pronouns">Pronouns:</label><br>
-    <input type="text" id="pronouns" name="pronouns" value="<%= user.pronouns %>"><br>
+    <form class="form" action="/updateProfile" method="post">
+      <label for="email">Email</label>
+      <input class="form-control" type="email" id="email" name="email" value="<%= user.email %>">
+      <br>
 
-    <input type="submit" value="Submit">
-  </form>
+      <label for="birthday">Birthday</label>
+      <input class="form-control" type="date" id="birthday" name="birthday"
+        value="<%= user.birthday instanceof Date ? user.birthday.toISOString().split('T')[0] : '' %>">
 
-</body>
-</html>
+      <input class="form-control" id="disabledInput" type="text" placeholder="<%= user.birthday instanceof Date ? user.birthday.toLocaleDateString('en-US', { weekday: 'long' ,
+    year: 'numeric' , month: 'long' , day: 'numeric' }) : '' %>" disabled>
+      <hr>
+
+      <label for="name">Your name</label>
+      <input class="form-control" type="text" id="name" name="name" value="<%= user.name %>"><br>
+
+      <label for="username">Username</label>
+      <div>
+        <div class="input-group mb-2">
+          <div class="input-group-prepend">
+            <div class="input-group-text">@</div>
+          </div>
+          <input class="form-control" type="text" id="username" name="username" value="<%= user.username %>">
+        </div>
+      </div>
+      <br>
+      <label for="pronouns">Pronouns</label>
+      <input class="form-control" type="text" id="pronouns" name="pronouns" value="<%= user.pronouns %>">
+
+      <hr>
+      <input class="btn blue-button" type="submit" value="Submit">
+    </form>
+
+  </div>
 
 
 
 
 
-
-<%- include("templates/footer") %>
+  <%- include("templates/footer") %>
