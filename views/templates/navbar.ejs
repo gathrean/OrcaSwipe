@@ -1,22 +1,111 @@
+<style>
+        .nav-item {
+                margin-right: 20px;
+                margin-left: 20px;
+                /* Adjust the value as per your preference */
+        }
+
+
+        .nav.nav-pills {
+                height: 40px;
+        }
+</style>
+
 <header class="d-flex justify-content-center py-3 sticky-top"
-        style="background-color: white; border-bottom: 1px solid black;">
+        style="background-color: white; border-bottom: 2px solid black;">
+
         <ul class="nav nav-pills container-fluid justify-content-center align-items-center">
+
+                <!-- HOME -->
                 <li class="nav-item">
                         <a href="/home"
                                 class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'home') ? 'active' : '' %>"
-                                aria-current="page">Home</a>
+                                aria-current="page">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
+                                        viewBox="0 0 24 24">
+                                        <!-- Add your SVG icon code here -->
+
+                                        <svg fill="none" height="24" width="24" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M4.586 20.414l-.707.707zm14.828 0l-.707-.707zM19 10v7h2v-7zm-3 10H8v2h8zM5 17v-7H3v7zm3 3c-.971 0-1.599-.002-2.061-.064-.434-.059-.57-.153-.646-.229l-1.414 1.414c.51.51 1.138.709 1.793.797C6.3 22.002 7.085 22 8 22zm-5-3c0 .915-.002 1.701.082 2.328.088.655.287 1.284.797 1.793l1.414-1.414c-.076-.076-.17-.212-.229-.646C5.002 18.6 5 17.971 5 17zm16 0c0 .971-.002 1.599-.064 2.061-.059.434-.153.57-.229.646l1.414 1.414c.51-.51.709-1.138.797-1.793C21.002 18.7 21 17.915 21 17zm-3 5c.915 0 1.701.002 2.328-.082.655-.088 1.284-.287 1.793-.797l-1.414-1.414c-.076.076-.212.17-.646.229-.462.062-1.09.064-2.061.064z"
+                                                        fill="currentColor" />
+                                                <path d="M3 11l6.172-6.172c1.333-1.333 2-2 2.828-2s1.495.667 2.828 2L21 11"
+                                                        stroke="currentColor" stroke-linecap="round" stroke-width="2" />
+                                                <path d="M9 17c0-.932 0-1.398.152-1.765a2 2 0 0 1 1.083-1.083C10.602 14 11.068 14 12 14s1.398 0 1.765.152a2 2 0 0 1 1.083 1.083C15 15.602 15 16.068 15 17v4H9zm7-12.5c0-.466 0-.699.076-.883a1 1 0 0 1 .541-.54C16.801 3 17.034 3 17.5 3s.699 0 .883.076a1 1 0 0 1 .54.541c.077.184.077.417.077.883V10l-3-3.5z"
+                                                        fill="currentColor" />
+                                        </svg>
+
+                                </svg>
+                        </a>
                 </li>
+
+                <!-- PODS -->
                 <li class="nav-item">
                         <a href="/yourpods"
-                                class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'pods') ? 'active' : '' %>">Pods</a>
+                                class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'pods') ? 'active' : '' %>"
+                                aria-current="page">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
+                                        viewBox="0 0 24 24">
+                                        <!-- Add your SVG icon code here -->
+
+                                        <svg fill="none" height="24" width="24" xmlns="http://www.w3.org/2000/svg">
+                                                <g stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2">
+                                                        <path d="M3 6.5c0-1.404 0-2.107.337-2.611a2 2 0 0 1 .552-.552C4.393 3 5.096 3 6.5 3c1.404 0 2.107 0 2.611.337a2 2 0 0 1 .552.552C10 4.393 10 5.096 10 6.5c0 1.404 0 2.107-.337 2.611a2 2 0 0 1-.552.552C8.607 10 7.904 10 6.5 10c-1.404 0-2.107 0-2.611-.337a2 2 0 0 1-.552-.552C3 8.607 3 7.904 3 6.5z"
+                                                                fill="currentColor" />
+                                                        <rect height="7" rx="2" width="7" x="3" y="14" />
+                                                        <rect height="7" rx="2" width="7" x="14" y="3" />
+                                                        <rect height="7" rx="2" width="7" x="14" y="14" />
+                                                </g>
+                                        </svg>
+
+                                </svg>
+                        </a>
                 </li>
+
+
+                <!-- PROFILE -->
                 <li class="nav-item">
                         <a href="/profile"
-                                class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'profile') ? 'active' : '' %>">Profile</a>
+                                class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'profile') ? 'active' : '' %>"
+                                aria-current="page">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
+                                        viewBox="0 0 24 24">
+                                        <!-- Add your SVG icon code here -->
+
+
+                                        <svg fill="none" height="24" width="24" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M19 21v-1.45c0-.977 0-1.465-.113-1.864a3 3 0 0 0-2.073-2.073c-.399-.113-.887-.113-1.864-.113h-6.9c-.977 0-1.465 0-1.864.113a3 3 0 0 0-2.073 2.073C4 18.085 4 18.573 4 19.55V21M16.2 7.06c0 2.245-1.88 4.065-4.2 4.065S7.8 9.305 7.8 7.06 9.68 2.996 12 2.996s4.2 1.82 4.2 4.064z"
+                                                        stroke="currentColor" stroke-linecap="round"
+                                                        stroke-linejoin="round" stroke-width="2" />
+                                        </svg>
+
+                                </svg>
+                        </a>
                 </li>
+
+
+                <!-- SETTINGS -->
                 <li class="nav-item">
                         <a href="/settings"
-                                class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'settings') ? 'active' : '' %>">Settings</a>
+                                class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'settings') ? 'active' : '' %>"
+                                aria-current="page">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
+                                        viewBox="0 0 24 24">
+                                        <!-- Add your SVG icon code here -->
+
+                                        <svg fill="none" height="24" width="24" xmlns="http://www.w3.org/2000/svg">
+                                                <g stroke="currentColor" stroke-width="2">
+                                                        <path d="M16.364 4.136c.329-.329.493-.493.657-.603a2 2 0 0 1 2.222 0c.164.11.328.274.657.603.328.328.492.493.602.656a2 2 0 0 1 0 2.223c-.11.163-.274.328-.602.656L9.066 18.505c-.264.265-.397.397-.55.502-.154.105-.325.18-.667.33l-.92.405c-1.986.874-2.98 1.311-3.463.828-.484-.484-.047-1.477.827-3.464l.405-.92c.15-.342.226-.513.33-.666.106-.154.238-.286.503-.55L16.364 4.135z"
+                                                                stroke-linecap="round" />
+                                                        <path d="M13.621 6.843l3.536 3.536" />
+                                                </g>
+                                        </svg>
+
+                                </svg>
+                        </a>
                 </li>
+
+
+
         </ul>
 </header>
