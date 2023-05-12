@@ -25,97 +25,9 @@
     integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/"
     crossorigin="anonymous"></script>
 
-  <!-- Splash CSS -->
-  <style>
-    .login-form {
-      display: flex;
-      flex-direction: column;
-      /* align-items: center; */
-      padding: 20px;
-      background-color: #f8f9fa;
-      border-radius: 20px;
-    }
+  <link rel="stylesheet" type="text/css" href="styles.css">
 
-    .login-form h1 {
-      margin-bottom: 20px;
-    }
-
-    * {
-      font-family: 'Montserrat', sans-serif;
-      font-weight: 600;
-      /* Semi-Bold */
-    }
-
-    body {
-      background: linear-gradient(180deg, #4676EE, #134ACC);
-    }
-
-    .container {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-
-    .logo {
-      width: 150px;
-      /* Adjust the width as needed */
-      height: auto;
-      /* Adjust the height as needed */
-      margin-bottom: 20px;
-    }
-
-    .splash-text {
-      color: white;
-      font-size: 50px;
-      text-align: center;
-      font-weight: 1000;
-      margin-bottom: 40px;
-    }
-
-    .splash-footer {
-      color: white;
-      font-size: 12px;
-      text-align: center;
-      margin-bottom: 40px;
-    }
-
-    .btn {
-      display: inline-block;
-      padding: 10px 20px;
-      border: 2px solid white;
-      border-radius: 50px;
-      color: white;
-      background-color: transparent;
-      font-size: 16px;
-      /* text-transform: uppercase; */
-      text-decoration: none;
-      cursor: pointer;
-      transition: background-color 0.3s ease, color 0.3s ease;
-      width: 200px;
-    }
-
-    .btn:hover {
-      border-color: white;
-      background-color: rgba(0, 0, 0, 0.25);
-      color: white;
-    }
-
-    .white-button {
-      color: black;
-      background-color: white;
-      border-color: white;
-    }
-
-    .blue-button {
-      color: black;
-      background-color: #4676EE;
-      border-color: #134ACC;
-    }
-  </style>
-
+  <%- include("splash-styles.ejs") %>
 </head>
 
 <body>
