@@ -1,17 +1,22 @@
-<header class="d-flex justify-content-center py-3">
-    <ul class="nav nav-pills">
-        <li class="nav-item"><a href="/home"
-                class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'home') ? 'active' : '' %>"
-                aria-current="page">Home</a></li>
-        <li class="nav-item"><a href="/yourpods"
-                class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'pods') ? 'active' : '' %>">Pods</a>
-        </li>
-        <li class="nav-item"><a href="/profile"
-                class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'profile') ? 'active' : '' %>">Profile</a>
-        </li>
-        <li class="nav-item"><a href="/settings"
-                class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'settings') ? 'active' : '' %>">Settings</a>
-        </li>
-
-    </ul>
+<header class="d-flex justify-content-center py-3 sticky-top"
+        style="background-color: white; border-bottom: 1px solid black;">
+        <ul class="nav nav-pills container-fluid justify-content-center align-items-center">
+                <li class="nav-item">
+                        <a href="/home"
+                                class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'home') ? 'active' : '' %>"
+                                aria-current="page">Home</a>
+                </li>
+                <li class="nav-item">
+                        <a href="/yourpods"
+                                class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'pods') ? 'active' : '' %>">Pods</a>
+                </li>
+                <li class="nav-item">
+                        <a href="/profile"
+                                class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'profile') ? 'active' : '' %>">Profile</a>
+                </li>
+                <li class="nav-item">
+                        <a href="/settings"
+                                class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'settings') ? 'active' : '' %>">Settings</a>
+                </li>
+        </ul>
 </header>
