@@ -1,14 +1,4 @@
-*, *:before, *:after {
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
-  }
-  
-  body {
-    background: #CCFBFE;
-    overflow: hidden;
-    font-family: sans-serif;
-  }
+
   
   .tinder {
     width: 100vw;
@@ -19,10 +9,12 @@
     position: relative;
     opacity: 0;
     transition: opacity 0.1s ease-in-out;
+    background-color: blue;
   }
   
   .loaded.tinder {
     opacity: 1;
+    max-height: 85vh;
   }
   
   .tinder--status {
@@ -61,8 +53,8 @@
     text-align: center;
     display: flex;
     justify-content: center;
-    align-items: flex-end;
     z-index: 1;
+    max-height: 75vh;
   }
   
   .tinder--card {
@@ -133,10 +125,15 @@
     vertical-align: middle;
   }
   
-  .fa-heart {
-    color: #FFACE4;
+  .fa-check {
+    color: lightgreen;
+  }
+
+  .fa-check:before {
+    position: relative;
+    right: 10%;
   }
   
-  .fa-remove {
-    color: #CDD6DD;
+  .fa-times {
+    color: lightcoral;
   }

@@ -342,7 +342,7 @@ app.get("/createdpods", (req, res) => {
 });
 
 app.get("/findPods", (req, res) => {
-  res.render('findPods');
+  res.render('findPods', {currentPage: 'findPods'});
 })
 
 app.get('/getPods', async (req, res) => {
