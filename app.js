@@ -355,7 +355,7 @@ app.get("/members", (req, res) => {
 
 app.get("/yourpods", (req, res) => {
   if(req.session.loggedIn) {
-    res.render("pods", { activeTab: 'yourpods', currentPage: 'pods' });
+    res.render("pods", { activeTab: 'pods', currentPage: 'pods' });
   } else {
     res.status(403).send("You must be logged in to access the pods page.<br><a href='/'>Go back to home page</a>")
   }
