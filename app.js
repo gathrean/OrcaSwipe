@@ -76,6 +76,10 @@ app.use(
 );
 
 app.get("/", (req, res) => {
+  res.render("splash/splash", { loggedIn: req.session.loggedIn, name: req.session.name, currentPage: 'splash' });
+});
+
+app.get("/home", (req, res) => {
   res.render("home", { loggedIn: req.session.loggedIn, name: req.session.name, currentPage: 'home' });
 });
 
@@ -272,7 +276,7 @@ app.post("/login", async (req, res) => {
         req.session.loggedIn = true;
         req.session.name = user.name;
         req.session.email = user.email;
-        res.redirect("/");
+        res.redirect("/home");
       } else {
         res.status(401).send("Incorrect username and password.<br><a href='/login'>Go back to log in</a>");
       }
