@@ -453,6 +453,18 @@ app.get("/editProfile", async (req, res) => {
   }
 });
 
+app.get("/findPods", (req, res) => {
+  res.render('findPods', {currentPage: 'findPods'});
+})
+
+app.get('/getPods', async (req, res) => {
+  var pods = await podsCollection.find().project().toArray();
+  for (var i = 0; i < pods.length; i++){
+    pods[i] = JSON.stringify(pods[i]);
+  }
+  res.json(pods);
+})
+
 
 app.get("/viewProfile", async (req, res) => {
   if (req.session.loggedIn) {
@@ -467,6 +479,18 @@ app.get("/viewProfile", async (req, res) => {
     res.status(403).send("You must be logged in to access this page.<br><a href='/'>Go back to home page</a>");
   }
 });
+
+app.get("/findPods", (req, res) => {
+  res.render('findPods', {currentPage: 'findPods'});
+})
+
+app.get('/getPods', async (req, res) => {
+  var pods = await podsCollection.find().project().toArray();
+  for (var i = 0; i < pods.length; i++){
+    pods[i] = JSON.stringify(pods[i]);
+  }
+  res.json(pods);
+})
 
 
 app.post("/updateProfile", async (req, res) => {
