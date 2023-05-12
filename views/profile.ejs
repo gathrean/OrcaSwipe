@@ -1,6 +1,7 @@
 <%- include("templates/header") %>
 
 
+
   <div class="user-profile form">
     <div class="profile-photo">
       <img src="https://cdn.discordapp.com/attachments/828116217285836825/1106489564949925948/orca_pfp.jpg"
@@ -16,23 +17,25 @@
     </div>
     <h4 class="username">@<%= user.username %>
     </h4>
+    <div class="profile-actions">
+      <div class="action-button">
+        <button class="btn blue-button" onclick="window.location.href='/viewProfile'">View Details</button>
+      </div>
+      <div class="action-button">
+        <button class="btn blue-button" onclick="window.location.href='/editProfile'">Edit Details</button>
+      </div>
+    </div>
     <form class="form" action="/updateProfile" method="post">
       <label for="email">Email</label>
       <input class="form-control" id="disabledInput" type="text" placeholder="<%= user.email %>" disabled>
       <br>
-
       <label for="birthday">Birthday</label>
-      <input class="form-control" id="disabledInput" type="text" placeholder="<%= user.birthday instanceof Date ? user.birthday.toLocaleDateString('en-US', { weekday: 'long' ,
-    year: 'numeric' , month: 'long' , day: 'numeric' }) : '' %>" disabled>
+      <input class="form-control" id="disabledInput" type="text"
+        placeholder="<%= user.birthday instanceof Date ? user.birthday.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'America/Los_Angeles' }) : '' %> "
+        disabled>
     </form>
-    <hr>
-    <div class="profile-actions">
-      <!-- <button class="btn blue-button" onclick="window.location.href='/viewProfile'">View Profile Details</button>
-    <hr> -->
-      <button class="btn blue-button" onclick="window.location.href='/editProfile'">Edit Profile Details</button>
-    </div>
-
   </div>
+
 
 
   <!-- <form id="profile-form" action="/updateProfile" method="POST">
@@ -58,3 +61,13 @@
 
 
   <%- include("templates/footer") %>
+
+    <style>
+      .profile-actions {
+        display: flex;
+      }
+
+      .action-button {
+        margin-right: 10px;
+      }
+    </style>

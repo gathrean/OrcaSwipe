@@ -17,8 +17,9 @@
     </div>
     <h4 class="username">@<%= user.username %>
     </h4>
-
     <form class="form" action="/updateProfile" method="post">
+      <input class="btn blue-button" type="submit" value="Submit">
+      <hr>
       <label for="email">Email</label>
       <input class="form-control" type="email" id="email" name="email" value="<%= user.email %>">
       <br>
@@ -46,9 +47,6 @@
       <br>
       <label for="pronouns">Pronouns</label>
       <input class="form-control" type="text" id="pronouns" name="pronouns" value="<%= user.pronouns %>">
-
-      <hr>
-      <input class="btn blue-button" type="submit" value="Submit">
     </form>
 
   </div>
