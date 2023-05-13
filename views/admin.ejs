@@ -1,30 +1,121 @@
 <%- include("templates/header") %>
-    <h1>Admin Page</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Type</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% users.forEach(user => { %>
-            <tr>
-                <td><%= user.name %></td>
-                <td><%= user.email %></td>
-                <td><%= user.admin ? 'Admin' : 'User' %></td>
-                <td>
-                    <% if (user.admin) { %>
-                        <a href="/demote/<%= user._id %>">Demote to User</a>
-                    <% } else { %>
-                        <a href="/promote/<%= user._id %>">Promote to Admin</a>
-                    <% } %>
-                </td>
-            </tr>
-            <% }) %>
-        </tbody>
-    </table>
-    <a href="/"><button>Back to Home</button></a>
+
+    <div class="user-profile form">
+        <div class="profile-photo">
+            <img src="https://cdn.discordapp.com/attachments/1101612482482684018/1106354139694387220/Screenshot_2023-05-11_at_3.56.19_PM.jpg"
+                alt="Profile Photo">
+        </div>
+        <h1>Admin Page</h1>
+        <p>ur not supposed to hav access wtf</p>
+        <a href="/"><button class="btn blue-button">Back to Home</button></a>
+    </div>
+
+    <br>
+
+    <div class="admin-form table-container">
+        <h3>List of all OrcaSwipe users</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>TYPE</th>
+                    <th>NAME</th>
+                    <th>EMAIL</th>
+                    <th>ACTION</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% users.forEach((user, index)=> { %>
+                    <tr class="<%= index % 2 === 0 ? 'even-row' : 'odd-row' %>">
+                        <td>
+                            <%= user.admin ? 'Admin' : 'User' %>
+                        </td>
+                        <td>
+                            <%= user.name %>
+                        </td>
+                        <td>
+                            <%= user.email %>
+                        </td>
+                        <td>
+                            <% if (user.admin) { %>
+                                <a href="/demote/<%= user._id %>">
+                                    <button class="btn red-button">Demote to User</button>
+                                </a>
+                                <% } else { %>
+                                    <a href="/promote/<%= user._id %>">
+                                        <button class="btn green-button">Promote to Admin</button>
+                                    </a>
+                                    <% } %>
+                        </td>
+                    </tr>
+                    <% }) %>
+            </tbody>
+        </table>
+    </div>
+
     <%- include("templates/footer") %>
+
+        <style>
+            /* Add styling for even and odd rows */
+            .even-row {
+                background-color: #f8f8f8;
+            }
+
+            .odd-row {
+                background-color: #ffffff;
+            }
+
+            /* Rest of your CSS */
+            .admin-form {
+                display: flex;
+                flex-direction: column;
+                padding: 20px;
+                background-color: #f8f9fa;
+                border-radius: 20px;
+                text-align: left;
+                width: 100%;
+            }
+
+            .table-container {
+                overflow-x: auto;
+                max-width: 100%;
+            }
+
+            .table-container table {
+                width: 100%;
+                white-space: nowrap;
+                border-collapse: collapse;
+            }
+
+            .table-container th,
+            .table-container td {
+                padding: 8px;
+                font-size: 14px;
+                border: 1px solid #ddd;
+            }
+
+            .table-container th {
+                background-color: #f2f2f2;
+            }
+
+            .green-button,
+            .red-button {
+                color: white;
+                font-size: 14px;
+                font-weight: bold;
+                border: none;
+                padding: 8px 16px;
+                cursor: pointer;
+                width: 100%;
+                text-align: center;
+                text-decoration: none;
+                transition: background-color 0.3s ease;
+            }
+
+            .green-button {
+                background-color: #00A676;
+            }
+
+            .red-button {
+                background-color: #DF2935;
+            }
+        </style>
