@@ -9,10 +9,42 @@
         <h3 class="animate-2"><i>Link up with your Pod!</i></h3>
 
         <form method="POST" action="/splash">
-            <button class="btn white-button  animate-3" type="submit" name="action" value="signup">Create
+            <button class="btn white-button animate-3" type="submit" name="action" value="signup">Create
                 account</button><br><br>
             <button class="btn animate-4" type="submit" name="action" value="login">Log in</button>
         </form>
+    </div>
+    <br><br><br>
+    <div class="container-splash-section">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="about-section form animate-5">
+                    <h2>📲 <i>What's our app?</i> </h2>
+                    <p>
+                        Our app, <b>OrcaSwipe</b>, is a community and event search application designed to connect
+                        Vancouverites with local communities.
+                        <br><br>
+                        With OrcaSwipe, users can swipe left or right on various
+                        events based on their interests, effectively addressing the issue of post-pandemic isolation.
+                    </p>
+                </div>
+            </div>
+            <br><br>
+            <div class="col-md-6">
+                <div class="team-section form animate-5">
+                    <h2>🐋 <i>What are Pods?</i></h2>
+                    <p><b>Pods</b> are social groups, often observed in marine mammals like Orcas. Initially appearing
+                        unfriendly, they become friendlier when they find their community.
+                        <br><br>
+                        Our app aims to help you discover and connect with your own real-world Pod: a supportive
+                        network that fosters friendshipand community.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="splash-footer container-splash-section">
+        <br><br><br>
     </div>
     <%- include("splash-footer.ejs") %>
 
@@ -27,7 +59,6 @@
                 padding-bottom: 50px;
                 /* Adjust the value as needed */
             }
-
 
             .animate-2 {
                 opacity: 0;
@@ -45,5 +76,43 @@
                 opacity: 0;
                 transform: translateX(-50px);
                 animation: swipe-right-and-fade-in 0.5s ease 1.5s forwards;
+            }
+
+            .animate-5 {
+                opacity: 0;
+                transform: translateX(-50px);
+                animation: swipe-right-and-fade-in 0.5s ease 2s forwards;
+            }
+
+            /* Media query for screens smaller than 768px */
+            @media (max-width: 767px) {
+                .container-splash-section {
+                    display: block;
+                }
+
+                .row {
+                    display: block;
+                }
+
+                .col-md-6 {
+                    width: 100%;
+                }
+            }
+
+            /* Media query for screens larger than 768px */
+            @media (min-width: 768px) {
+                .container-splash-section {
+                    display: flex;
+                    justify-content: space-between;
+                }
+
+                .row {
+                    display: flex;
+                    justify-content: space-between;
+                }
+
+                .col-md-6 {
+                    width: 48%;
+                }
             }
         </style>
