@@ -1,4 +1,10 @@
 <style>
+        .nav {
+                padding-left: 0;
+                padding-right: 0;
+                font-weight: 600;
+        }
+
         .nav-item {
                 margin-right: 1px;
                 margin-left: 1px;
@@ -32,24 +38,23 @@
                 bottom: 0;
                 width: 100%;
         }
-
 </style>
 
 <header class="d-flex justify-content-center py-3 sticky-bottom" style="background-color: white;">
 
         <ul class="nav nav-pills container-fluid justify-content-center align-items-center">
 
-                <!-- HOST PODS -->
+                <!-- HOME -->
                 <li class="nav-item">
-                        <a href="/createdPods"
-                                class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'pods') ? 'active' : '' %>"
+                        <a href="/home"
+                                class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'home') ? 'active' : '' %>"
                                 aria-current="page">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
                                         viewBox="0 0 24 24">
                                         <!-- Add your SVG icon code here -->
-                                        <%- include("icons/host") %>
+                                        <%- include("icons/home") %>
                                 </svg>
-                                <span class="icon-label">host</span>
+                                <span class="icon-label">home</span>
                         </a>
                 </li>
 
@@ -67,17 +72,17 @@
                         </a>
                 </li>
 
-                <!-- HOME -->
+                <!-- HOST PODS -->
                 <li class="nav-item">
-                        <a href="/home"
-                                class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'home') ? 'active' : '' %>"
+                        <a href="/createdPods"
+                                class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'pods') ? 'active' : '' %>"
                                 aria-current="page">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
                                         viewBox="0 0 24 24">
                                         <!-- Add your SVG icon code here -->
-                                        <%- include("icons/home") %>
+                                        <%- include("icons/host") %>
                                 </svg>
-                                <span class="icon-label">home</span>
+                                <span class="icon-label">host</span>
                         </a>
                 </li>
 
