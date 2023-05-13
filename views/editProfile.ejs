@@ -28,9 +28,12 @@
       <input class="form-control" type="date" id="birthday" name="birthday"
         value="<%= user.birthday instanceof Date ? user.birthday.toISOString().split('T')[0] : '' %>">
 
-      <input class="form-control" id="disabledInput" type="text" placeholder="<%= user.birthday instanceof Date ? user.birthday.toLocaleDateString('en-US', { weekday: 'long' ,
-    year: 'numeric' , month: 'long' , day: 'numeric' }) : '' %>" disabled>
+      <input class="form-control" id="disabledInput" type="text"
+        placeholder="<%= user.birthday instanceof Date ? user.birthday.toISOString().substring(0, 10) : '' %>" disabled>
       <hr>
+
+
+
 
       <label for="name">Your name</label>
       <input class="form-control" type="text" id="name" name="name" value="<%= user.name %>"><br>
