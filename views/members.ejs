@@ -1,5 +1,15 @@
 <%- include("templates/header") %>
-    <h1>Members Area</h1>
-    Hello <%= name %> <br>
-    <a href='/logout'><button class="btn btn-primary mb-3">Log out</button></a> <br>
-<%- include("templates/footer") %>
+    <div class="form">
+        <h1>Members Area</h1>
+        <p>
+            Hmm... <%= name %> it seems like this page is empty. 🤔
+        </p>
+        <div class="profile-actions">
+            <div class="action-button">
+                <button class="btn blue-button" onclick="window.location.href='/home'">Let's go back!
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <%- include("templates/footer") %>
