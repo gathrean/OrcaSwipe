@@ -6,12 +6,24 @@
 
 
         .nav.nav-pills {
-                height: 20px;
+                height: 35px;
                 flex-wrap: nowrap;
         }
 
         header {
                 box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .icon-label {
+                display: block;
+                text-align: center;
+                font-size: 10px;
+        }
+
+        .nav-link {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
         }
 </style>
 
@@ -29,6 +41,7 @@
                                         <!-- Add your SVG icon code here -->
                                         <%- include("icons/home") %>
                                 </svg>
+                                <span class="icon-label">home</span>
                         </a>
                 </li>
 
@@ -42,6 +55,7 @@
                                         <!-- Add your SVG icon code here -->
                                         <%- include("icons/pods") %>
                                 </svg>
+                                <span class="icon-label">pods</span>
                         </a>
                 </li>
 
@@ -56,6 +70,7 @@
                                         <!-- Add your SVG icon code here -->
                                         <%- include("icons/profile") %>
                                 </svg>
+                                <span class="icon-label">profile</span>
                         </a>
                 </li>
 
@@ -70,6 +85,7 @@
                                         <!-- Add your SVG icon code here -->
                                         <%- include("icons/settings") %>
                                 </svg>
+                                <span class="icon-label">settings</span>
                         </a>
                 </li>
 
