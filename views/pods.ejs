@@ -1,36 +1,70 @@
 <%- include("templates/header") %>
 
-  <div class="tabs">
+  <!-- <div class="tabs">
     <div style="display: flex; justify-content: space-between; width: 100%;">
       <a href="/yourpods" class="btn <%= activeTab === 'yourpods' ? 'btn-primary active' : 'btn-secondary' %>"
         style="flex: 1;">Your Pods</a>
+
+
       <a href="/createdpods" class="btn <%= activeTab === 'createdpods' ? 'btn-primary active' : 'btn-secondary' %>"
         style="flex: 1;">Pods You've Created</a>
     </div>
 
-  </div>
-  <br>
+  </div> -->
   <div class="content form">
-    <% if (activeTab==='createdpods' ) { %>
-      <h1>Pods you've created!</h1>
-      <a href="/createpod"><button class="btn blue-button">Create a pod!</button></a>
 
+    <div class="user-profile pods-actions" style="display: flex; justify-content: space-between; width: 100%;">
+      <div class="action-button">
+        <button class="btn blue-button" onclick="window.location.href='/yourPods'">Joined Pods</button>
+
+        <!-- <a href="/yourpods" class="btn <%= activeTab === 'yourpods' ? 'btn-primary active' : 'btn-secondary' %>"
+          style="flex: 1;">Your Pods</a> -->
+      </div>
+      <div class="action-button">
+        <button class="btn blue-button" onclick="window.location.href='/createdPods'">Hosted Pods</button>
+
+        <!-- <a href="/createdpods" class="btn <%= activeTab === 'createdpods' ? 'btn-primary active' : 'btn-secondary' %>"
+          style="flex: 1;">Pods You've Created</a> -->
+
+      </div>
+    </div>
+
+    <hr>
+    <% if (activeTab==='createdpods' ) { %>
+      <h1>Pods you've created</h1>
+      <a href="/createpod"><button class="btn blue-button">Create a pod!</button></a>
+      <br>
       <% createdPods.forEach(function(pod) { %>
         <div class="card">
           <h2>
             <%= pod.name %>
           </h2>
-          <p>
+          <p class="description">
             <%= pod.eventDescription %>
           </p>
           <!-- add more pod details here -->
         </div>
+        <br>
         <% }); %>
 
           <% } else { %>
-            <h1>Pods you're attending!</h1>
+            <h1>Pods you're attending</h1>
             <!-- content to be added later -->
             <% } %>
   </div>
-
   <%- include("templates/footer") %>
+
+    <style>
+      .pods-actions {
+        display: flex;
+      }
+
+      .action-button {
+        margin-right: 10px;
+      }
+
+      .description {
+        font-weight: 100;
+        ;
+      }
+    </style>
