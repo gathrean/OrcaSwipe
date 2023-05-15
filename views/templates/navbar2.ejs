@@ -1,0 +1,75 @@
+<style>
+    .navbar-2 {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 0 0 5px;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .navbar-2__logo {
+        height: 100%;
+        pointer-events: none;
+    }
+
+    .navbar-2__logo img {
+        height: 100%;
+        width: auto;
+    }
+
+    .navbar-2__icons {
+        display: flex;
+        align-items: center;
+    }
+
+    .navbar-2__icon-label {
+        font-size: 10px;
+    }
+
+    .navbar-2__icon-label--active {
+        color: blue;
+    }
+</style>
+
+<header class="navbar-2 py-3 sticky-top" style="background-color: white;">
+
+    <!-- LEFT -->
+    <div class="navbar-2__logo">
+        <a>
+            <!-- logo image -->
+            <img src="https://cdn.discordapp.com/attachments/828116217285836825/1107482843615068160/Mobile_Logo.png"
+                alt="OrcaSwipe Logo">
+        </a>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="navbar-2__icons">
+        <ul class="nav nav-pills container-fluid justify-content-center align-items-center">
+            <!-- PROFILE -->
+            <li class="nav-item">
+                <a href="/profile"
+                    class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'profile') ? 'active' : '' %>"
+                    aria-current="page">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" viewBox="0 0 24 24">
+                        <!-- Add your SVG icon code here -->
+                        <%- include("icons/profile") %>
+                    </svg>
+                </a>
+            </li>
+            <!-- MENU / HAMBURGER -->
+            <li class="nav-item">
+                <a href="#" class="navbar-2__icon nav-link" aria-current="page" id="navbar-2__menu-toggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" viewBox="0 0 24 24">
+                        <!-- Add your SVG icon code here -->
+                        <%- include("icons/hamburger") %>
+                    </svg>
+                </a>
+            </li>
+        </ul>
+    </div>
+</header>
