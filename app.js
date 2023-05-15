@@ -60,8 +60,11 @@ var mongoStore = MongoStore.create({
   },
 });
 
-// Serve static files from the "views/splash" directory
+// Serve static files from the "/views/splash" directory
 app.use('/splash', express.static('views/splash'));
+
+// Serve static files from "/images" directory
+app.use(express.static('images'));
 
 app.use(
   session({
