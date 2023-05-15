@@ -1,4 +1,4 @@
-'use strict';
+// Based on code from Rob Vermeer at https://codepen.io/RobVermeer/pen/japZpY
 
 var tinderContainer = document.querySelector('.tinder');
 var allCards = document.querySelectorAll('.tinder--card');
