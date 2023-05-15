@@ -50,17 +50,21 @@
     <!-- RIGHT -->
     <div class="navbar-2__icons">
         <ul class="nav nav-pills container-fluid justify-content-center align-items-center">
-            <!-- PROFILE -->
+
+            <!-- SETTINGS -->
             <li class="nav-item">
-                <a href="/profile"
-                    class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'profile') ? 'active' : '' %>"
+                <a href="/settings"
+                    class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'settings') ? 'active' : '' %>"
                     aria-current="page">
                     <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" viewBox="0 0 24 24">
                         <!-- Add your SVG icon code here -->
-                        <%- include("icons/profile") %>
+                        <%- include("icons/settings") %>
                     </svg>
+                    <!-- <span class="icon-label">settings</span> -->
                 </a>
             </li>
+
+
             <!-- MENU / HAMBURGER -->
             <li class="nav-item">
                 <a href="#" class="navbar-2__icon nav-link" aria-current="page" id="navbar-2__menu-toggle">
