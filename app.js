@@ -244,7 +244,8 @@ app.post("/signup", async (req, res) => {
         name: req.body.name,
         email: req.body.email,
         password: hashedPassword,
-        admin: false
+        admin: false,
+        eventsAttended: []
       };
       const result = await usersCollection.insertOne(newUser);
       req.session.loggedIn = true;
@@ -254,6 +255,19 @@ app.post("/signup", async (req, res) => {
     } catch (error) {
       res.status(500).send("Error signing up.");
     }
+  }
+});
+
+app.post('/savePod', async (req, res) => {
+  var pod = req.body.pod;
+  var email = req.session.email; // assuming you're storing the email in the session
+
+  try {
+      await usersCollection.updateOne({email: email}, {$push: {eventsAttended: pod}});
+      res.sendStatus(200);
+  } catch (err) {
+      console.error(err);
+      res.sendStatus(500);
   }
 });
 
@@ -461,12 +475,17 @@ app.get("/findPods", (req, res) => {
 })
 
 app.get('/getPods', async (req, res) => {
-  var pods = await podsCollection.find().project().toArray();
+  var email = req.session.email;
+  var user = await usersCollection.findOne({email: email});
+  var attendedPods = user.eventsAttended || [];
+
+  var pods = await podsCollection.find({name: {$nin: attendedPods.map(pod => pod.name)}}).project().toArray();
   for (var i = 0; i < pods.length; i++){
-    pods[i] = JSON.stringify(pods[i]);
+      pods[i] = JSON.stringify(pods[i]);
   }
   res.json(pods);
-})
+});
+
 
 
 app.get("/viewProfile", async (req, res) => {
@@ -482,19 +501,6 @@ app.get("/viewProfile", async (req, res) => {
     res.status(403).send("You must be logged in to access this page.<br><a href='/'>Go back to home page</a>");
   }
 });
-
-app.get("/findPods", (req, res) => {
-  res.render('findPods', {currentPage: 'findPods'});
-})
-
-app.get('/getPods', async (req, res) => {
-  var pods = await podsCollection.find().project().toArray();
-  for (var i = 0; i < pods.length; i++){
-    pods[i] = JSON.stringify(pods[i]);
-  }
-  res.json(pods);
-})
-
 
 app.post("/updateProfile", async (req, res) => {
   if (req.session.loggedIn) {

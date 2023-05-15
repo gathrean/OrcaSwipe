@@ -1,5 +1,3 @@
-'use strict';
-
 var tinderContainer = document.querySelector('.tinder');
 var allCards = document.querySelectorAll('.tinder--card');
 var nope = document.getElementById('nope');
@@ -45,6 +43,12 @@ function populateStack() {
     makeSwipable();
 }
 
+function handleLoveSwipe(pod) {
+    const xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "/savePod");
+    xhttp.setRequestHeader('Content-Type', 'application/json');
+    xhttp.send(JSON.stringify({ pod: pod }));
+}
 
 function makeSwipable() {
     allCards.forEach(function (el) {
@@ -77,6 +81,13 @@ function makeSwipable() {
             var keep = Math.abs(event.deltaX) < 80 || Math.abs(event.velocityX) < 0.5;
 
             event.target.classList.toggle('removed', !keep);
+
+            if (!keep && event.deltaX > 0) {
+                console.log('Swiped right on:', pods[0]);
+                handleLoveSwipe(pods[0]);
+                pods.shift();  // remove the swiped pod
+            }
+            
 
             if (keep) {
                 event.target.style.transform = '';
