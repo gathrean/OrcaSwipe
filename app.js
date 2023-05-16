@@ -509,7 +509,8 @@ app.post("/updateProfile", async (req, res) => {
       username: Joi.string().max(50).optional(),
       email: Joi.string().email().optional(),
       birthday: Joi.date().optional(),
-      pronouns: Joi.string().max(50).optional()
+      pronouns: Joi.string().max(50).optional(),
+      interests: Joi.array().items(Joi.string()).max(10).optional(),
     });
 
     const validationResult = schema.validate(req.body);
@@ -526,6 +527,7 @@ app.post("/updateProfile", async (req, res) => {
             email: req.body.email,
             birthday: new Date(req.body.birthday),
             pronouns: req.body.pronouns,
+            interests: req.body.interests,
           };
           await usersCollection.updateOne({ email: req.session.email }, { $set: updatedUser });
           req.session.name = updatedUser.name;
