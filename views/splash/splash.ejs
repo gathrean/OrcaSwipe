@@ -42,10 +42,17 @@
                 </div>
             </div>
         </div>
+
+        <br><br><br>
+        <!-- Easter egg button -->
+        <button class="animate-secret btn easter-egg-button" onclick="redirectToFlappyOrca()">🤔🤔🤔🤔 ???</button>
+    </div>
+
     </div>
     <div class="splash-footer container-splash-section">
         <br><br><br>
     </div>
+
     <%- include("splash-footer.ejs") %>
 
         <style>
@@ -84,6 +91,24 @@
                 animation: swipe-right-and-fade-in 0.5s ease 2s forwards;
             }
 
+            .animate-secret {
+                opacity: 0;
+                transform: translateX(-50px);
+                animation: swipe-right-and-fade-in 0.5s ease 4s forwards;
+            }
+
+            easter-egg-button {
+                background-color: #FFD700;
+                /* Adjust the color as desired */
+                color: #000;
+                /* Adjust the color as desired */
+                padding: 10px 20px;
+                font-size: 16px;
+                border-radius: 5px;
+                margin-top: 20px;
+                cursor: pointer;
+            }
+
             /* Media query for screens smaller than 768px */
             @media (max-width: 767px) {
                 .container-splash-section {
@@ -116,3 +141,10 @@
                 }
             }
         </style>
+
+        <script>
+            // Function to redirect to the Flappy Orca page
+            function redirectToFlappyOrca() {
+                window.location.href = '/flappy-orca/flappy-orca.html';
+            }
+        </script>
