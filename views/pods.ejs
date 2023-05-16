@@ -49,6 +49,18 @@
 
           <% } else { %>
             <h1>Pods you're attending</h1>
+            <% attendedPods.forEach(function(pod) { %>
+              <div class="card">
+                <h2>
+                  <%= pod.name %>
+                </h2>
+                <p class="description">
+                  <%= pod.eventDescription %>
+                </p>
+                <!-- add more pod details here -->
+              </div>
+              <br>
+            <% }); %>
             <!-- content to be added later -->
             <% } %>
   </div>

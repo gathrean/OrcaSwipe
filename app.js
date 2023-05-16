@@ -258,17 +258,16 @@ app.post("/signup", async (req, res) => {
   }
 });
 
-app.post('/savePod', async (req, res) => {
-  var pod = req.body.pod;
-  var email = req.session.email; // assuming you're storing the email in the session
+app.post('/savePod', (req, res) => {
+  var pod = req.body.pod;  // assuming your body contains a 'pod' field
+  var email = req.session.email; 
 
-  try {
-      await usersCollection.updateOne({email: email}, {$push: {eventsAttended: pod}});
-      res.sendStatus(200);
-  } catch (err) {
-      console.error(err);
-      res.sendStatus(500);
-  }
+  usersCollection.updateOne({email: email}, {$push: {eventsAttended: pod}}).then(() => {
+    res.sendStatus(200);
+  }).catch((err) => {
+    console.error(err);
+    res.sendStatus(500);
+  });
 });
 
 app.get("/login", (req, res) => {
@@ -370,9 +369,15 @@ app.get("/members", (req, res) => {
   }
 });
 
-app.get("/yourpods", (req, res) => {
+app.get("/yourpods", async (req, res) => {
   if(req.session.loggedIn) {
-    res.render("pods", { activeTab: 'pods', currentPage: 'pods' });
+    const user = await usersCollection.findOne({ email: req.session.email });
+    if (!user) {
+      console.log(`User email from session: ${req.session.email}`);
+      console.log('User from DB: ', user);
+      return res.status(500).send('User not found');
+    }
+    res.render("pods", { activeTab: 'pods', currentPage: 'pods', attendedPods: user.eventsAttended });
   } else {
     res.status(403).send("You must be logged in to access the pods page.<br><a href='/'>Go back to home page</a>")
   }
