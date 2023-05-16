@@ -1,5 +1,5 @@
 var modal = `
-<div class="modal" tabindex="-1">
+<div class="modal" tabindex="-1" id="pod-details">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -10,8 +10,7 @@ var modal = `
                 <p>Modal body text goes here.</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn blue-button" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -19,6 +18,27 @@ var modal = `
 `
 $('body').append(modal);
 
-$('#see-details').on('click', () => {
+const setup = () => {
+    $('.see-details').on('click', function(e){
+        var podName = $(this).attr('id');
+        var pod = findPod(pods, podName);
+        $('.modal-title').empty().append(podName);
+        $('.modal-body').empty().append(`
+            <span>Description</span>
+            <ul>
+                ${pod.eventDescription}
+            </ul>
+        `)
+    })
+}
 
-})
+function findPod(pods, podName){
+    for (var i = 0; i < pods.length; i++){
+        if (pods[i].name == podName){
+            return pods[i];
+        }
+    }
+    return null;
+}
+
+$(document).ready(setup);
