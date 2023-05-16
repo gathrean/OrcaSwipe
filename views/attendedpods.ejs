@@ -1,0 +1,45 @@
+<%- include("templates/header") %>
+
+    <div class="content form">
+        <div class="user-profile pods-actions" style="display: flex; justify-content: space-between; width: 100%;">
+            <div class="action-button">
+
+            </div>
+            <div class="action-button">
+
+            </div>
+        </div>
+
+        <h1>Pods you're attending</h1>
+
+        <% attendedPods.forEach(function(pod) { %>
+            <div class="card">
+                <h2>
+                    <%= pod.name %>
+                </h2>
+                <p class="description">
+                    <%= pod.eventDescription %>
+                </p>
+                <!-- add more pod details here -->
+            </div>
+            <br>
+            <% }); %>
+
+                <!-- content to be added later -->
+    </div>
+
+    <%- include("templates/footer") %>
+
+        <style>
+            .pods-actions {
+                display: flex;
+            }
+
+            .action-button {
+                margin-right: 10px;
+            }
+
+            .description {
+                font-weight: 100;
+            }
+        </style>

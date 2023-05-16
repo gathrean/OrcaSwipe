@@ -1,7 +1,6 @@
 <%- include("templates/header") %>
 
-  <div class="content form">
-
+  <!-- <div class="content form">
     <div class="user-profile pods-actions" style="display: flex; justify-content: space-between; width: 100%;">
       <div class="action-button">
 
@@ -11,43 +10,16 @@
       </div>
     </div>
 
-    <!-- <hr> -->
     <% if (activeTab==='createdpods' ) { %>
-      <a href="/createpod"><button class="btn blue-button">Host a pod</button></a>
-      <hr>
-      <% createdPods.forEach(function(pod) { %>
-        <div class="card">
-          <h2>
-            <%= pod.name %>
-          </h2>
-          <p class="description">
-            <%= pod.eventDescription %>
-          </p>
-          <!-- add more pod details here -->
-        </div>
-        <br>
-        <% }); %>
-
-          <% } else { %>
-            <h1>Pods you're attending</h1>
-            <% attendedPods.forEach(function(pod) { %>
-              <div class="card">
-                <h2>
-                  <%= pod.name %>
-                </h2>
-                <p class="description">
-                  <%= pod.eventDescription %>
-                </p>
-                <!-- add more pod details here -->
-              </div>
-              <br>
-              <% }); %>
-                <!-- content to be added later -->
-                <% } %>
+      <%- include("createdpods") %>
+        <% } else { %>
+          <%- include("attendedpods") %>
+            <% } %> -->
   </div>
+
   <%- include("templates/footer") %>
 
-    <style>
+    <!-- <style>
       .pods-actions {
         display: flex;
       }
@@ -58,6 +30,5 @@
 
       .description {
         font-weight: 100;
-        ;
       }
-    </style>
+    </style> -->
