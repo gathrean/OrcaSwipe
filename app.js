@@ -25,6 +25,7 @@ const app = express();
 let usersCollection;
 let podsCollection;
 
+// Environment variables
 const mongodb_user = process.env.MONGODB_USER;
 const mongodb_password = process.env.MONGODB_PASSWORD;
 const mongodb_cluster = process.env.MONGODB_CLUSTER;
@@ -78,18 +79,22 @@ app.use(
   })
 );
 
+// GET request for the root URL
 app.get("/", (req, res) => {
   res.render("splash/splash", { loggedIn: req.session.loggedIn, name: req.session.name, currentPage: 'splash' });
 });
 
+// GET request for the "/home" URL
 app.get("/home", (req, res) => {
   res.render("home", { loggedIn: req.session.loggedIn, name: req.session.name, currentPage: 'home' });
 });
 
+// GET request for the "/splash" URL
 app.get("/splash", (req, res) => {
   res.render("splash/splash", { loggedIn: req.session.loggedIn, username: req.session.username, currentPage: 'splash' });
 });
 
+// POST request for the "/splash" URL
 app.post("/splash", (req, res) => {
   const { action } = req.body;
 
@@ -104,23 +109,24 @@ app.post("/splash", (req, res) => {
   }
 });
 
-
-
-
+// GET request for the "/signup" URL
 app.get("/signup", (req, res) => {
   res.render("splash/signup", { currentPage: 'signup' });
 });
 
+// GET request for the "/resetPassword" URL
 app.get('/resetPassword', (req, res) => {
   res.render('resetPassword');
 });
 
+// GET request for the "/createNewPassword" URL
 app.get('/createNewPassword', async (req, res) => {
   var email = req.params.email;
   var code = req.params.code;
   res.render('createNewPassword', { code: code, email: email });
 })
 
+// POST request for the "/submitPassword" URL
 app.post('/submitPassword', async (req, res) => {
   const email = req.body.email;
   console.log(email)
@@ -156,6 +162,7 @@ app.post('/submitPassword', async (req, res) => {
 
 })
 
+// POST request for the "/sendResetEmail" URL
 app.post('/sendResetEmail', async (req, res) => {
   const email = req.body.resetEmail;
   const schema = Joi.object({
@@ -190,12 +197,14 @@ app.post('/sendResetEmail', async (req, res) => {
   }
 });
 
+// POST request for the "/updatePassword" URL
 app.get('/updatePassword', async (req, res) => {
   const code = req.query.code;
   const email = req.query.email;
   res.render('updatePassword', { code: code, email: email });
 })
 
+// POST request for the "/updateSettings" URL
 app.post("/updateSettings", async (req, res) => {
   if (req.session.loggedIn) {
     const schema = Joi.object({
@@ -225,6 +234,7 @@ app.post("/updateSettings", async (req, res) => {
   }
 });
 
+// POST request for the "/signup" URL
 app.post("/signup", async (req, res) => {
   const schema = Joi.object({
     username: Joi.string().max(50).required(),
@@ -258,11 +268,12 @@ app.post("/signup", async (req, res) => {
   }
 });
 
+// POST request for the "/savePod" URL
 app.post('/savePod', (req, res) => {
   var pod = req.body.pod;  // assuming your body contains a 'pod' field
-  var email = req.session.email; 
+  var email = req.session.email;
 
-  usersCollection.updateOne({email: email}, {$push: {eventsAttended: pod}}).then(() => {
+  usersCollection.updateOne({ email: email }, { $push: { eventsAttended: pod } }).then(() => {
     res.sendStatus(200);
   }).catch((err) => {
     console.error(err);
@@ -270,11 +281,12 @@ app.post('/savePod', (req, res) => {
   });
 });
 
+// GET request for the "/login" URL
 app.get("/login", (req, res) => {
   res.render("splash/login", { currentPage: 'login' });
 });
 
-
+// POST request for the "/login" URL
 app.post("/login", async (req, res) => {
   const schema = Joi.object({
     username: Joi.string().required(),
@@ -302,6 +314,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
+// GET request for the "/logout" URL
 app.get("/logout", (req, res) => {
   req.session.destroy((err) => {
     if (err) {
@@ -313,6 +326,7 @@ app.get("/logout", (req, res) => {
   });
 });
 
+// GET request for the "/admin" URL
 app.get("/admin", async (req, res) => {
   if (req.session.loggedIn) {
     const currentUser = await usersCollection.findOne({ email: req.session.email });
@@ -347,7 +361,7 @@ app.get("/demote/:userId", async (req, res) => {
   }
 });
 
-
+// GET request for the "/settings" URL
 app.get("/settings", async (req, res) => {
   if (req.session.loggedIn) {
     try {
@@ -369,8 +383,9 @@ app.get("/members", (req, res) => {
   }
 });
 
+// GET request for the "/pods" URL
 app.get("/yourpods", async (req, res) => {
-  if(req.session.loggedIn) {
+  if (req.session.loggedIn) {
     const user = await usersCollection.findOne({ email: req.session.email });
     if (!user) {
       console.log(`User email from session: ${req.session.email}`);
@@ -383,8 +398,9 @@ app.get("/yourpods", async (req, res) => {
   }
 });
 
+// GET request for the "/createdpods" URL
 app.get("/createdpods", async (req, res) => {
-  if(req.session.loggedIn) {
+  if (req.session.loggedIn) {
     try {
       const createdPods = await podsCollection.find({ creator: req.session.email }).toArray();
       res.render("pods", { activeTab: 'createdpods', currentPage: 'pods', createdPods: createdPods });
@@ -396,10 +412,10 @@ app.get("/createdpods", async (req, res) => {
   }
 });
 
-
+// GET request for the "/createpod" URL
 app.get("/createpod", (req, res) => {
-  if(req.session.loggedIn) {
-    res.render("createpod", { currentPage: 'pods'});
+  if (req.session.loggedIn) {
+    res.render("createpod", { currentPage: 'pods' });
   }
 });
 
@@ -482,17 +498,17 @@ app.get("/editProfile", async (req, res) => {
 });
 
 app.get("/findPods", (req, res) => {
-  res.render('findPods', {currentPage: 'findPods'});
+  res.render('findPods', { currentPage: 'findPods' });
 })
 
 app.get('/getPods', async (req, res) => {
   var email = req.session.email;
-  var user = await usersCollection.findOne({email: email});
+  var user = await usersCollection.findOne({ email: email });
   var attendedPods = user.eventsAttended || [];
 
-  var pods = await podsCollection.find({name: {$nin: attendedPods.map(pod => pod.name)}}).project().toArray();
-  for (var i = 0; i < pods.length; i++){
-      pods[i] = JSON.stringify(pods[i]);
+  var pods = await podsCollection.find({ name: { $nin: attendedPods.map(pod => pod.name) } }).project().toArray();
+  for (var i = 0; i < pods.length; i++) {
+    pods[i] = JSON.stringify(pods[i]);
   }
   res.json(pods);
 });
