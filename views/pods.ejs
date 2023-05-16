@@ -1,30 +1,12 @@
 <%- include("templates/header") %>
 
-  <!-- <div class="tabs">
-    <div style="display: flex; justify-content: space-between; width: 100%;">
-      <a href="/yourpods" class="btn <%= activeTab === 'yourpods' ? 'btn-primary active' : 'btn-secondary' %>"
-        style="flex: 1;">Your Pods</a>
-
-
-      <a href="/createdpods" class="btn <%= activeTab === 'createdpods' ? 'btn-primary active' : 'btn-secondary' %>"
-        style="flex: 1;">Pods You've Created</a>
-    </div>
-
-  </div> -->
   <div class="content form">
 
     <div class="user-profile pods-actions" style="display: flex; justify-content: space-between; width: 100%;">
       <div class="action-button">
-        <!-- <button class="btn blue-button" onclick="window.location.href='/yourPods'">Joined Pods</button> -->
 
-        <!-- <a href="/yourpods" class="btn <%= activeTab === 'yourpods' ? 'btn-primary active' : 'btn-secondary' %>"
-          style="flex: 1;">Your Pods</a> -->
       </div>
       <div class="action-button">
-        <!-- <button class="btn blue-button" onclick="window.location.href='/createdPods'">Hosted Pods</button> -->
-
-        <!-- <a href="/createdpods" class="btn <%= activeTab === 'createdpods' ? 'btn-primary active' : 'btn-secondary' %>"
-          style="flex: 1;">Pods You've Created</a> -->
 
       </div>
     </div>
@@ -33,7 +15,6 @@
     <% if (activeTab==='createdpods' ) { %>
       <a href="/createpod"><button class="btn blue-button">Host a pod</button></a>
       <hr>
-      <!-- <h1>Pods you've created</h1> -->
       <% createdPods.forEach(function(pod) { %>
         <div class="card">
           <h2>
@@ -60,9 +41,9 @@
                 <!-- add more pod details here -->
               </div>
               <br>
-            <% }); %>
-            <!-- content to be added later -->
-            <% } %>
+              <% }); %>
+                <!-- content to be added later -->
+                <% } %>
   </div>
   <%- include("templates/footer") %>
 
