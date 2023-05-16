@@ -42,14 +42,17 @@
                 </div>
             </div>
         </div>
+
+        <br><br><br>
+        <!-- Easter egg button -->
+        <button class="animate-secret btn easter-egg-button" onclick="redirectToFlappyOrca()">🤔🤔🤔🤔 ???</button>
+    </div>
+
     </div>
     <div class="splash-footer container-splash-section">
         <br><br><br>
     </div>
 
-    <!-- Easter egg button -->
-    <button class="btn easter-egg-button" onclick="redirectToFlappyOrca()">Secret Easter Egg</button>
-    </div>
     <%- include("splash-footer.ejs") %>
 
         <style>
@@ -86,6 +89,12 @@
                 opacity: 0;
                 transform: translateX(-50px);
                 animation: swipe-right-and-fade-in 0.5s ease 2s forwards;
+            }
+
+            .animate-secret {
+                opacity: 0;
+                transform: translateX(-50px);
+                animation: swipe-right-and-fade-in 0.5s ease 4s forwards;
             }
 
             easter-egg-button {
