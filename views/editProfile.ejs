@@ -1,61 +1,77 @@
 <%- include("templates/header") %>
 
-  <div class="user-profile form">
-    <div class="profile-photo">
-      <img src="https://cdn.discordapp.com/attachments/828116217285836825/1106489564949925948/orca_pfp.jpg"
-        alt="Profile Photo">
-    </div>
-
-
-    <div class="profile-details">
-      <h1 class="profile-name">
-        <%= user.name %>
-      </h1>
-      <h4 class="pronouns">
-        (<%= user.pronouns %>)
-      </h4>
-    </div>
-    <h4 class="username">@<%= user.username %>
-    </h4>
-    <form class="form" action="/updateProfile" method="post">
-      <input class="btn blue-button" type="submit" value="Submit">
-      <hr>
-      <label for="email">Email</label>
-      <input class="form-control" type="email" id="email" name="email" value="<%= user.email %>">
-      <br>
-
-      <label for="birthday">Birthday</label>
-      <input class="form-control" type="date" id="birthday" name="birthday"
-        value="<%= user.birthday instanceof Date ? user.birthday.toISOString().split('T')[0] : '' %>">
-
-      <input class="form-control" id="disabledInput" type="text"
-        placeholder="<%= user.birthday instanceof Date ? user.birthday.toISOString().substring(0, 10) : '' %>" disabled>
-      <hr>
-
-
-
-
-      <label for="name">Your name</label>
-      <input class="form-control" type="text" id="name" name="name" value="<%= user.name %>"><br>
-
-      <label for="username">Username</label>
-      <div>
-        <div class="input-group mb-2">
-          <div class="input-group-prepend">
-            <div class="input-group-text">@</div>
-          </div>
-          <input class="form-control" type="text" id="username" name="username" value="<%= user.username %>">
-        </div>
-      </div>
-      <br>
-      <label for="pronouns">Pronouns</label>
-      <input class="form-control" type="text" id="pronouns" name="pronouns" value="<%= user.pronouns %>">
-    </form>
-
+<div class="user-profile form">
+  <div class="profile-photo">
+    <img src="https://cdn.discordapp.com/attachments/828116217285836825/1106489564949925948/orca_pfp.jpg"
+      alt="Profile Photo">
   </div>
 
 
+  <div class="profile-details">
+    <h1 class="profile-name">
+      <%= user.name %>
+    </h1>
+    <h4 class="pronouns">
+      (<%= user.pronouns %>)
+    </h4>
+  </div>
+  <h4 class="username">@<%= user.username %>
+  </h4>
+  <form class="form" action="/updateProfile" method="post">
+    <input class="btn blue-button" type="submit" value="Submit">
+    <hr>
+    <label for="email">Email</label>
+    <input class="form-control" type="email" id="email" name="email" value="<%= user.email %>">
+    <br>
+
+    <label for="birthday">Birthday</label>
+    <input class="form-control" type="date" id="birthday" name="birthday"
+      value="<%= user.birthday instanceof Date ? user.birthday.toISOString().split('T')[0] : '' %>">
+
+    <input class="form-control" id="disabledInput" type="text"
+      placeholder="<%= user.birthday instanceof Date ? user.birthday.toISOString().substring(0, 10) : '' %>" disabled>
+    <hr>
 
 
 
-  <%- include("templates/footer") %>
+
+    <label for="name">Your name</label>
+    <input class="form-control" type="text" id="name" name="name" value="<%= user.name %>"><br>
+
+    <label for="username">Username</label>
+    <div>
+      <div class="input-group mb-2">
+        <div class="input-group-prepend">
+          <div class="input-group-text">@</div>
+        </div>
+        <input class="form-control" type="text" id="username" name="username" value="<%= user.username %>">
+      </div>
+    </div>
+    <br>
+    <label for="pronouns">Pronouns</label>
+    <input class="form-control" type="text" id="pronouns" name="pronouns" value="<%= user.pronouns %>">
+
+    <br>
+    <label>Your Pod Tags </label>
+    <div id="interests">
+      <% const interests = ['outdoors', 'video games', 'reading', 'cooking', 'music', 'sports', 'art', 'travel', 'coding', 'photography']; %>
+      <% interests.forEach((interest, index) => { %>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="<%= interest %>" id="interest<%= index %>"
+          name="interests" <%= user.interests && user.interests.includes(interest) ? 'checked' : '' %>>
+        <label class="form-check-label" for="interest<%= index %>">
+          <%= interest %>
+        </label>
+      </div>
+      <% }) %>
+    </div>
+
+  </form>
+
+</div>
+
+
+
+
+
+<%- include("templates/footer") %>
