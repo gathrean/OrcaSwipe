@@ -505,13 +505,29 @@ app.get('/getPods', async (req, res) => {
   var email = req.session.email;
   var user = await usersCollection.findOne({ email: email });
   var attendedPods = user.eventsAttended || [];
+  var userInterests = user.interests || [];  // Get the user's interests
 
-  var pods = await podsCollection.find({ name: { $nin: attendedPods.map(pod => pod.name) } }).project().toArray();
-  for (var i = 0; i < pods.length; i++) {
-    pods[i] = JSON.stringify(pods[i]);
+  // Prepare a list of keys from user interests where value is true
+  let keys = [];
+  for (let interest of userInterests) {
+    keys.push(`tags.${interest}`);
+  }
+
+  // Prepare a query where at least one key from the list has value true
+  let query = { $or: keys.map(key => ({ [key]: true })) };
+
+  var pods = await podsCollection.find({
+    name: {$nin: attendedPods.map(pod => pod.name)},
+    ...query
+  }).project().toArray();
+  
+  for (var i = 0; i < pods.length; i++){
+      pods[i] = JSON.stringify(pods[i]);
   }
   res.json(pods);
 });
+
+
 
 
 
