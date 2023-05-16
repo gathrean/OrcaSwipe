@@ -550,6 +550,10 @@ app.post("/updateProfile", async (req, res) => {
   }
 });
 
+app.get('/map', (req, res) => {
+  res.render('map');
+})
+
 app.get('*', (req, res) => {
   res.status(404);
   res.render("404");
