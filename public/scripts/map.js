@@ -5,14 +5,14 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
 
-var coordinates;
 var targetPin = undefined;
 
 map.on('click', (e) => {
     if (targetPin != undefined) {
         map.removeLayer(targetPin)
     }
-    coordinates = e.latlng;
-    targetPin = L.marker(coordinates).addTo(map);
-    targetPin.bindPopup("<b>Your pod is here?</b>").openPopup();
+    targetPin = L.marker(e.latlng).addTo(map);
+    targetPin.bindPopup("<b>Pod Location</b>").openPopup();
+    $('#lat').val(e.latlng.lat);
+    $('#lng').val(e.latlng.lng);
 })
