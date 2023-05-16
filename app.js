@@ -403,16 +403,19 @@ app.get("/createpod", (req, res) => {
   }
 });
 
+
+
 app.post("/createpod", async (req, res) => {
   if(req.session.loggedIn) {
-    let { name, event1, event2, event3, eventDescription } = req.body;
+    let { name, eventDescription } = req.body;
 
-    // If the event is in req.body, it was checked. Otherwise, it was not.
-    const tags = {
-      outdoors: !!event1,
-      music: !!event2,
-      sports: !!event3
-    };
+    const interests = ['outdoors', 'video games', 'reading', 'cooking', 'music', 'sports', 'art', 'travel', 'coding', 'photography'];
+
+    // If the interest is in req.body, it was checked. Otherwise, it was not.
+    let tags = {}
+    interests.forEach(interest => {
+        tags[interest] = !!req.body[interest];
+    });
 
     const creator = req.session.email;
     let attenders = 0;
@@ -422,11 +425,7 @@ app.post("/createpod", async (req, res) => {
     // use Joi to validate data
     const schema = Joi.object({
       name: Joi.string().required(),
-      tags: Joi.object({
-        outdoors: Joi.boolean(),
-        music: Joi.boolean(),
-        sports: Joi.boolean()
-      }),
+      tags: Joi.object().pattern(Joi.string(), Joi.boolean()),
       eventDescription: Joi.string().required(),
       attenders: Joi.number().integer().min(0),
       creator: Joi.string()
@@ -448,6 +447,8 @@ app.post("/createpod", async (req, res) => {
     res.status(403).send("You must be logged in to create a pod.<br><a href='/'>Go back to home page</a>");
   }
 });
+
+
 
 app.get("/profile", async (req, res) => {
   if (req.session.loggedIn) {
