@@ -57,11 +57,11 @@
     color: black;
     top: 0;
     left: 0;
-    padding: 20px;
+    /* padding: 20px; */
     margin: 10px;
 
-    background: white;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    /* background: #00A676; */
+    /* box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; */
     border-radius: 20px;
 }
 

@@ -1,8 +1,8 @@
-let move_speed = 3, grativy = 0.5;
+let move_speed = 1, grativy = 0.3, pipe_speed = 2;
 let orca = document.querySelector('.orca');
 let img = document.getElementById('orca-1');
-let sound_point = new Audio('soundfx/rizz-sounds--.mp3');
-let sound_die = new Audio('soundfx/vine-boom--mp3');
+let sound_point = new Audio('flappy-soundfx/rizz-sounds.mp3');
+let sound_die = new Audio('flappy-soundfx/vine-boom.mp3');
 
 // getting orca element properties
 let orca_props = orca.getBoundingClientRect();
@@ -58,17 +58,18 @@ function play() {
             } else {
                 if (orca_props.left < pipe_sprite_props.left + pipe_sprite_props.width && orca_props.left + orca_props.width > pipe_sprite_props.left && orca_props.top < pipe_sprite_props.top + pipe_sprite_props.height && orca_props.top + orca_props.height > pipe_sprite_props.top) {
                     game_state = 'End';
-                    message.innerHTML = 'Game Over'.fontcolor('red') + '<br> Enter To Restart';
+                    message.innerHTML = 'Game Over'.fontcolor('red') + '<br> Click to restart';
                     message.classList.add('messageStyle');
                     img.style.display = 'none';
                     sound_die.play();
                     return;
                 } else {
-                    if (pipe_sprite_props.right < orca_props.left && pipe_sprite_props.right + move_speed >= orca_props.left && element.increase_score == '1') {
-                        score_val.innerHTML = + score_val.innerHTML + 1;
+                    if (pipe_sprite_props.right < orca_props.left && pipe_sprite_props.right + pipe_speed >= orca_props.left && element.increase_score == '1') {
+                        score_val.innerHTML = +score_val.innerHTML + 1;
                         sound_point.play();
+                        element.increase_score = '0'; // Prevent multiple score increments
                     }
-                    element.style.left = pipe_sprite_props.left - move_speed + 'px';
+                    element.style.left = pipe_sprite_props.left - pipe_speed + 'px';
                 }
             }
         });
@@ -85,25 +86,25 @@ function play() {
         // Keyboard input
         document.addEventListener('keydown', (e) => {
             if (e.key == 'ArrowUp' || e.key == ' ') {
-                img.src = 'images/orca-2.png';
+                img.src = 'orca-2.png';
                 orca_dy = -7.6;
             }
         });
 
         document.addEventListener('keyup', (e) => {
             if (e.key == 'ArrowUp' || e.key == ' ') {
-                img.src = 'images/orca.png';
+                img.src = 'orca.png';
             }
         });
 
         // Click input
         document.addEventListener('mousedown', () => {
-            img.src = 'images/orca-2.png';
+            img.src = 'orca-2.png';
             orca_dy = -7.6;
         });
 
         document.addEventListener('mouseup', () => {
-            img.src = 'images/orca.png';
+            img.src = 'orca.png';
         });
 
         if (orca_props.top <= 0 || orca_props.bottom >= background.bottom) {
@@ -129,7 +130,7 @@ function play() {
     function create_pipe() {
         if (game_state != 'Play') return;
 
-        if (pipe_seperation > 115) {
+        if (pipe_seperation > 250) {
             pipe_seperation = 0;
 
             let pipe_posi = Math.floor(Math.random() * 43) + 8;
