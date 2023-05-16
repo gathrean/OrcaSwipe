@@ -405,7 +405,9 @@ app.get("/createpod", (req, res) => {
 
 app.post("/createpod", async (req, res) => {
   if(req.session.loggedIn) {
-    let { name, event1, event2, event3, eventDescription } = req.body;
+    let { name, event1, event2, event3, eventDescription} = req.body;
+    var location = {lat: req.body.lat, lng: req.body.lng};
+    console.log(location);
 
     // If the event is in req.body, it was checked. Otherwise, it was not.
     const tags = {
@@ -417,7 +419,7 @@ app.post("/createpod", async (req, res) => {
     const creator = req.session.email;
     let attenders = 0;
 
-    const newPod = { name, tags, eventDescription, attenders, creator };
+    const newPod = { name, tags, eventDescription, attenders, creator, location };
     
     // use Joi to validate data
     const schema = Joi.object({
@@ -429,7 +431,11 @@ app.post("/createpod", async (req, res) => {
       }),
       eventDescription: Joi.string().required(),
       attenders: Joi.number().integer().min(0),
-      creator: Joi.string()
+      creator: Joi.string(),
+      location: Joi.object({
+        lat: Joi.number().required(),
+        lng: Joi.number().required()
+      })
     });
 
     const validationResult = schema.validate(newPod);
