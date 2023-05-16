@@ -22,11 +22,16 @@ const setup = () => {
     $('.see-details').on('click', function(e){
         var podName = $(this).attr('id');
         var pod = findPod(pods, podName);
+        var tags = Object.keys(pod.tags);
         $('.modal-title').empty().append(podName);
         $('.modal-body').empty().append(`
             <span>Description</span>
             <ul>
                 ${pod.eventDescription}
+            </ul>
+            <span>Tags</span>
+            <ul>
+                ${tags.map((tag) => {return `<li>${tag}</li>`}).join('')}
             </ul>
         `)
     })
