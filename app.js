@@ -407,7 +407,6 @@ app.post("/createpod", async (req, res) => {
   if(req.session.loggedIn) {
     let { name, event1, event2, event3, eventDescription} = req.body;
     var location = {lat: req.body.lat, lng: req.body.lng};
-    console.log(location);
 
     // If the event is in req.body, it was checked. Otherwise, it was not.
     const tags = {
