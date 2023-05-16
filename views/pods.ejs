@@ -1,5 +1,5 @@
 <%- include("templates/header") %>
-
+<script defer src="/scripts/podDetails.js"></script>
   <!-- <div class="tabs">
     <div style="display: flex; justify-content: space-between; width: 100%;">
       <a href="/yourpods" class="btn <%= activeTab === 'yourpods' ? 'btn-primary active' : 'btn-secondary' %>"
@@ -58,6 +58,7 @@
                   <%= pod.eventDescription %>
                 </p>
                 <!-- add more pod details here -->
+                <button id="see-details" type="button" class="btn blue-button">See Details</button>
               </div>
               <br>
             <% }); %>
