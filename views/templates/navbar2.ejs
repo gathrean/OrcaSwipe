@@ -39,6 +39,22 @@
 <header class="navbar-2 py-3 sticky-top" style="background-color: white;">
 
     <!-- LEFT -->
+    <div class="navbar-2__icons">
+        <ul class="nav nav-pills container-fluid justify-content-center align-items-center">
+
+            <!-- MENU / HAMBURGER -->
+            <li class="nav-item">
+                <a href="#" class="navbar-2__icon nav-link" aria-current="page" id="navbar-2__menu-toggle">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" viewBox="0 0 24 24">
+                        <!-- Add your SVG icon code here -->
+                        <%- include("icons/hamburger") %>
+                    </svg>
+                </a>
+            </li>
+
+        </ul>
+    </div>
+
     <div class="navbar-2__logo">
         <a>
             <!-- logo image -->
@@ -51,29 +67,18 @@
     <div class="navbar-2__icons">
         <ul class="nav nav-pills container-fluid justify-content-center align-items-center">
 
-            <!-- SETTINGS -->
+            <!-- PROFILE -->
             <li class="nav-item">
-                <a href="/settings"
-                    class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'settings') ? 'active' : '' %>"
+                <a href="/profile"
+                    class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'profile') ? 'active' : '' %>"
                     aria-current="page">
                     <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" viewBox="0 0 24 24">
                         <!-- Add your SVG icon code here -->
-                        <%- include("icons/settings") %>
-                    </svg>
-                    <!-- <span class="icon-label">settings</span> -->
-                </a>
-            </li>
-
-
-            <!-- MENU / HAMBURGER -->
-            <li class="nav-item">
-                <a href="#" class="navbar-2__icon nav-link" aria-current="page" id="navbar-2__menu-toggle">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" viewBox="0 0 24 24">
-                        <!-- Add your SVG icon code here -->
-                        <%- include("icons/hamburger") %>
+                        <%- include("icons/profile") %>
                     </svg>
                 </a>
             </li>
+
         </ul>
     </div>
 </header>
