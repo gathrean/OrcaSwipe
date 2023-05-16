@@ -407,7 +407,8 @@ app.get("/createpod", (req, res) => {
 
 app.post("/createpod", async (req, res) => {
   if(req.session.loggedIn) {
-    let { name, eventDescription } = req.body;
+    let { name, eventDescription} = req.body;
+    var location = {lat: req.body.lat, lng: req.body.lng};
 
     const interests = ['outdoors', 'video games', 'reading', 'cooking', 'music', 'sports', 'art', 'travel', 'coding', 'photography'];
 
@@ -420,7 +421,7 @@ app.post("/createpod", async (req, res) => {
     const creator = req.session.email;
     let attenders = 0;
 
-    const newPod = { name, tags, eventDescription, attenders, creator };
+    const newPod = { name, tags, eventDescription, attenders, creator, location };
     
     // use Joi to validate data
     const schema = Joi.object({
@@ -428,7 +429,11 @@ app.post("/createpod", async (req, res) => {
       tags: Joi.object().pattern(Joi.string(), Joi.boolean()),
       eventDescription: Joi.string().required(),
       attenders: Joi.number().integer().min(0),
-      creator: Joi.string()
+      creator: Joi.string(),
+      location: Joi.object({
+        lat: Joi.number().required(),
+        lng: Joi.number().required()
+      })
     });
 
     const validationResult = schema.validate(newPod);
