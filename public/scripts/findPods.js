@@ -33,10 +33,15 @@ function loadPods() {
 
 function populateStack() {
     for (var i = 0; i < pods.length; i++) {
+        var tags = [];
+        if (pods[i].tags.outdoors) tags.push("Outdoor activity");
+        if (pods[i].tags.music) tags.push("Music Festival");
+        if (pods[i].tags.sports) tags.push("Sport activity");
         var card = `<div class="tinder--card">
                         <img>
                         <h3>${pods[i].name}</h3>
                         <p>${pods[i].eventDescription}</p>
+                        <p>Tags: ${tags.join(', ')}</p>
                     </div>`
         $('#stack').append(card);
     }
@@ -44,6 +49,7 @@ function populateStack() {
     initCards();
     makeSwipable();
 }
+
 
 function handleLoveSwipe(pod) {
     const xhttp = new XMLHttpRequest();
