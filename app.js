@@ -154,7 +154,7 @@ app.post('/submitPassword', async (req, res) => {
   });
   const validationResult = schema.validate(req.body);
   if (validationResult.error) {
-    res.render('error', { link: 'createNewPassword', error: validationResult.error });
+    res.render('errors/error', { link: 'createNewPassword', error: validationResult.error });
   } else {
 
     const user = await usersCollection.findOne({
@@ -164,14 +164,14 @@ app.post('/submitPassword', async (req, res) => {
       ]
     });
     if (user == null) {
-      res.render('error', { link: "/resetPassword", error: 'Reset code is invalid, please try again.' });;
+      res.render('errors/error', { link: "/resetPassword", error: 'Reset code is invalid, please try again.' });;
     }
     if (Date.now() < user.resetExpiry) {
       var newPassword = await bcrypt.hash(req.body.password, 10);
       await usersCollection.updateOne({ email: email }, { $set: { password: newPassword } });
       res.redirect('/login');
     } else {
-      res.render('error', { link: "/resetPassword", error: 'Reset has expired, please try again.' })
+      res.render('errors/error', { link: "/resetPassword", error: 'Reset has expired, please try again.' })
     }
   }
 
@@ -186,11 +186,11 @@ app.post('/sendResetEmail', async (req, res) => {
   const validationResult = schema.validate(req.body);
 
   if (validationResult.error) {
-    res.render('error.ejs', { link: 'resetPassword', error: validationResult.error });
+    res.render('errors/error.ejs', { link: 'resetPassword', error: validationResult.error });
   } else {
     const user = await usersCollection.find({ email: email });
     if (user == null) {
-      res.render('error', { link: 'resetPassword', error: 'Email is not registered.' })
+      res.render('errors/error', { link: 'resetPassword', error: 'Email is not registered.' })
     } else {
       const resetCode = Math.random().toString(36).substring(2, 8);;
       const target = `${hostURL}updatePassword?email=${email}&code=${resetCode}`;
@@ -610,7 +610,7 @@ app.post("/updateProfile", async (req, res) => {
 // GET request to catch all other routes that are not defined
 app.get('*', (req, res) => {
   res.status(404);
-  res.render("404");
+  res.render("errors/404");
 });
 
 // Start server
