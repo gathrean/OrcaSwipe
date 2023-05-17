@@ -383,8 +383,10 @@ app.get("/members", (req, res) => {
   }
 });
 
+// I (ean) removed the GET request for /yourpods to better clean the code up
+
 // GET request for the "/pods" URL
-app.get("/yourpods", async (req, res) => {
+app.get("/attendedpods", async (req, res) => {
   if (req.session.loggedIn) {
     const user = await usersCollection.findOne({ email: req.session.email });
     if (!user) {
@@ -392,7 +394,7 @@ app.get("/yourpods", async (req, res) => {
       console.log('User from DB: ', user);
       return res.status(500).send('User not found');
     }
-    res.render("pods", { activeTab: 'pods', currentPage: 'pods', attendedPods: user.eventsAttended });
+    res.render("attendedpods", { activeTab: 'attendedpods', currentPage: 'attendedPods', attendedPods: user.eventsAttended });
   } else {
     res.status(403).send("You must be logged in to access the pods page.<br><a href='/'>Go back to home page</a>")
   }
@@ -403,7 +405,7 @@ app.get("/createdpods", async (req, res) => {
   if (req.session.loggedIn) {
     try {
       const createdPods = await podsCollection.find({ creator: req.session.email }).toArray();
-      res.render("pods", { activeTab: 'createdpods', currentPage: 'pods', createdPods: createdPods });
+      res.render("createdpods", { activeTab: 'createdpods', currentPage: 'createdPods', createdPods: createdPods });
     } catch (error) {
       res.status(500).send("Error retrieving created pods.<br><a href='/'>Go back to home page</a>")
     }
@@ -419,26 +421,24 @@ app.get("/createpod", (req, res) => {
   }
 });
 
-
-
 app.post("/createpod", async (req, res) => {
-  if(req.session.loggedIn) {
-    let { name, eventDescription} = req.body;
-    var location = {lat: req.body.lat, lng: req.body.lng};
+  if (req.session.loggedIn) {
+    let { name, eventDescription } = req.body;
+    var location = { lat: req.body.lat, lng: req.body.lng };
 
     const interests = ['outdoors', 'video games', 'reading', 'cooking', 'music', 'sports', 'art', 'travel', 'coding', 'photography'];
 
     // If the interest is in req.body, it was checked. Otherwise, it was not.
     let tags = {}
     interests.forEach(interest => {
-        tags[interest] = !!req.body[interest];
+      tags[interest] = !!req.body[interest];
     });
 
     const creator = req.session.email;
     let attenders = 0;
 
     const newPod = { name, tags, eventDescription, attenders, creator, location };
-    
+
     // use Joi to validate data
     const schema = Joi.object({
       name: Joi.string().required(),
@@ -468,8 +468,6 @@ app.post("/createpod", async (req, res) => {
     res.status(403).send("You must be logged in to create a pod.<br><a href='/'>Go back to home page</a>");
   }
 });
-
-
 
 app.get("/profile", async (req, res) => {
   if (req.session.loggedIn) {
@@ -517,19 +515,15 @@ app.get('/getPods', async (req, res) => {
   let query = { $or: keys.map(key => ({ [key]: true })) };
 
   var pods = await podsCollection.find({
-    name: {$nin: attendedPods.map(pod => pod.name)},
+    name: { $nin: attendedPods.map(pod => pod.name) },
     ...query
   }).project().toArray();
-  
-  for (var i = 0; i < pods.length; i++){
-      pods[i] = JSON.stringify(pods[i]);
+
+  for (var i = 0; i < pods.length; i++) {
+    pods[i] = JSON.stringify(pods[i]);
   }
   res.json(pods);
 });
-
-
-
-
 
 app.get("/viewProfile", async (req, res) => {
   if (req.session.loggedIn) {
