@@ -4,11 +4,11 @@
         <h1>Settings</h1>
         <div>
             <label for="pod-proximity">Edit Pod Proximity:</label>
-            <input type="range" id="pod-proximity" name="podProximity" min="0" max="1000"
-                value="<%= user.podProximity %>" step="1" oninput="updatePodProximityValue(this.value)">
-            <span id="pod-proximity-value">
-                <%= user.podProximity %>
-            </span> meters
+            <input type="range" id="pod-proximity" name="podProximity" min="0" max="100"
+                value="<%- user.podProximity / 1000 %>" step="1" oninput="updatePodProximityValue(this.value)">
+            <div id="pod-proximity-value">
+                <%- user.podProximity / 1000 %> Kilometers
+            </div> 
         </div>
 
         <hr>
@@ -17,7 +17,7 @@
 
     <script>
         function updatePodProximityValue(value) {
-            document.getElementById("pod-proximity-value").textContent = value;
+            document.getElementById("pod-proximity-value").textContent = value + ' Kilometers';
         }
     </script>
 

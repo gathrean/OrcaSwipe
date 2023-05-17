@@ -241,8 +241,7 @@ app.get('/updatePassword', async (req, res) => {
 app.post("/updateSettings", async (req, res) => {
   if (req.session.loggedIn) {
     const schema = Joi.object({
-      name: Joi.string().max(50).required(),
-      podProximity: Joi.number().min(0).max(1000).required(),
+      podProximity: Joi.number().min(0).max(100).required(),
     });
 
     const validationResult = schema.validate(req.body);
@@ -252,8 +251,7 @@ app.post("/updateSettings", async (req, res) => {
     } else {
       try {
         const updatedUser = {
-          name: req.body.name,
-          podProximity: req.body.podProximity,
+          podProximity: req.body.podProximity * 1000,
         };
         await usersCollection.updateOne({ email: req.session.email }, { $set: updatedUser });
         req.session.name = updatedUser.name;
@@ -572,6 +570,7 @@ app.get("/editProfile", async (req, res) => {
 app.get("/findPods", async (req, res) => {
   var email = req.session.email;
   var user = await usersCollection.findOne({ email: email });
+  console.log(user)
   res.render('findPods', { currentPage: 'findPods', maxDist: user.podProximity });
 })
 

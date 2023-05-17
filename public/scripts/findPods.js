@@ -39,12 +39,8 @@ function loadPods() {
             navigator.geolocation.getCurrentPosition(function getLocation(position){
                 userLocation = {lat: position.coords.latitude, lng: position.coords.longitude};
                 pods = pods.filter((p) => {
-                    console.log(map.distance(p.location, userLocation));
-                    console.log(maxDist);
-                    console.log(p.name);
                     return map.distance(p.location, userLocation) <= maxDist;
                 })
-                console.log(pods)
                 populateStack();
             });  
         } else {
