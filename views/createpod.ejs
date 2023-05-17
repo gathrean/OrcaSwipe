@@ -3,6 +3,8 @@
     integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
 <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
     integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+
+    
 <script defer src="scripts/map.js"></script>
 <style>
     #map {
@@ -13,7 +15,7 @@
     }
 </style>
 
-<form class="form" action="/createpod" method="post">
+<form class="form" action="/createpod" method="post" enctype="multipart/form-data">
     <h4>Enter pod information:</h4>
     <input type="text" name="name" placeholder="Name of the pod"><br>
     <label>Pod Tags </label>
@@ -36,6 +38,9 @@
     <input id="lng" name="lng" type="hidden">
     <label for="map">Where is this Pod?</label>
     <div id="map"></div>
+    <br>
+
+    <input type="file" name="image" accept="image/*"><br>
     <input class="btn blue-button" type="submit" value="Create!">
 </form>
 <%- include("templates/footer") %>
