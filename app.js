@@ -288,7 +288,9 @@ app.post("/signup", async (req, res) => {
         email: req.body.email,
         password: hashedPassword,
         admin: false,
-        eventsAttended: []
+        eventsAttended: [],
+        interests: [],
+        podProximity: 500
       };
       const result = await usersCollection.insertOne(newUser);
       req.session.loggedIn = true;
@@ -577,21 +579,32 @@ app.get('/getPods', async (req, res) => {
   var email = req.session.email;
   var user = await usersCollection.findOne({ email: email });
   var attendedPods = user.eventsAttended || [];
-  var userInterests = user.interests || [];  // Get the user's interests
+  var userInterests = user.interests;  // Get the user's interests
 
   // Prepare a list of keys from user interests where value is true
   let keys = [];
-  for (let interest of userInterests) {
-    keys.push(`tags.${interest}`);
-  }
+  let query;
 
   // Prepare a query where at least one key from the list has value true
-  let query = { $or: keys.map(key => ({ [key]: true })) };
+  if (userInterests && userInterests.length != 0){
+    query = { $or: keys.map(key => ({ [key]: true })) };
+    for (let interest of userInterests) {
+      keys.push(`tags.${interest}`);
+    }
+  }
 
-  var pods = await podsCollection.find({
-    name: { $nin: attendedPods.map(pod => pod.name) },
-    ...query
-  }).project().toArray();
+  if (userInterests && userInterests.length != 0){
+    var pods = await podsCollection.find({
+      name: { $nin: attendedPods.map(pod => pod.name) },
+      ...query
+    }).project().toArray();
+  } else {
+    var pods = await podsCollection.find({
+      name: { $nin: attendedPods.map(pod => pod.name) }
+    }).project().toArray();
+  }
+
+  console.log(pods)
 
   for (var i = 0; i < pods.length; i++) {
     pods[i] = JSON.stringify(pods[i]);
