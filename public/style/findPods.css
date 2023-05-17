@@ -58,6 +58,8 @@
   cursor: -webkit-grab;
   cursor: -moz-grab;
   cursor: grab;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.75); 
+  /* box-shadow: (horizonal) (vertical) (blur radius) (rgb) */
 }
 
 .moving.tinder--card {
