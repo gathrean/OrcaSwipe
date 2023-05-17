@@ -476,6 +476,7 @@ app.get("/createpod", (req, res) => {
 
 
 app.post("/createpod", upload.single('image'), async (req, res) => {
+  const interests=['outdoors', 'video games' , 'reading' , 'cooking' , 'music' , 'sports' , 'art', 'travel' , 'coding' , 'photography' ];
   if(req.session.loggedIn) {
     let { name, eventDescription} = req.body;
     var location = {lat: req.body.lat, lng: req.body.lng};
@@ -526,7 +527,7 @@ app.post("/createpod", upload.single('image'), async (req, res) => {
     } else {
       try {
         const result = await podsCollection.insertOne(newPod);
-        res.redirect("/yourpods");
+        res.redirect("/attendedPods");
       } catch (error) {
         res.status(500).send("Error creating pod.<br><a href='/createpod'>Go back</a>");
       }
