@@ -241,8 +241,7 @@ app.get('/updatePassword', async (req, res) => {
 app.post("/updateSettings", async (req, res) => {
   if (req.session.loggedIn) {
     const schema = Joi.object({
-      name: Joi.string().max(50).required(),
-      podProximity: Joi.number().min(0).max(1000).required(),
+      podProximity: Joi.number().min(0).max(100).required(),
     });
 
     const validationResult = schema.validate(req.body);
@@ -252,8 +251,7 @@ app.post("/updateSettings", async (req, res) => {
     } else {
       try {
         const updatedUser = {
-          name: req.body.name,
-          podProximity: req.body.podProximity,
+          podProximity: req.body.podProximity * 1000,
         };
         await usersCollection.updateOne({ email: req.session.email }, { $set: updatedUser });
         req.session.name = updatedUser.name;
@@ -288,7 +286,9 @@ app.post("/signup", async (req, res) => {
         email: req.body.email,
         password: hashedPassword,
         admin: false,
-        eventsAttended: []
+        eventsAttended: [],
+        interests: [],
+        podProximity: 10000
       };
       const result = await usersCollection.insertOne(newUser);
       req.session.loggedIn = true;
@@ -567,8 +567,11 @@ app.get("/editProfile", async (req, res) => {
 });
 
 // POST request for the "/findPods" URL
-app.get("/findPods", (req, res) => {
-  res.render('findPods', { currentPage: 'findPods' });
+app.get("/findPods", async (req, res) => {
+  var email = req.session.email;
+  var user = await usersCollection.findOne({ email: email });
+  console.log(user)
+  res.render('findPods', { currentPage: 'findPods', maxDist: user.podProximity });
 })
 
 // GET request for the "/getPods" URL
@@ -577,21 +580,30 @@ app.get('/getPods', async (req, res) => {
   var email = req.session.email;
   var user = await usersCollection.findOne({ email: email });
   var attendedPods = user.eventsAttended || [];
-  var userInterests = user.interests || [];  // Get the user's interests
+  var userInterests = user.interests;  // Get the user's interests
 
   // Prepare a list of keys from user interests where value is true
   let keys = [];
-  for (let interest of userInterests) {
-    keys.push(`tags.${interest}`);
-  }
+  let query;
 
   // Prepare a query where at least one key from the list has value true
-  let query = { $or: keys.map(key => ({ [key]: true })) };
+  if (userInterests && userInterests.length != 0){
+    query = { $or: keys.map(key => ({ [key]: true })) };
+    for (let interest of userInterests) {
+      keys.push(`tags.${interest}`);
+    }
+  }
 
-  var pods = await podsCollection.find({
-    name: { $nin: attendedPods.map(pod => pod.name) },
-    ...query
-  }).project().toArray();
+  if (userInterests && userInterests.length != 0){
+    var pods = await podsCollection.find({
+      name: { $nin: attendedPods.map(pod => pod.name) },
+      ...query
+    }).project().toArray();
+  } else {
+    var pods = await podsCollection.find({
+      name: { $nin: attendedPods.map(pod => pod.name) }
+    }).project().toArray();
+  }
 
   for (var i = 0; i < pods.length; i++) {
     pods[i] = JSON.stringify(pods[i]);
