@@ -9,9 +9,10 @@
 
             </div>
         </div>
-
         <h1>Pods you're attending</h1>
-
+        <script>
+            var pods = (<%- JSON.stringify(attendedPods) %>);
+        </script>
         <% attendedPods.forEach(function(pod) { %>
             <div class="card">
                 <h2>
@@ -26,6 +27,9 @@
                 <button class="btn show-attenders" data-pod-id="<%= pod._id %>">
                     Show attenders
                 </button>
+                <!-- add more pod details here -->
+                <button id="<%= pod.name %>" type="button" class="btn blue-button see-details" 
+                    data-bs-toggle="modal" data-bs-target="#pod-details">See Details</button>
             </div>
             <br>
         <% }); %>

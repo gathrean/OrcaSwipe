@@ -1,13 +1,16 @@
-const express = require("express");
-const session = require("express-session");
-const MongoStore = require("connect-mongo");
-const Joi = require("joi");
-const bcrypt = require("bcrypt");
-const { MongoClient, ObjectId } = require("mongodb");
-const url = require("url");
+// Import required modules
 require("dotenv").config();
-const ejs = require("ejs");
 
+const express = require("express");                      // Import express
+const session = require("express-session");              // Import express-session
+const MongoStore = require("connect-mongo");             // Import connect-mongo
+const Joi = require("joi");                              // Import Joi
+const bcrypt = require("bcrypt");                        // Import bcrypt
+const { MongoClient, ObjectId } = require("mongodb");    // Import Object from MongoDB
+const url = require("url");                              // Import url
+const ejs = require("ejs");                              // Import ejs
+
+// For sending emails
 const nodemailer = require('nodemailer');
 const appEmail = process.env.EMAIL;
 const appEmailPW = process.env.EMAIL_APP_PASSWORD;
@@ -22,8 +25,28 @@ const mailer = nodemailer.createTransport({
 });
 
 const app = express();
+
+// MongoDB collections
 let usersCollection;
 let podsCollection;
+
+///// Firebase SDK /////
+const admin = require("firebase-admin");
+
+const serviceAccount = require("./orcaswipe-8ae9b-firebase-adminsdk-a4otn-1e3c2ae04e.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  storageBucket: "orcaswipe-8ae9b.appspot.com"
+});
+
+const bucket = admin.storage().bucket();
+
+
+///// Multer Middleware needed for file upload /////
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
+
 
 // Environment variables
 const mongodb_user = process.env.MONGODB_USER;
@@ -33,12 +56,18 @@ const mongodb_database = process.env.MONGODB_DATABASE;
 const node_session_secret = process.env.NODE_SESSION_SECRET;
 const mongodb_session_secret = process.env.MONGODB_SESSION_SECRET;
 const hashedPassword = process.env.HASHED_PASSWORD;
+// End of environment variables
+
+// Set up the port
 const PORT = process.env.PORT || 3000;
 
+// Set the view engine for the app to EJS
 app.set("view engine", "ejs");
 
+// Construct the MongoDB connection URI using the provided variables
 const uri = `mongodb+srv://${mongodb_user}:${encodeURIComponent(mongodb_password)}@${mongodb_cluster}/${mongodb_database}`;
 
+// Connect to MongoDB using the provided URI and enable unified topology
 MongoClient.connect(uri, { useUnifiedTopology: true })
   .then((client) => {
     console.log("Connected to MongoDB");
@@ -50,10 +79,19 @@ MongoClient.connect(uri, { useUnifiedTopology: true })
     console.error("Error connecting to MongoDB", error);
   });
 
+// Enable JSON parsing middleware for the app
 app.use(express.json());
+
+// Enable URL-encoded parsing middleware for the app
 app.use(express.urlencoded({ extended: false }));
+
+// Serve static files from the "public" directory
 app.use(express.static("public"));
 
+// Serve static files from the "/views/splash" directory
+app.use('/splash', express.static('views/splash'));
+
+// Create a MongoStore instance for session management, using the MongoDB 
 var mongoStore = MongoStore.create({
   mongoUrl: `mongodb+srv://${mongodb_user}:${encodeURIComponent(mongodb_password)}@${mongodb_cluster}/${mongodb_database}`,
   crypto: {
@@ -61,12 +99,7 @@ var mongoStore = MongoStore.create({
   },
 });
 
-// Serve static files from the "/views/splash" directory
-app.use('/splash', express.static('views/splash'));
-
-// Serve static files from "/images" directory
-app.use(express.static('images'));
-
+// Enable session middleware for the app, with the following configurations:
 app.use(
   session({
     secret: node_session_secret,
@@ -116,7 +149,7 @@ app.get("/signup", (req, res) => {
 
 // GET request for the "/resetPassword" URL
 app.get('/resetPassword', (req, res) => {
-  res.render('resetPassword');
+  res.render('resetting-passwords/resetPassword');
 });
 
 // GET request for the "/createNewPassword" URL
@@ -139,7 +172,7 @@ app.post('/submitPassword', async (req, res) => {
   });
   const validationResult = schema.validate(req.body);
   if (validationResult.error) {
-    res.render('error', { link: 'createNewPassword', error: validationResult.error });
+    res.render('errors/error', { link: 'createNewPassword', error: validationResult.error });
   } else {
 
     const user = await usersCollection.findOne({
@@ -149,14 +182,14 @@ app.post('/submitPassword', async (req, res) => {
       ]
     });
     if (user == null) {
-      res.render('error', { link: "/resetPassword", error: 'Reset code is invalid, please try again.' });;
+      res.render('errors/error', { link: "resetting-passwords/resetPassword", error: 'Reset code is invalid, please try again.' });;
     }
     if (Date.now() < user.resetExpiry) {
       var newPassword = await bcrypt.hash(req.body.password, 10);
       await usersCollection.updateOne({ email: email }, { $set: { password: newPassword } });
       res.redirect('/login');
     } else {
-      res.render('error', { link: "/resetPassword", error: 'Reset has expired, please try again.' })
+      res.render('errors/error', { link: "resetting-passwords/resetPassword", error: 'Reset has expired, please try again.' })
     }
   }
 
@@ -171,11 +204,11 @@ app.post('/sendResetEmail', async (req, res) => {
   const validationResult = schema.validate(req.body);
 
   if (validationResult.error) {
-    res.render('error.ejs', { link: 'resetPassword', error: validationResult.error });
+    res.render('errors/error.ejs', { link: 'resetting-passwords/resetPassword', error: validationResult.error });
   } else {
     const user = await usersCollection.find({ email: email });
     if (user == null) {
-      res.render('error', { link: 'resetPassword', error: 'Email is not registered.' })
+      res.render('errors/error', { link: 'resetting-passwords/resetPassword', error: 'Email is not registered.' })
     } else {
       const resetCode = Math.random().toString(36).substring(2, 8);;
       const target = `${hostURL}updatePassword?email=${email}&code=${resetCode}`;
@@ -191,7 +224,7 @@ app.post('/sendResetEmail', async (req, res) => {
         { $set: { resetCode: resetCode, resetExpiry: Date.now() + resetExpiryTime } });
       await mailer.sendMail(mailOptions, function (error, info) {
         var result = error ? error : 'Email sent! Check your inbox.'
-        res.render('resetEmailSent', { result: result });
+        res.render('resetting-passwords/resetEmailSent', { result: result });
       });
     }
   }
@@ -201,7 +234,7 @@ app.post('/sendResetEmail', async (req, res) => {
 app.get('/updatePassword', async (req, res) => {
   const code = req.query.code;
   const email = req.query.email;
-  res.render('updatePassword', { code: code, email: email });
+  res.render('resetting-passwords/updatePassword', { code: code, email: email });
 })
 
 // POST request for the "/updateSettings" URL
@@ -321,7 +354,7 @@ app.post("/login", async (req, res) => {
         req.session.loggedIn = true;
         req.session.name = user.name;
         req.session.email = user.email;
-        res.redirect("/home");
+        res.redirect("/find");
       } else {
         res.status(401).send("Incorrect username and password.<br><a href='/login'>Go back to log in</a>");
       }
@@ -349,7 +382,7 @@ app.get("/admin", async (req, res) => {
     const currentUser = await usersCollection.findOne({ email: req.session.email });
     if (currentUser && currentUser.admin) {
       const users = await usersCollection.find({}).toArray();
-      res.render("admin", { users: users, currentPage: 'admin' });
+      res.render("admin/admin", { users: users, currentPage: 'admin' });
     } else {
       res.status(403).send("You must be an admin to access this page.<br><a href='/'>Go back to home page</a>");
     }
@@ -358,6 +391,7 @@ app.get("/admin", async (req, res) => {
   }
 });
 
+// Button to promote User to Admin
 app.get("/promote/:userId", async (req, res) => {
   const userId = req.params.userId;
   try {
@@ -368,6 +402,7 @@ app.get("/promote/:userId", async (req, res) => {
   }
 });
 
+// Button to demote Admin to User
 app.get("/demote/:userId", async (req, res) => {
   const userId = req.params.userId;
   try {
@@ -400,8 +435,10 @@ app.get("/members", (req, res) => {
   }
 });
 
+// I (ean) removed the GET request for /yourpods to better clean the code up
+
 // GET request for the "/pods" URL
-app.get("/yourpods", async (req, res) => {
+app.get("/attendedpods", async (req, res) => {
   if (req.session.loggedIn) {
     const user = await usersCollection.findOne({ email: req.session.email });
     if (!user) {
@@ -409,7 +446,7 @@ app.get("/yourpods", async (req, res) => {
       console.log('User from DB: ', user);
       return res.status(500).send('User not found');
     }
-    res.render("pods", { activeTab: 'pods', currentPage: 'pods', attendedPods: user.eventsAttended });
+    res.render("attendedpods", { activeTab: 'attendedpods', currentPage: 'attendedPods', attendedPods: user.eventsAttended });
   } else {
     res.status(403).send("You must be logged in to access the pods page.<br><a href='/'>Go back to home page</a>")
   }
@@ -420,7 +457,7 @@ app.get("/createdpods", async (req, res) => {
   if (req.session.loggedIn) {
     try {
       const createdPods = await podsCollection.find({ creator: req.session.email }).toArray();
-      res.render("pods", { activeTab: 'createdpods', currentPage: 'pods', createdPods: createdPods });
+      res.render("createdpods", { activeTab: 'createdpods', currentPage: 'createdPods', createdPods: createdPods });
     } catch (error) {
       res.status(500).send("Error retrieving created pods.<br><a href='/'>Go back to home page</a>")
     }
@@ -436,23 +473,39 @@ app.get("/createpod", (req, res) => {
   }
 });
 
-app.post("/createpod", async (req, res) => {
+
+
+app.post("/createpod", upload.single('image'), async (req, res) => {
   if(req.session.loggedIn) {
     let { name, eventDescription} = req.body;
     var location = {lat: req.body.lat, lng: req.body.lng};
 
-    const interests = ['outdoors', 'video games', 'reading', 'cooking', 'music', 'sports', 'art', 'travel', 'coding', 'photography'];
+    console.log(req.file);
+    if (req.file) {
+      // Uploads a local file to the bucket
+      await bucket.upload(req.file.path, {
+          // Support for HTTP requests made with `Accept-Encoding: gzip`
+          gzip: true,
+          metadata: {
+              // Enable long-lived HTTP caching headers
+              // Use only if the contents of the file will never change
+              cacheControl: 'public, max-age=31536000',
+          },
+      });
+
+      console.log(`${req.file.filename} uploaded to Firebase.`);
+    }
 
     // If the interest is in req.body, it was checked. Otherwise, it was not.
     let tags = {}
     interests.forEach(interest => {
-        tags[interest] = !!req.body[interest];
+      tags[interest] = !!req.body[interest];
     });
 
     const creator = req.session.email;
     let attenders = [];
     const newPod = { name, tags, eventDescription, attenders, creator, location };
-    
+
     // use Joi to validate data
     const schema = Joi.object({
       name: Joi.string().required(),
@@ -483,6 +536,8 @@ app.post("/createpod", async (req, res) => {
   }
 });
 
+
+// GET request for the "/profile" URL
 app.get("/profile", async (req, res) => {
   if (req.session.loggedIn) {
     try {
@@ -496,6 +551,7 @@ app.get("/profile", async (req, res) => {
   }
 });
 
+// GET request for the "/editProfile" URL
 app.get("/editProfile", async (req, res) => {
   if (req.session.loggedIn) {
     try {
@@ -509,16 +565,33 @@ app.get("/editProfile", async (req, res) => {
   }
 });
 
+// POST request for the "/findPods" URL
 app.get("/findPods", (req, res) => {
   res.render('findPods', { currentPage: 'findPods' });
 })
 
+// GET request for the "/getPods" URL
+// (NOT to be confused with /findPods)
 app.get('/getPods', async (req, res) => {
   var email = req.session.email;
   var user = await usersCollection.findOne({ email: email });
   var attendedPods = user.eventsAttended || [];
+  var userInterests = user.interests || [];  // Get the user's interests
 
-  var pods = await podsCollection.find({ name: { $nin: attendedPods.map(pod => pod.name) } }).project().toArray();
+  // Prepare a list of keys from user interests where value is true
+  let keys = [];
+  for (let interest of userInterests) {
+    keys.push(`tags.${interest}`);
+  }
+
+  // Prepare a query where at least one key from the list has value true
+  let query = { $or: keys.map(key => ({ [key]: true })) };
+
+  var pods = await podsCollection.find({
+    name: { $nin: attendedPods.map(pod => pod.name) },
+    ...query
+  }).project().toArray();
+
   for (var i = 0; i < pods.length; i++) {
     pods[i] = JSON.stringify(pods[i]);
   }
@@ -541,10 +614,10 @@ app.get("/pod/:id/attenders", async (req, res) => {
           return user.email;  // return the user's email for example
       })
   );
-
   res.json(attenders);
 });
 
+// GET request for the "/viewProfile" URL  res.json(attenders);
 app.get("/viewProfile", async (req, res) => {
   if (req.session.loggedIn) {
     try {
@@ -559,6 +632,7 @@ app.get("/viewProfile", async (req, res) => {
   }
 });
 
+// POST request for the "/updateProfile" URL
 app.post("/updateProfile", async (req, res) => {
   if (req.session.loggedIn) {
     const schema = Joi.object({
@@ -602,11 +676,13 @@ app.post("/updateProfile", async (req, res) => {
   }
 });
 
+// GET request to catch all other routes that are not defined
 app.get('*', (req, res) => {
   res.status(404);
-  res.render("404");
+  res.render("errors/404");
 });
 
+// Start server
 app.listen(PORT, () => {
   console.log('server is running on port 3000');
 });

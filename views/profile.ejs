@@ -32,8 +32,20 @@
       <label for="birthday">Birthday</label>
       <input class="form-control" id="disabledInput" type="text"
         placeholder="<%= user.birthday instanceof Date ? user.birthday.toISOString().substring(0, 10) : '' %>" disabled>
-    </form>
-  </div>
+    <br>
+    <label for="interests"> Tags </label>
+    <div id="interests">
+      <% user.interests.forEach((interest) => { %>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="<%= interest %>" disabled>
+          <label class="form-check-label">
+            <%= interest %>
+          </label>
+        </div>
+      <% }) %>
+    </div>
+  </form>
+</div>
 
   <%- include("templates/footer") %>
 

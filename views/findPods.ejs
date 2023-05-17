@@ -1,22 +1,33 @@
 <%- include("templates/header") %>
-<!-- Based on code from Rob Vermeer at https://codepen.io/RobVermeer/pen/japZpY -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-<link rel="stylesheet" href="/style/findPods.css">
-<div class="tinder">
-  
+  <!-- Based on code from Rob Vermeer at https://codepen.io/RobVermeer/pen/japZpY -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="/style/findPods.css">
+  <div class="tinder">
+
     <div id='stack' class="tinder--cards">
-      <div class="tinder--card">
+      <!-- <div class="tinder--card">
         <img>
         <h3>Demo card 1</h3>
         <p>This is a demo for Tinder like swipe cards</p>
-      </div>
+      </div> -->
     </div>
-  
+
     <div class="tinder--buttons">
-      <button id="nope"><i class="btn fas fa-times"></i></button>
-      <button id="love"><i class="btn fas fa-check"></i></button>
+
+      <button id="nope" class="button nope">
+        <svg class="nope button" viewBox="0 0 24 24">
+          <%- include("./icons/nope") %>
+        </svg>
+      </button>
+
+      <button id="love" class="button love">
+        <svg class="love" viewBox="0 0 24 24">
+          <%- include("./icons/love") %>
+        </svg>
+      </button>
     </div>
-</div>
-<script src="https://ajax.googleapis.com/ajax/libs/hammerjs/2.0.8/hammer.min.js"></script>
-<script src="/scripts/findPods.js"></script>
-<%- include("templates/footer") %>
+
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/hammerjs/2.0.8/hammer.min.js"></script>
+  <script src="/scripts/findPods.js"></script>
+  <%- include("templates/footer") %>

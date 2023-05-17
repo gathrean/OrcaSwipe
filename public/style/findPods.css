@@ -2,14 +2,31 @@
 
 .tinder {
   width: 100vw;
-  height: 90vh;
+  height: 75vh;
   overflow: hidden;
   display: grid;
   grid-template-rows: 90% 10%;
-  position: relative;
   opacity: 0;
   transition: opacity 0.1s ease-in-out;
-  background-color: blue;
+  display: flex;
+  flex-direction: column;
+}
+
+.tinder--stack {
+  flex: 1;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.tinder--buttons {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 16px;
+  z-index: 2;
 }
 
 .loaded.tinder {
@@ -30,10 +47,10 @@
   display: inline-block;
   width: 90vw;
   max-width: 400px;
-  height: 85%;
+  height: 75vh;
   background: #FFFFFF;
   padding-bottom: 40px;
-  border-radius: 8px;
+  border-radius: 20px;
   overflow: hidden;
   position: absolute;
   will-change: transform;
@@ -60,6 +77,9 @@
   font-size: 32px;
   padding: 0 16px;
   pointer-events: none;
+  display: flex;
+  justify-content: center;
+  text-align: center;
 }
 
 .tinder--card p {
@@ -67,7 +87,11 @@
   font-size: 20px;
   padding: 0 16px;
   pointer-events: none;
+  display: flex;
+  justify-content: center;
+  text-align: center;
 }
+
 
 .tinder--buttons {
   padding-top: 1vh;
@@ -77,11 +101,11 @@
 }
 
 .tinder--buttons button {
-  border-radius: 50%;
+  border-radius: 100%;
   line-height: 15%;
   width: 60px;
+  height: 60px;
   border: 0;
-  background: #FFFFFF;
   display: inline-block;
   margin: 0 8px;
 }
@@ -98,12 +122,16 @@
   justify-content: center;
 }
 
-.fa-check {
-  color: lightgreen;
-  width: 10%;
+.nope {
+  color: white;
+  width: auto;
+  background: #DF2935;
+  border-radius: 100%;
 }
 
-.fa-times {
-  color: lightcoral;
-  width: 10%;
+.love {
+  color: white;
+  width: auto;
+  background-color: #00A676;
+  border-radius: 100%;
 }
