@@ -51,7 +51,7 @@ function populateStack() {
         }
         // Creating HTML for each card using pod data
         var card = `<div class="tinder--card">
-                        <img>
+                        <img src="${pods[i].image}">
                         <h3>${pods[i].name}</h3>
                         <p>${pods[i].eventDescription}</p>
                         <p>Tags: ${tags.join(', ')}</p>
@@ -64,6 +64,7 @@ function populateStack() {
     initCards();
     makeSwipable();
 }
+
 
 // Function to handle the love swipe action
 function handleLoveSwipe(pod) {
