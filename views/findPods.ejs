@@ -2,24 +2,81 @@
   <!-- Based on code from Rob Vermeer at https://codepen.io/RobVermeer/pen/japZpY -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <link rel="stylesheet" href="/style/findPods.css">
+
+  <style>
+    #map {
+      width: 80vw;
+      max-width: 90%;
+      height: 40vh;
+      margin: 0 auto;
+    }
+
+    .card {
+      width: 90vw;
+      max-width: 450px;
+      margin-bottom: 20px;
+      /* Set a maximum width for desktop view */
+    }
+
+    /* Media query for desktop view */
+    @media (min-width: 992px) {
+      .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
+
+      .card {
+        flex-basis: calc(33.33% - 20px);
+        /* Adjust flex-basis value for desired spacing */
+        margin-bottom: 20px;
+        /* Add bottom margin for spacing */
+      }
+    }
+
+    .pods-actions {
+      display: flex;
+    }
+
+    .action-button {
+      margin-right: 10px;
+    }
+
+    .description {
+      font-weight: 100;
+    }
+  </style>
+
+  <!-- Title on top -->
+  <div class="behind-stack animate">
+    <div style="display: flex; align-items: center;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" style="fill: white; margin-right: 10px;">
+        <!-- Add your SVG icon code here -->
+        <%- include("./icons/find-2") %>
+      </svg>
+      <h1 style="text-align: left; color: white; font-size: 3rem; line-height: 50px; margin: 0;">Find</h1>
+    </div>
+
+    <!-- Caption for title -->
+    <div>
+      <p class="animate" style="text-align: left; color: white">
+        <br>
+        You've reached the end of the stack!<br>
+      </p>
+    </div>
+  </div>
+
   <div class="tinder">
 
     <div id='stack' class="tinder--cards">
-      <!-- <div class="tinder--card">
-        <img>
-        <h3>Demo card 1</h3>
-        <p>This is a demo for Tinder like swipe cards</p>
-      </div> -->
     </div>
 
     <div class="tinder--buttons">
-
       <button id="nope" class="button nope">
         <svg class="nope button" viewBox="0 0 24 24">
           <%- include("./icons/nope") %>
         </svg>
       </button>
-
       <button id="love" class="button love">
         <svg class="love" viewBox="0 0 24 24">
           <%- include("./icons/love") %>
@@ -28,6 +85,8 @@
     </div>
 
   </div>
+
   <script src="https://ajax.googleapis.com/ajax/libs/hammerjs/2.0.8/hammer.min.js"></script>
   <script src="/scripts/findPods.js"></script>
+
   <%- include("templates/footer") %>
