@@ -24,6 +24,7 @@ function initCards(card, index) {
     tinderContainer.classList.add('loaded'); // Adding the "loaded" class to the Tinder container
 }
 
+
 // Function to load pods from the server
 function loadPods() {
     const xhttp = new XMLHttpRequest();
@@ -32,11 +33,26 @@ function loadPods() {
         for (var i = 0; i < fetchedPods.length; i++) {
             pods.push(JSON.parse(fetchedPods[i]));        // Adding each fetched pod to the "pods" array
         }
-        // Populating the stack with the fetched pods
-        populateStack();
+        $('body').append(`<div id="map"></div>`)
+        var map = L.map('map');
+        if (navigator.geolocation){
+            navigator.geolocation.getCurrentPosition(function getLocation(position){
+                userLocation = {lat: position.coords.latitude, lng: position.coords.longitude};
+                pods = pods.filter((p) => {
+                    console.log(map.distance(p.location, userLocation));
+                    console.log(maxDist);
+                    console.log(p.name);
+                    return map.distance(p.location, userLocation) <= maxDist;
+                })
+                console.log(pods)
+                populateStack();
+            });  
+        } else {
+            populateStack();
+        }
     }
     // Making a GET request to the server to fetch the pods
-    xhttp.open("GET", "getPods");
+    xhttp.open("GET", `getPods`);
     xhttp.send();
 }
 

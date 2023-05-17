@@ -569,8 +569,10 @@ app.get("/editProfile", async (req, res) => {
 });
 
 // POST request for the "/findPods" URL
-app.get("/findPods", (req, res) => {
-  res.render('findPods', { currentPage: 'findPods' });
+app.get("/findPods", async (req, res) => {
+  var email = req.session.email;
+  var user = await usersCollection.findOne({ email: email });
+  res.render('findPods', { currentPage: 'findPods', maxDist: user.podProximity });
 })
 
 // GET request for the "/getPods" URL
@@ -603,8 +605,6 @@ app.get('/getPods', async (req, res) => {
       name: { $nin: attendedPods.map(pod => pod.name) }
     }).project().toArray();
   }
-
-  console.log(pods)
 
   for (var i = 0; i < pods.length; i++) {
     pods[i] = JSON.stringify(pods[i]);
