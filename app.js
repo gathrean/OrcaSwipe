@@ -131,7 +131,7 @@ app.get("/signup", (req, res) => {
 
 // GET request for the "/resetPassword" URL
 app.get('/resetPassword', (req, res) => {
-  res.render('resetPassword');
+  res.render('resetting-passwords/resetPassword');
 });
 
 // GET request for the "/createNewPassword" URL
@@ -164,14 +164,14 @@ app.post('/submitPassword', async (req, res) => {
       ]
     });
     if (user == null) {
-      res.render('errors/error', { link: "/resetPassword", error: 'Reset code is invalid, please try again.' });;
+      res.render('errors/error', { link: "resetting-passwords/resetPassword", error: 'Reset code is invalid, please try again.' });;
     }
     if (Date.now() < user.resetExpiry) {
       var newPassword = await bcrypt.hash(req.body.password, 10);
       await usersCollection.updateOne({ email: email }, { $set: { password: newPassword } });
       res.redirect('/login');
     } else {
-      res.render('errors/error', { link: "/resetPassword", error: 'Reset has expired, please try again.' })
+      res.render('errors/error', { link: "resetting-passwords/resetPassword", error: 'Reset has expired, please try again.' })
     }
   }
 
@@ -186,11 +186,11 @@ app.post('/sendResetEmail', async (req, res) => {
   const validationResult = schema.validate(req.body);
 
   if (validationResult.error) {
-    res.render('errors/error.ejs', { link: 'resetPassword', error: validationResult.error });
+    res.render('errors/error.ejs', { link: 'resetting-passwords/resetPassword', error: validationResult.error });
   } else {
     const user = await usersCollection.find({ email: email });
     if (user == null) {
-      res.render('errors/error', { link: 'resetPassword', error: 'Email is not registered.' })
+      res.render('errors/error', { link: 'resetting-passwords/resetPassword', error: 'Email is not registered.' })
     } else {
       const resetCode = Math.random().toString(36).substring(2, 8);;
       const target = `${hostURL}updatePassword?email=${email}&code=${resetCode}`;
@@ -206,7 +206,7 @@ app.post('/sendResetEmail', async (req, res) => {
         { $set: { resetCode: resetCode, resetExpiry: Date.now() + resetExpiryTime } });
       await mailer.sendMail(mailOptions, function (error, info) {
         var result = error ? error : 'Email sent! Check your inbox.'
-        res.render('resetEmailSent', { result: result });
+        res.render('resetting-passwords/resetEmailSent', { result: result });
       });
     }
   }
@@ -216,7 +216,7 @@ app.post('/sendResetEmail', async (req, res) => {
 app.get('/updatePassword', async (req, res) => {
   const code = req.query.code;
   const email = req.query.email;
-  res.render('updatePassword', { code: code, email: email });
+  res.render('resetting-passwords/updatePassword', { code: code, email: email });
 })
 
 // POST request for the "/updateSettings" URL
@@ -319,7 +319,7 @@ app.post("/login", async (req, res) => {
         req.session.loggedIn = true;
         req.session.name = user.name;
         req.session.email = user.email;
-        res.redirect("/home");
+        res.redirect("/find");
       } else {
         res.status(401).send("Incorrect username and password.<br><a href='/login'>Go back to log in</a>");
       }
@@ -347,7 +347,7 @@ app.get("/admin", async (req, res) => {
     const currentUser = await usersCollection.findOne({ email: req.session.email });
     if (currentUser && currentUser.admin) {
       const users = await usersCollection.find({}).toArray();
-      res.render("admin", { users: users, currentPage: 'admin' });
+      res.render("admin/admin", { users: users, currentPage: 'admin' });
     } else {
       res.status(403).send("You must be an admin to access this page.<br><a href='/'>Go back to home page</a>");
     }
