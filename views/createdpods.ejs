@@ -1,44 +1,102 @@
 <%- include("templates/header") %>
 
-    <div class="content form">
-        <div class="user-profile pods-actions" style="display: flex; justify-content: space-between; width: 100%;">
-            <div class="action-button">
+    <style>
+        .card {
+            width: 90vw;
+            max-width: 450px;
+            margin-bottom: 20px;
+            /* Set a maximum width for desktop view */
+        }
 
-            </div>
-            <div class="action-button">
+        /* Media query for desktop view */
+        @media (min-width: 992px) {
+            .card-container {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
 
-            </div>
-        </div>
+            .card {
+                flex-basis: calc(33.33% - 20px);
+                /* Adjust flex-basis value for desired spacing */
+                margin-bottom: 20px;
+                /* Add bottom margin for spacing */
+            }
+        }
 
-        <a href="/createpod"><button class="btn blue-button">Host a pod</button></a>
-        <hr>
+        .pods-actions {
+            display: flex;
+        }
 
+        .action-button {
+            margin-right: 10px;
+        }
+
+        .description {
+            font-weight: 100;
+        }
+
+        .host-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .host-title {
+            margin: 0;
+            color: white;
+            font-size: 3rem;
+            line-height: 1;
+        }
+    </style>
+
+    <!-- Title on top -->
+    <div class="host-container">
+        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" style="fill: white; margin-right: 10px;">
+            <!-- Add your SVG icon code here -->
+            <%- include("./icons/host-2") %>
+        </svg>
+        <h1 class="host-title">Host</h1>
+    </div>
+
+    <!-- Caption for title -->
+    <div>
+        <p style="text-align: left; color: white">
+            List of all the Pods you are hosting
+        </p>
+    </div>
+
+    <!-- Button for hosting a new pod -->
+    <a href="/createpod"><button class="btn white-button">
+            Host a new pod
+        </button></a>
+    <hr>
+
+    <!-- Card container -->
+    <div class="card-container">
+        <!-- Card for each hosted pod -->
         <% createdPods.forEach(function(pod) { %>
-            <div class="card">
+            <div class="card form">
                 <h2>
                     <%= pod.name %>
                 </h2>
+                <p>
+                    <strong>Location:</strong>
+                    <%= pod.location %>
+                </p>
+                <p>
+                    <strong>Host:</strong>
+                    <%= pod.host %>
+                </p>
                 <p class="description">
                     <%= pod.eventDescription %>
                 </p>
                 <!-- add more pod details here -->
+                <!-- Button to see pod details (can be customized) -->
+                <button id="<%= pod.name %>" type="button" class="btn blue-button see-details" data-bs-toggle="modal"
+                    data-bs-target="#pod-details">See Details</button>
             </div>
-            <br>
+
             <% }); %>
     </div>
 
     <%- include("templates/footer") %>
-
-        <style>
-            .pods-actions {
-                display: flex;
-            }
-
-            .action-button {
-                margin-right: 10px;
-            }
-
-            .description {
-                font-weight: 100;
-            }
-        </style>
