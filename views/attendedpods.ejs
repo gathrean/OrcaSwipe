@@ -1,100 +1,138 @@
 <%- include("templates/header") %>
-<script defer src="scripts/podDetails.js"></script>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
-integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
-<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
-integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
-<style>
-    #map {
-        width: 80vw;
-        max-width: 90%;
-        height: 40vh;
-        margin: 0 auto;
-    }
-</style>
-    <div class="content form">
-        <div class="user-profile pods-actions" style="display: flex; justify-content: space-between; width: 100%;">
-            <div class="action-button">
+    <script defer src="scripts/podDetails.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+        integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+        integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+    <style>
+        #map {
+            width: 80vw;
+            max-width: 90%;
+            height: 40vh;
+            margin: 0 auto;
+        }
 
-            </div>
-            <div class="action-button">
+        .card {
+            width: 90vw;
+            max-width: 450px;
+            margin-bottom: 20px;
+            /* Set a maximum width for desktop view */
+        }
 
-            </div>
-        </div>
-        <h1>Pods you're attending</h1>
-        <script>
-            var pods = (<%- JSON.stringify(attendedPods) %>);
-        </script>
+        /* Media query for desktop view */
+        @media (min-width: 992px) {
+            .card-container {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+
+            .card {
+                flex-basis: calc(33.33% - 20px);
+                /* Adjust flex-basis value for desired spacing */
+                margin-bottom: 20px;
+                /* Add bottom margin for spacing */
+            }
+        }
+
+        .pods-actions {
+            display: flex;
+        }
+
+        .action-button {
+            margin-right: 10px;
+        }
+
+        .description {
+            font-weight: 100;
+        }
+    </style>
+
+    <!-- Title on top -->
+    <div style="display: flex; align-items: center;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" style="fill: white; margin-right: 10px;">
+            <!-- Add your SVG icon code here -->
+            <%- include("./icons/pods-2") %>
+        </svg>
+        <h1 style="text-align: left; color: white; font-size: 3rem; line-height: 50px; margin: 0;">Attending</h1>
+    </div>
+
+    <!-- Caption for title -->
+    <div>
+        <p style="text-align: left; color: white">
+            List of all the Pods you are attending
+        </p>
+    </div>
+
+    <script>
+        // Storing the attendedPods data as a JavaScript variable
+        var pods = ("<%- JSON.stringify(attendedPods) %>");
+    </script>
+
+    <!-- Button for finding a new pod -->
+    <a href="/findPods"><button class="btn white-button">Find new pods</button></a>
+    <hr>
+
+    <!-- Card container -->
+    <div class="card-container">
+        <!-- Card for each attended pod -->
         <% attendedPods.forEach(function(pod) { %>
-            <div class="card">
+            <div class="card form">
                 <h2>
                     <%= pod.name %>
                 </h2>
+                <p>
+                    <strong>Location:</strong>
+                    <%= pod.location %>
+                </p>
+                <p>
+                    <strong>Host:</strong>
+                    <%= pod.host %>
+                </p>
                 <p class="description">
                     <%= pod.eventDescription %>
                 </p>
-                <p class="attenders">
-                    Number of Attenders: <%= pod.attenders.length %>
-                </p>
-                <button class="btn show-attenders" data-pod-id="<%= pod._id %>">
-                    Show attenders
-                </button>
                 <!-- add more pod details here -->
-                <button id="<%= pod.name %>" type="button" class="btn blue-button see-details" 
-                    data-bs-toggle="modal" data-bs-target="#pod-details">See Details</button>
+                <button id="<%= pod.name %>" type="button" class="btn blue-button see-details" data-bs-toggle="modal"
+                    data-bs-target="#pod-details">See Details</button>
             </div>
-            <br>
-        <% }); %>
-        
-        <!-- Modal -->
-        <div id="modal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <p id="modal-text"></p>
-            </div>
-        </div>
-        
 
-                <!-- content to be added later -->
+            <% }); %>
+
+                <!-- Modal -->
+                <div id="modal" class="modal">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <p id="modal-text"></p>
+                    </div>
+                </div>
+
     </div>
 
     <%- include("templates/footer") %>
 
-        <style>
-            .pods-actions {
-                display: flex;
-            }
 
-            .action-button {
-                margin-right: 10px;
-            }
+        <script>
+            document.querySelectorAll('.show-attenders').forEach(button => {
+                button.addEventListener('click', async function () {
+                    const podId = this.getAttribute('data-pod-id');
+                    const response = await fetch(`/pod/${podId}/attenders`);
+                    const attenders = await response.json();
 
-            .description {
-                font-weight: 100;
-            }
-        </style>
+                    // Here you could update your page with the attenders information.
+                    // This is just an example, you will need to adjust this according to your page structure and design.
+                    const modalText = document.getElementById('modal-text');
+                    modalText.textContent = attenders.join(', ');
 
-<script>
-    document.querySelectorAll('.show-attenders').forEach(button => {
-        button.addEventListener('click', async function() {
-            const podId = this.getAttribute('data-pod-id');
-            const response = await fetch(`/pod/${podId}/attenders`);
-            const attenders = await response.json();
+                    // Display the modal
+                    const modal = document.getElementById('modal');
+                    modal.style.display = "block";
+                });
+            });
 
-            // Here you could update your page with the attenders information.
-            // This is just an example, you will need to adjust this according to your page structure and design.
-            const modalText = document.getElementById('modal-text');
-            modalText.textContent = attenders.join(', ');
-
-            // Display the modal
-            const modal = document.getElementById('modal');
-            modal.style.display = "block";
-        });
-    });
-
-    // When the user clicks on <span> (x), close the modal
-    document.querySelector('.close').addEventListener('click', function() {
-        const modal = document.getElementById('modal');
-        modal.style.display = "none";
-    });
-</script>
+            // When the user clicks on <span> (x), close the modal
+            document.querySelector('.close').addEventListener('click', function () {
+                const modal = document.getElementById('modal');
+                modal.style.display = "none";
+            });
+        </script>
