@@ -290,7 +290,7 @@ app.post("/signup", async (req, res) => {
         admin: false,
         eventsAttended: [],
         interests: [],
-        podProximity: 500
+        podProximity: 10000
       };
       const result = await usersCollection.insertOne(newUser);
       req.session.loggedIn = true;
