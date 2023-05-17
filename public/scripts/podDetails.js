@@ -29,8 +29,7 @@ const setup = () => {
                 i--;
             }
         }
-
-        $('.modal-title').empty().append(podName);
+        $('.modal-title').empty().append(`<b>${podName}<b>`);
         $('.modal-body').empty().append(`
             <div><b>Description</b></div>
             <div>${pod.eventDescription}</div>
@@ -42,19 +41,17 @@ const setup = () => {
             <div><b>Location</b></div>
             <div id="map"></div>
         `)
-        var map = L.map('map');
+        var location = L.latLng(pod.location.lat, pod.location.lng);
+        var map = L.map('map').setView(location, 16);
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
         var targetPin;
-        var location = L.latLng(pod.location.lat, pod.location.lng);
-        map.setView(location);
-        map.locate({ setView: true, maxZoom: 16, enableHighAccuracy: true });
         if (targetPin != undefined) {
             map.removeLayer(targetPin)
         }
-        targetPin = L.marker(e.latlng).addTo(map);
+        targetPin = L.marker(location).addTo(map);
     })
 
 }
