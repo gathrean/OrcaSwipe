@@ -25,6 +25,24 @@ const app = express();
 let usersCollection;
 let podsCollection;
 
+///// Firebase SDK /////
+const admin = require("firebase-admin");
+
+const serviceAccount = require("./orcaswipe-8ae9b-firebase-adminsdk-a4otn-1e3c2ae04e.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  storageBucket: "orcaswipe-8ae9b.appspot.com"
+});
+
+const bucket = admin.storage().bucket();
+
+
+///// Multer Middleware needed for file upload /////
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
+
+
 // Environment variables
 const mongodb_user = process.env.MONGODB_USER;
 const mongodb_password = process.env.MONGODB_PASSWORD;
@@ -421,12 +439,28 @@ app.get("/createpod", (req, res) => {
 
 
 
-app.post("/createpod", async (req, res) => {
+app.post("/createpod", upload.single('image'), async (req, res) => {
   if(req.session.loggedIn) {
     let { name, eventDescription} = req.body;
     var location = {lat: req.body.lat, lng: req.body.lng};
 
     const interests = ['outdoors', 'video games', 'reading', 'cooking', 'music', 'sports', 'art', 'travel', 'coding', 'photography'];
+
+    console.log(req.file);
+    if (req.file) {
+      // Uploads a local file to the bucket
+      await bucket.upload(req.file.path, {
+          // Support for HTTP requests made with `Accept-Encoding: gzip`
+          gzip: true,
+          metadata: {
+              // Enable long-lived HTTP caching headers
+              // Use only if the contents of the file will never change
+              cacheControl: 'public, max-age=31536000',
+          },
+      });
+
+      console.log(`${req.file.filename} uploaded to Firebase.`);
+  }
 
     // If the interest is in req.body, it was checked. Otherwise, it was not.
     let tags = {}
