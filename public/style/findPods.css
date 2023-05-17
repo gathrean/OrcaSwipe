@@ -2,14 +2,14 @@
 
 .tinder {
   width: 100vw;
-  height: 90vh;
+  height: 75vh;
   overflow: hidden;
   display: grid;
   grid-template-rows: 90% 10%;
   position: relative;
   opacity: 0;
   transition: opacity 0.1s ease-in-out;
-  background-color: blue;
+  /* background-color: blue; */
 }
 
 .loaded.tinder {
@@ -99,11 +99,11 @@
 }
 
 .fa-check {
-  color: lightgreen;
+  color: #00A676;
   width: 10%;
 }
 
 .fa-times {
-  color: lightcoral;
+  color: #DF2935;
   width: 10%;
 }
