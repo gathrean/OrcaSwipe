@@ -354,7 +354,7 @@ app.post("/login", async (req, res) => {
         req.session.loggedIn = true;
         req.session.name = user.name;
         req.session.email = user.email;
-        res.redirect("/find");
+        res.redirect("/findPods");
       } else {
         res.status(401).send("Incorrect username and password.<br><a href='/login'>Go back to log in</a>");
       }
