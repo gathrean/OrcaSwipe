@@ -35,7 +35,7 @@ function loadPods() {
         }
         $('body').append(`<div id="map"></div>`)
         var map = L.map('map');
-        if (navigator.geolocation){
+        if (navigator.geolocation && typeof maxDist != undefined){
             navigator.geolocation.getCurrentPosition(function getLocation(position){
                 userLocation = {lat: position.coords.latitude, lng: position.coords.longitude};
                 pods = pods.filter((p) => {
