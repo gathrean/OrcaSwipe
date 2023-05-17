@@ -50,6 +50,12 @@
 
         .pods-actions {
             display: flex;
+            justify-content: space-between;
+        }
+
+        .action-button {
+            margin-right: 10px;
+            display: flex;
         }
 
         .action-button {
@@ -88,29 +94,43 @@
         <!-- Card for each hosted pod -->
         <% createdPods.forEach(function(pod) { %>
             <div class="card form">
-                <h2>
+                <h1>
                     <%= pod.name %>
-                </h2>
-                <p>
-                    <strong>Location:</strong>
+                </h1>
+
+                <h3 class="description">
                     <%= pod.location %>
-                </p>
+                </h3>
+
+                <hr>
+
                 <p>
                     <strong>Host:</strong>
                     <%= pod.host %>
                 </p>
-                <p class="description">
-                    <%= pod.eventDescription %>
+
+                <p>
+                    <strong>Attenders:</strong>
+                    <span class="attenders">
+                        <%= pod.attenders.length %>
+                    </span>
                 </p>
-                <p class="attenders">
-                    Number of Attenders: <%= pod.attenders.length %>
+
+                <p>
+                    <strong>Description:</strong>
+                    <span class="description">
+                        <%= pod.eventDescription %>
+                    </span>
                 </p>
-                <button class="btn show-attenders" data-pod-id="<%= pod._id %>">
-                    Show attenders
-                </button>
-                <!-- Button to see pod details (can be customized) -->
-                <button id="<%= pod.name %>" type="button" class="btn blue-button see-details" data-bs-toggle="modal"
-                    data-bs-target="#pod-details">See Details</button>
+
+                <hr>
+                <div class="pods-actions">
+                    <button id="<%= pod.name %>" type="button" class="btn blue-button see-details"
+                        data-bs-toggle="modal" data-bs-target="#pod-details">See details</button>
+                    <button class="btn blue-button show-attenders" data-pod-id="<%= pod._id %>">
+                        Who's going?
+                    </button>
+                </div>
             </div>
 
             <% }); %>
