@@ -20,10 +20,24 @@
                 <p class="description">
                     <%= pod.eventDescription %>
                 </p>
-                <!-- add more pod details here -->
+                <p class="attenders">
+                    Number of Attenders: <%= pod.attenders.length %>
+                </p>
+                <button class="btn show-attenders" data-pod-id="<%= pod._id %>">
+                    Show attenders
+                </button>
             </div>
             <br>
-            <% }); %>
+        <% }); %>
+        
+        <!-- Modal -->
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <p id="modal-text"></p>
+            </div>
+        </div>
+        
 
                 <!-- content to be added later -->
     </div>
@@ -43,3 +57,28 @@
                 font-weight: 100;
             }
         </style>
+
+<script>
+    document.querySelectorAll('.show-attenders').forEach(button => {
+        button.addEventListener('click', async function() {
+            const podId = this.getAttribute('data-pod-id');
+            const response = await fetch(`/pod/${podId}/attenders`);
+            const attenders = await response.json();
+
+            // Here you could update your page with the attenders information.
+            // This is just an example, you will need to adjust this according to your page structure and design.
+            const modalText = document.getElementById('modal-text');
+            modalText.textContent = attenders.join(', ');
+
+            // Display the modal
+            const modal = document.getElementById('modal');
+            modal.style.display = "block";
+        });
+    });
+
+    // When the user clicks on <span> (x), close the modal
+    document.querySelector('.close').addEventListener('click', function() {
+        const modal = document.getElementById('modal');
+        modal.style.display = "none";
+    });
+</script>

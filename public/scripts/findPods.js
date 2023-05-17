@@ -148,3 +148,35 @@ var loveListener = createButtonListener(true);
 
 nope.addEventListener('click', nopeListener);
 love.addEventListener('click', loveListener);
+
+document.addEventListener('click', function(event) {
+    if (event.target.matches('.show-attenders')) {
+        var podId = event.target.dataset.podId;
+
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = () => {
+            var attenders = JSON.parse(xhttp.responseText);
+            var attendersText = attenders.map(attender => attender.name).join(', ');  // assuming attenders have a 'name' field
+            document.getElementById('modal-text').innerText = `Attenders: ${attendersText}`;
+
+            // Show modal
+            var modal = document.getElementById('modal');
+            modal.style.display = "block";
+        }
+        xhttp.open("GET", `/pod/${podId}/attenders`);
+        xhttp.send();
+    }
+}, false);
+
+// When the user clicks on <span> (x), close the modal
+document.getElementsByClassName('close')[0].onclick = function() {
+    document.getElementById('modal').style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    var modal = document.getElementById('modal');
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}

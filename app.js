@@ -269,15 +269,32 @@ app.post("/signup", async (req, res) => {
 });
 
 // POST request for the "/savePod" URL
-app.post('/savePod', (req, res) => {
+app.post('/savePod', async (req, res) => {
   var pod = req.body.pod;  // assuming your body contains a 'pod' field
   var email = req.session.email;
 
-  usersCollection.updateOne({ email: email }, { $push: { eventsAttended: pod } }).then(() => {
-    res.sendStatus(200);
-  }).catch((err) => {
-    console.error(err);
-    res.sendStatus(500);
+  const user = await usersCollection.findOne({ email: email });
+  if (!user) {
+      console.error('User not found');
+      return res.sendStatus(500);
+  }
+
+  usersCollection.updateOne({ email: email }, { $push: { eventsAttended: pod } })
+  .then(() => {
+    const attendee = [];
+      // update the attenders field in the pod (CHANGE THIS LATER TO HAVE FULL USER INFO)
+      podsCollection.updateOne({ _id: new ObjectId(pod._id) }, { $push: { attenders: user._id } })
+      .then(() => {
+          res.sendStatus(200);
+      })
+      .catch((err) => {
+          console.error(err);
+          res.sendStatus(500);
+      });
+  })
+  .catch((err) => {
+      console.error(err);
+      res.sendStatus(500);
   });
 });
 
@@ -419,8 +436,6 @@ app.get("/createpod", (req, res) => {
   }
 });
 
-
-
 app.post("/createpod", async (req, res) => {
   if(req.session.loggedIn) {
     let { name, eventDescription} = req.body;
@@ -435,8 +450,7 @@ app.post("/createpod", async (req, res) => {
     });
 
     const creator = req.session.email;
-    let attenders = 0;
-
+    let attenders = [];
     const newPod = { name, tags, eventDescription, attenders, creator, location };
     
     // use Joi to validate data
@@ -444,7 +458,7 @@ app.post("/createpod", async (req, res) => {
       name: Joi.string().required(),
       tags: Joi.object().pattern(Joi.string(), Joi.boolean()),
       eventDescription: Joi.string().required(),
-      attenders: Joi.number().integer().min(0),
+      attenders: Joi.array(),
       creator: Joi.string(),
       location: Joi.object({
         lat: Joi.number().required(),
@@ -468,8 +482,6 @@ app.post("/createpod", async (req, res) => {
     res.status(403).send("You must be logged in to create a pod.<br><a href='/'>Go back to home page</a>");
   }
 });
-
-
 
 app.get("/profile", async (req, res) => {
   if (req.session.loggedIn) {
@@ -513,7 +525,25 @@ app.get('/getPods', async (req, res) => {
   res.json(pods);
 });
 
+//Populates the show attenders card
+app.get("/pod/:id/attenders", async (req, res) => {
+  const podId = new ObjectId(req.params.id);
+  const pod = await podsCollection.findOne({ _id: podId });
 
+  if (!pod) {
+      return res.status(404).send("Pod not found");
+  }
+
+  // Fetch user data for each attender
+  const attenders = await Promise.all(
+      pod.attenders.map(async (userId) => {
+          const user = await usersCollection.findOne({ _id: userId });
+          return user.email;  // return the user's email for example
+      })
+  );
+
+  res.json(attenders);
+});
 
 app.get("/viewProfile", async (req, res) => {
   if (req.session.loggedIn) {
