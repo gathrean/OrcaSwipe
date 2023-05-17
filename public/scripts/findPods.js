@@ -77,6 +77,18 @@ function handleLoveSwipe(pod) {
     xhttp.send(JSON.stringify({ pod: pod }));
 }
 
+// Function to handle the nope swipe action
+function handleNopeSwipe(pod) {
+    const xhttp = new XMLHttpRequest();
+
+    // Making a POST request to perform the nope action on the pod
+    xhttp.open("POST", "/nopePod");
+    xhttp.setRequestHeader('Content-Type', 'application/json');
+
+    // Sending the pod data in the request body
+    xhttp.send(JSON.stringify({ pod: pod }));
+}
+
 // Function to make the cards swipable
 function makeSwipable() {
     allCards.forEach(function (el) {
@@ -153,10 +165,7 @@ function makeSwipable() {
 // Function to create a button listener
 function createButtonListener(love) {
     return function (event) {
-        // Selecting all the cards that are not removed
         var cards = document.querySelectorAll('.tinder--card:not(.removed)');
-
-        // Calculating the width to move the card off the screen
         var moveOutWidth = document.body.clientWidth * 1.5;
 
         if (!cards.length) return false;
@@ -166,15 +175,24 @@ function createButtonListener(love) {
         card.classList.add('removed');
 
         if (love) {
-            // Moving the card off the screen towards the right with rotation if "love" is true
-            card.style.transform = 'translate(' + moveOutWidth + 'px, -100px) rotate(-30deg)';
+            card.style.transform = 'translate(' + moveOutWidth + 'px, -100px) rotate(-60deg)';
+
+            // Handling the love swipe action on the pod
+            handleLoveSwipe(pods[0]);
+
+            // Removing the swiped pod from the "pods" array
+            pods.shift();
         } else {
-            // Moving the card off the screen towards the left with rotation if "love" is false
-            card.style.transform = 'translate(-' + moveOutWidth + 'px, -100px) rotate(30deg)';
+            card.style.transform = 'translate(-' + moveOutWidth + 'px, -100px) rotate(60deg)';
+
+            // Handling the nope swipe action on the pod
+            handleNopeSwipe(pods[0]);
+
+            // Removing the swiped pod from the "pods" array
+            pods.shift();
         }
 
-        initCards(); // Re-initializing the cards
-
+        initCards();
         event.preventDefault();
     };
 }
