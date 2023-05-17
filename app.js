@@ -1,13 +1,16 @@
-const express = require("express");
-const session = require("express-session");
-const MongoStore = require("connect-mongo");
-const Joi = require("joi");
-const bcrypt = require("bcrypt");
-const { MongoClient, ObjectId } = require("mongodb");
-const url = require("url");
+// Import required modules
 require("dotenv").config();
-const ejs = require("ejs");
 
+const express = require("express");                      // Import express
+const session = require("express-session");              // Import express-session
+const MongoStore = require("connect-mongo");             // Import connect-mongo
+const Joi = require("joi");                              // Import Joi
+const bcrypt = require("bcrypt");                        // Import bcrypt
+const { MongoClient, ObjectId } = require("mongodb");    // Import Object from MongoDB
+const url = require("url");                              // Import url
+const ejs = require("ejs");                              // Import ejs
+
+// For sending emails
 const nodemailer = require('nodemailer');
 const appEmail = process.env.EMAIL;
 const appEmailPW = process.env.EMAIL_APP_PASSWORD;
@@ -22,6 +25,8 @@ const mailer = nodemailer.createTransport({
 });
 
 const app = express();
+
+// MongoDB collections
 let usersCollection;
 let podsCollection;
 
@@ -33,12 +38,18 @@ const mongodb_database = process.env.MONGODB_DATABASE;
 const node_session_secret = process.env.NODE_SESSION_SECRET;
 const mongodb_session_secret = process.env.MONGODB_SESSION_SECRET;
 const hashedPassword = process.env.HASHED_PASSWORD;
+// End of environment variables
+
+// Set up the port
 const PORT = process.env.PORT || 3000;
 
+// Set the view engine for the app to EJS
 app.set("view engine", "ejs");
 
+// Construct the MongoDB connection URI using the provided variables
 const uri = `mongodb+srv://${mongodb_user}:${encodeURIComponent(mongodb_password)}@${mongodb_cluster}/${mongodb_database}`;
 
+// Connect to MongoDB using the provided URI and enable unified topology
 MongoClient.connect(uri, { useUnifiedTopology: true })
   .then((client) => {
     console.log("Connected to MongoDB");
@@ -50,10 +61,19 @@ MongoClient.connect(uri, { useUnifiedTopology: true })
     console.error("Error connecting to MongoDB", error);
   });
 
+// Enable JSON parsing middleware for the app
 app.use(express.json());
+
+// Enable URL-encoded parsing middleware for the app
 app.use(express.urlencoded({ extended: false }));
+
+// Serve static files from the "public" directory
 app.use(express.static("public"));
 
+// Serve static files from the "/views/splash" directory
+app.use('/splash', express.static('views/splash'));
+
+// Create a MongoStore instance for session management, using the MongoDB 
 var mongoStore = MongoStore.create({
   mongoUrl: `mongodb+srv://${mongodb_user}:${encodeURIComponent(mongodb_password)}@${mongodb_cluster}/${mongodb_database}`,
   crypto: {
@@ -61,12 +81,7 @@ var mongoStore = MongoStore.create({
   },
 });
 
-// Serve static files from the "/views/splash" directory
-app.use('/splash', express.static('views/splash'));
-
-// Serve static files from "/images" directory
-app.use(express.static('images'));
-
+// Enable session middleware for the app, with the following configurations:
 app.use(
   session({
     secret: node_session_secret,
@@ -341,6 +356,7 @@ app.get("/admin", async (req, res) => {
   }
 });
 
+// Button to promote User to Admin
 app.get("/promote/:userId", async (req, res) => {
   const userId = req.params.userId;
   try {
@@ -351,6 +367,7 @@ app.get("/promote/:userId", async (req, res) => {
   }
 });
 
+// Button to demote Admin to User
 app.get("/demote/:userId", async (req, res) => {
   const userId = req.params.userId;
   try {
@@ -421,6 +438,7 @@ app.get("/createpod", (req, res) => {
   }
 });
 
+// GET request for the "/createpod" URL
 app.post("/createpod", async (req, res) => {
   if (req.session.loggedIn) {
     let { name, eventDescription } = req.body;
@@ -469,6 +487,7 @@ app.post("/createpod", async (req, res) => {
   }
 });
 
+// GET request for the "/profile" URL
 app.get("/profile", async (req, res) => {
   if (req.session.loggedIn) {
     try {
@@ -482,6 +501,7 @@ app.get("/profile", async (req, res) => {
   }
 });
 
+// GET request for the "/editProfile" URL
 app.get("/editProfile", async (req, res) => {
   if (req.session.loggedIn) {
     try {
@@ -495,10 +515,13 @@ app.get("/editProfile", async (req, res) => {
   }
 });
 
+// POST request for the "/findPods" URL
 app.get("/findPods", (req, res) => {
   res.render('findPods', { currentPage: 'findPods' });
 })
 
+// GET request for the "/getPods" URL
+// (NOT to be confused with /findPods)
 app.get('/getPods', async (req, res) => {
   var email = req.session.email;
   var user = await usersCollection.findOne({ email: email });
@@ -525,6 +548,7 @@ app.get('/getPods', async (req, res) => {
   res.json(pods);
 });
 
+// GET request for the "/viewProfile" URL
 app.get("/viewProfile", async (req, res) => {
   if (req.session.loggedIn) {
     try {
@@ -539,6 +563,7 @@ app.get("/viewProfile", async (req, res) => {
   }
 });
 
+// POST request for the "/updateProfile" URL
 app.post("/updateProfile", async (req, res) => {
   if (req.session.loggedIn) {
     const schema = Joi.object({
@@ -582,11 +607,13 @@ app.post("/updateProfile", async (req, res) => {
   }
 });
 
+// GET request to catch all other routes that are not defined
 app.get('*', (req, res) => {
   res.status(404);
   res.render("404");
 });
 
+// Start server
 app.listen(PORT, () => {
   console.log('server is running on port 3000');
 });
