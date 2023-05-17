@@ -22,7 +22,14 @@ const setup = () => {
     $('.see-details').on('click', function(e){
         var podName = $(this).attr('id');
         var pod = findPod(pods, podName);
+        console.log(pod);
         var tags = Object.keys(pod.tags);
+        for (var i = 0; i < tags.length; i++){
+            if (!pod.tags[tags[i]]){
+                tags.splice(i, 1);
+                i--;
+            }
+        }
         $('.modal-title').empty().append(podName);
         $('.modal-body').empty().append(`
             <span>Description</span>
