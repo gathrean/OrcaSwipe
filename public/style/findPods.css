@@ -9,7 +9,6 @@
   position: relative;
   opacity: 0;
   transition: opacity 0.1s ease-in-out;
-  /* background-color: blue; */
 }
 
 .loaded.tinder {

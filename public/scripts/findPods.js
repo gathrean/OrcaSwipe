@@ -1,36 +1,46 @@
 // Based on code from Rob Vermeer at https://codepen.io/RobVermeer/pen/japZpY
 
-var tinderContainer = document.querySelector('.tinder');
-var allCards = document.querySelectorAll('.tinder--card');
-var nope = document.getElementById('nope');
-var love = document.getElementById('love');
+// Selecting elements from the DOM
+var tinderContainer = document.querySelector('.tinder');       // Tinder container element
+var allCards = document.querySelectorAll('.tinder--card');     // All card elements
+var nope = document.getElementById('nope');                    // "Nope" button element
+var love = document.getElementById('love');                    // "Love" button element
 
-var pods = []
+var pods = []; // Array to store pods
 
+// Function to initialize the cards
 function initCards(card, index) {
+
+    // Selecting all the cards that are not removed
     var newCards = document.querySelectorAll('.tinder--card:not(.removed)');
     newCards.forEach(function (card, index) {
+
+        // Setting the stacked effect for each card
         card.style.zIndex = allCards.length - index;
         card.style.transform = 'scale(' + (20 - index) / 20 + ') translateY(-' + 30 * index + 'px)';
         card.style.opacity = (10 - index) / 10;
     });
 
-    tinderContainer.classList.add('loaded');
+    tinderContainer.classList.add('loaded'); // Adding the "loaded" class to the Tinder container
 }
 
+// Function to load pods from the server
 function loadPods() {
     const xhttp = new XMLHttpRequest();
     xhttp.onload = () => {
-        var fetchedPods = JSON.parse(xhttp.responseText);
+        var fetchedPods = JSON.parse(xhttp.responseText); // Parsing the fetched pods from the response
         for (var i = 0; i < fetchedPods.length; i++) {
-            pods.push(JSON.parse(fetchedPods[i]));
+            pods.push(JSON.parse(fetchedPods[i]));        // Adding each fetched pod to the "pods" array
         }
+        // Populating the stack with the fetched pods
         populateStack();
     }
+    // Making a GET request to the server to fetch the pods
     xhttp.open("GET", "getPods");
     xhttp.send();
 }
 
+// Function to populate the stack with pods
 function populateStack() {
     for (var i = 0; i < pods.length; i++) {
         var tags = [];
@@ -39,33 +49,42 @@ function populateStack() {
                 tags.push(tag);
             }
         }
+        // Creating HTML for each card using pod data
         var card = `<div class="tinder--card">
                         <img>
                         <h3>${pods[i].name}</h3>
                         <p>${pods[i].eventDescription}</p>
                         <p>Tags: ${tags.join(', ')}</p>
-                    </div>`
-        $('#stack').append(card);
+                    </div>`;
+        $('#stack').append(card); // Appending the card to the stack
     }
+
+    // Updating the allCards variable with the newly added cards
     allCards = document.querySelectorAll('.tinder--card');
     initCards();
     makeSwipable();
 }
 
-
-
+// Function to handle the love swipe action
 function handleLoveSwipe(pod) {
     const xhttp = new XMLHttpRequest();
+
+    // Making a POST request to save the pod
     xhttp.open("POST", "/savePod");
     xhttp.setRequestHeader('Content-Type', 'application/json');
+
+    // Sending the pod data in the request body
     xhttp.send(JSON.stringify({ pod: pod }));
 }
 
+// Function to make the cards swipable
 function makeSwipable() {
     allCards.forEach(function (el) {
+        // Initializing Hammer.js for touch gestures on each card
         var hammertime = new Hammer(el);
 
         hammertime.on('pan', function (event) {
+            // Adding the "moving" class to the card when it is being panned
             el.classList.add('moving');
         });
 
@@ -73,6 +92,7 @@ function makeSwipable() {
             if (event.deltaX === 0) return;
             if (event.center.x === 0 && event.center.y === 0) return;
 
+            // "tinder_love" if the card is swiped to the right, "tinder_nope" if the card is swiped to the left
             tinderContainer.classList.toggle('tinder_love', event.deltaX > 0);
             tinderContainer.classList.toggle('tinder_nope', event.deltaX < 0);
 
@@ -80,27 +100,36 @@ function makeSwipable() {
             var yMulti = event.deltaY / 80;
             var rotate = xMulti * yMulti;
 
-            event.target.style.transform = 'translate(' + event.deltaX + 'px, ' + event.deltaY + 'px) rotate(' + rotate + 'deg)';
+            event.target.style.transform = 'translate(' + event.deltaX + 'px, ' + event.deltaY + 'px) rotate(' + rotate + 'deg)'; // Applying translation and rotation to the card during panning
         });
 
+        // Handling the "panend" event
         hammertime.on('panend', function (event) {
             el.classList.remove('moving');
             tinderContainer.classList.remove('tinder_love');
             tinderContainer.classList.remove('tinder_nope');
 
+            // Calculating the width of the card's container
             var moveOutWidth = document.body.clientWidth;
+
+            // Determining whether to keep the card or swipe it away based on the swipe distance and velocity
             var keep = Math.abs(event.deltaX) < 80 || Math.abs(event.velocityX) < 0.5;
 
+            // Adding the "removed" class to the card if it should be swiped away
             event.target.classList.toggle('removed', !keep);
 
             if (!keep && event.deltaX > 0) {
                 console.log('Swiped right on:', pods[0]);
+
+                // Handling the love swipe action on the pod
                 handleLoveSwipe(pods[0]);
-                pods.shift();  // remove the swiped pod
+
+                // Removing the swiped pod from the "pods" array
+                pods.shift()
             }
-            
 
             if (keep) {
+                // Resetting the transform of the card if it should be kept
                 event.target.style.transform = '';
             } else {
                 var endX = Math.max(Math.abs(event.velocityX) * moveOutWidth, moveOutWidth);
@@ -111,16 +140,23 @@ function makeSwipable() {
                 var yMulti = event.deltaY / 80;
                 var rotate = xMulti * yMulti;
 
+                // Applying transform to animate the card off the screen
                 event.target.style.transform = 'translate(' + toX + 'px, ' + (toY + event.deltaY) + 'px) rotate(' + rotate + 'deg)';
+
+                // Re-initializing the cards
                 initCards();
             }
         });
     });
 }
 
+// Function to create a button listener
 function createButtonListener(love) {
     return function (event) {
+        // Selecting all the cards that are not removed
         var cards = document.querySelectorAll('.tinder--card:not(.removed)');
+
+        // Calculating the width to move the card off the screen
         var moveOutWidth = document.body.clientWidth * 1.5;
 
         if (!cards.length) return false;
@@ -130,21 +166,23 @@ function createButtonListener(love) {
         card.classList.add('removed');
 
         if (love) {
+            // Moving the card off the screen towards the right with rotation if "love" is true
             card.style.transform = 'translate(' + moveOutWidth + 'px, -100px) rotate(-30deg)';
         } else {
+            // Moving the card off the screen towards the left with rotation if "love" is false
             card.style.transform = 'translate(-' + moveOutWidth + 'px, -100px) rotate(30deg)';
         }
 
-        initCards();
+        initCards(); // Re-initializing the cards
 
         event.preventDefault();
     };
 }
 
-loadPods();
+loadPods(); // Loading the pods from the server
 
 var nopeListener = createButtonListener(false);
 var loveListener = createButtonListener(true);
 
-nope.addEventListener('click', nopeListener);
-love.addEventListener('click', loveListener);
+nope.addEventListener('click', nopeListener); // Adding click event listener to the "Nope" button
+love.addEventListener('click', loveListener); // Adding click event listener to the "Love" button
