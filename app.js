@@ -471,13 +471,13 @@ app.get("/createdpods", async (req, res) => {
 });
 
 app.post('/deletePod', async (req, res) => {
-  const documents = await usersCollection.find({}).toArray();
-  await testUsersCollection.deleteMany();
-  await testUsersCollection.insertMany(documents);
+  // const documents = await usersCollection.find({}).toArray();
+  // await testUsersCollection.deleteMany();
+  // await testUsersCollection.insertMany(documents);
 
-  const podDocs = await podsCollection.find({}).toArray();
-  await testPodsCollection.deleteMany();
-  await testPodsCollection.insertMany(podDocs);
+  // const podDocs = await podsCollection.find({}).toArray();
+  // await testPodsCollection.deleteMany();
+  // await testPodsCollection.insertMany(podDocs);
   
   const schema = Joi.object({
     id: Joi.string().hex().length(24)
@@ -488,11 +488,11 @@ app.post('/deletePod', async (req, res) => {
     console.log(req.body.podID)
     var targetID = new ObjectId(req.body.podID)
     var query = {$and: [{_id: targetID}, {creator: req.session.email}]}
-    var targetPod = await testPodsCollection.deleteOne(query);
+    var targetPod = await podsCollection.deleteOne(query);
 
     console.log(targetID)
     //console.log(await testUsersCollection.find(filter).project().toArray())
-    var userArr = await testUsersCollection.find().project().toArray();
+    var userArr = await usersCollection.find().project().toArray();
     userArr.forEach(async (u) => {
       var events = u.eventsAttended;
       for (var i = 0; i < events.length; i++){
@@ -501,7 +501,7 @@ app.post('/deletePod', async (req, res) => {
           i--;
         }
       }
-      await testUsersCollection.updateOne({_id: u._id}, {
+      await usersCollection.updateOne({_id: u._id}, {
            $set: {eventsAttended: events}
       })
     })
