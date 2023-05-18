@@ -628,6 +628,31 @@ app.get("/pod/:id/attenders", async (req, res) => {
   res.json(attenders);
 });
 
+//leaving the pod
+app.post("/pod/:podId/leave", async (req, res) => {
+  if (req.session.loggedIn) {
+      try {
+          const podId = req.params.podId;
+          const user = await usersCollection.findOne({ email: req.session.email });
+
+          if (user) {
+              await podsCollection.updateOne(
+                  { _id:  new ObjectId(podId) },
+                  { $pull: { attenders: user._id } }
+              );
+              res.status(200).send();
+          } else {
+              res.status(404).send('User not found');
+          }
+      } catch (error) {
+        console.error(error);
+          res.status(500).send('Error leaving pod');
+      }
+  } else {
+      res.status(403).send('You must be logged in to leave a pod');
+  }
+});
+
 // GET request for the "/viewProfile" URL  res.json(attenders);
 app.get("/viewProfile", async (req, res) => {
   if (req.session.loggedIn) {
