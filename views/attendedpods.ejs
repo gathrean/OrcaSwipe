@@ -4,16 +4,7 @@
         integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
         integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
-    <script>
-        var pods = ("<%- JSON.stringify(attendedPods) %>");
-    </script>
     <style>
-        #map {
-            width: 80vw;
-            max-width: 90%;
-            height: 40vh;
-            margin: 0 auto;
-        }
 
         .card {
             width: 90vw;
@@ -69,7 +60,7 @@
 
     <script>
         // Storing the attendedPods data as a JavaScript variable
-        var pods = ("<%- JSON.stringify(attendedPods) %>");
+        var pods = (<%- JSON.stringify(attendedPods) %>);
     </script>
 
     <!-- Button for finding a new pod -->

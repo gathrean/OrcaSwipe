@@ -16,6 +16,17 @@ var modal = `
 </div>`
 $('body').append(modal);
 
+var mapCSS = `
+<style>
+        #map {
+            width: 80vw;
+            max-width: 90%;
+            height: 40vh;
+            margin: 0 auto;
+        }
+</style>`
+$('body').append(mapCSS);
+
 
 
 const setup = () => {

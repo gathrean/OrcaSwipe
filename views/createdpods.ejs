@@ -89,14 +89,24 @@
     </button></a>
 <hr>
 
-<!-- Card container -->
-<div class="card-container">
-    <!-- Card for each hosted pod -->
-    <% createdPods.forEach(function(pod) { %>
-    <div class="card form">
-        <h1>
-            <%= pod.name %>
-        </h1>
+    <script>
+        // Storing the createdPods data as a JavaScript variable
+        var pods = (<%- JSON.stringify(createdPods) %>);
+    </script>
+    <script defer src="scripts/podDetails.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+        integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+        integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+
+    <!-- Card container -->
+    <div class="card-container">
+        <!-- Card for each hosted pod -->
+        <% createdPods.forEach(function(pod) { %>
+            <div class="card form">
+                <h1>
+                    <%= pod.name %>
+                </h1>
 
         <!-- Add the image tag here -->
         <img src="<%= pod.image %>" alt="<%= pod.name %>">
@@ -126,15 +136,18 @@
             </span>
         </p>
 
-        <hr>
-        <div class="pods-actions">
-            <button id="<%= pod.name %>" type="button" class="btn blue-button see-details" data-bs-toggle="modal"
-                data-bs-target="#pod-details">See details</button>
-            <button class="btn blue-button show-attenders" data-pod-id="<%= pod._id %>">
-                Who's going?
-            </button>
-        </div>
-    </div>
+                <hr>
+                <div class="pods-actions">
+                    <button id="<%= pod.name %>" type="button" class="btn blue-button see-details"
+                        data-bs-toggle="modal" data-bs-target="#pod-details">See details</button>
+                    <button class="btn blue-button show-attenders" data-pod-id="<%= pod._id %>">
+                        Who's going?
+                    </button>
+                    <button class="btn blue-button delete" data-pod-id="<%= pod._id %>" data-bs-toggle="modal" data-bs-target="#pod-details">
+                        Delete Pod?
+                    </button>
+                </div>
+            </div>
 
     <% }); %>
 
@@ -169,9 +182,28 @@
         });
     });
 
-    // When the user clicks on <span> (x), close the modal
-    document.querySelector('.close').addEventListener('click', function () {
-        const modal = document.getElementById('modal');
-        modal.style.display = "none";
-    });
-</script>
+            // When the user clicks on <span> (x), close the modal
+            document.querySelector('.close').addEventListener('click', function () {
+                const modal = document.getElementById('modal');
+                modal.style.display = "none";
+            });
+
+            $('.delete').on('click', function() {
+                $('.modal-title').empty().append(`<b>Confirm Deletion<b>`);
+                $('.modal-body').empty().append(`
+                    <div>Delete this pod?</div>
+                    <form action='deletePod' method='post'>
+                    <input name="podID" type='hidden' value='${$(this).attr('data-pod-id')}'>
+                    <button type="submit" id="confirm-delete" class="btn blue-button" data-pod-id="${$(this).attr('data-pod-id')}">
+                        Confirm
+                    </button>
+                    </form>
+                `)
+
+                // $('#confirm-delete').on('click', async function() {
+                // await fetch(`/deletePod?podID=${$(this).attr('data-pod-id')}`, 
+                //     {method: 'POST', redirect: 'follow'});
+                // })
+            })
+
+        </script>
