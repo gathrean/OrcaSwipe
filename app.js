@@ -640,6 +640,10 @@ app.post("/pod/:podId/leave", async (req, res) => {
                   { _id:  new ObjectId(podId) },
                   { $pull: { attenders: user._id } }
               );
+              await usersCollection.updateOne(
+                { _id: new ObjectId(user._id) },
+                { $pull: { eventsAttended: { _id: podId } } }
+              );
               res.status(200).send();
           } else {
               res.status(404).send('User not found');
