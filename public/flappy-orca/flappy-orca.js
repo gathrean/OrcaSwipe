@@ -70,6 +70,10 @@ function play() {
                         element.increase_score = '0'; // Prevent multiple score increments
                     }
                     element.style.left = pipe_sprite_props.left - pipe_speed + 'px';
+                    if (pipe_sprite_props.left <= 0) {
+                        element.remove();
+                    }
+                    
                 }
             }
         });

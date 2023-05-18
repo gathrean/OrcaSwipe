@@ -1,7 +1,9 @@
 <%- include("splash-header.ejs") %>
+
     <div class="container-initial">
-        <div class="animate noRightClick">
-            <img src="https://cdn.discordapp.com/attachments/1101692795921645680/1106310966070755388/OrcaSwipe_Logo.png"
+        <div class="animate">
+            <img onclick="redirectToFlappyOrca()"
+                src="https://cdn.discordapp.com/attachments/1101692795921645680/1106310966070755388/OrcaSwipe_Logo.png"
                 alt="logo" class="logo">
             <h1 class="splash-text">OrcaSwipe</h1>
         </div>
@@ -13,8 +15,9 @@
                 account</button><br><br>
             <button class="btn animate-4" type="submit" name="action" value="login">Log in</button>
         </form>
+        <br>
     </div>
-    <br><br><br>
+    <br><br>
     <div class="container-splash-section">
         <div class="row">
             <div class="col-md-6">
@@ -42,16 +45,9 @@
                 </div>
             </div>
         </div>
-
-        <br><br><br>
-        <!-- Easter egg button -->
-        <button class="animate-secret btn easter-egg-button" onclick="redirectToFlappyOrca()">🤔🤔🤔🤔 ???</button>
     </div>
 
-    </div>
-    <div class="splash-footer container-splash-section">
-        <br><br><br>
-    </div>
+    <div class="splash-footer container-splash-section"></div>
 
     <%- include("splash-footer.ejs") %>
 
@@ -128,7 +124,7 @@
             @media (min-width: 768px) {
                 .container-splash-section {
                     display: flex;
-                    justify-content: space-between;
+                    /* justify-content: space-between; */
                 }
 
                 .row {

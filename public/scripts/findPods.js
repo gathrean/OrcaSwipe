@@ -13,8 +13,38 @@ function initCards(card, index) {
 
     // Selecting all the cards that are not removed
     var newCards = document.querySelectorAll('.tinder--card:not(.removed)');
-    newCards.forEach(function (card, index) {
+    // Checking if there are no remaining cards
+    if (newCards.length === 0) {
+        // Display a message indicating that pods are empty
+        var emptyMessage = document.createElement('div');
+        emptyMessage.classList.add('empty-message');
 
+        var messageText = document.createElement('p');
+        messageText.textContent = "No more pods found.";
+        emptyMessage.appendChild(messageText);
+
+        var buttonContainer = document.createElement('div');
+        buttonContainer.classList.add('button-container');
+
+        var adjustTagsButton = document.createElement('a');
+        adjustTagsButton.textContent = "Adjust my tags";
+        adjustTagsButton.classList.add('btn', 'white-button');
+        adjustTagsButton.href = "/editProfile";
+        buttonContainer.appendChild(adjustTagsButton);
+
+        var hostPodButton = document.createElement('a');
+        hostPodButton.textContent = "Host a pod";
+        hostPodButton.classList.add('btn', 'white-button');
+        hostPodButton.href = "/createPod";
+        buttonContainer.appendChild(hostPodButton);
+
+        emptyMessage.appendChild(messageText);
+        emptyMessage.appendChild(buttonContainer);
+
+        document.getElementById('stack').appendChild(emptyMessage);
+    }
+
+    newCards.forEach(function (card, index) {
         // Setting the stacked effect for each card
         card.style.zIndex = allCards.length - index;
         card.style.transform = 'scale(' + (20 - index) / 20 + ') translateY(-' + 30 * index + 'px)';
@@ -27,26 +57,40 @@ function initCards(card, index) {
 
 // Function to load pods from the server
 function loadPods() {
+
+    // Show the loading circle
+    var loadingCircle = document.getElementById('loading-circle');
+    loadingCircle.style.display = 'block';
+
     const xhttp = new XMLHttpRequest();
+
+    // Handling the response from the server
     xhttp.onload = () => {
-        var fetchedPods = JSON.parse(xhttp.responseText); // Parsing the fetched pods from the response
+        // Parsing the fetched pods from the response
+        var fetchedPods = JSON.parse(xhttp.responseText);
+
+        // Adding each fetched pod to the "pods" array
         for (var i = 0; i < fetchedPods.length; i++) {
-            pods.push(JSON.parse(fetchedPods[i]));        // Adding each fetched pod to the "pods" array
+            pods.push(JSON.parse(fetchedPods[i]));
         }
+
+        // If the user has specified a maximum distance, filter the pods based on the distance
         $('body').append(`<div id="map"></div>`)
         var map = L.map('map');
-        if (navigator.geolocation && typeof maxDist != undefined){
-            navigator.geolocation.getCurrentPosition(function getLocation(position){
-                userLocation = {lat: position.coords.latitude, lng: position.coords.longitude};
+        if (navigator.geolocation && typeof maxDist != undefined) {
+            navigator.geolocation.getCurrentPosition(function getLocation(position) {
+                userLocation = { lat: position.coords.latitude, lng: position.coords.longitude };
                 pods = pods.filter((p) => {
                     return map.distance(p.location, userLocation) <= maxDist;
                 })
                 $('#map').empty();
                 populateStack();
-            });  
+            });
         } else {
             populateStack();
         }
+        // Hide the loading circle when the pods have finished loading
+        loadingCircle.style.display = 'none';
     }
     // Making a GET request to the server to fetch the pods
     xhttp.open("GET", `getPods`);
@@ -55,6 +99,8 @@ function loadPods() {
 
 // Function to populate the stack with pods
 function populateStack() {
+
+    // Shows the stack
     for (var i = 0; i < pods.length; i++) {
         var tags = [];
         for (var tag in pods[i].tags) {
@@ -64,7 +110,7 @@ function populateStack() {
         }
         // Creating HTML for each card using pod data
         var card = `<div class="tinder--card">
-                        <img>
+                        <img src="${pods[i].image}">
                         <h3>${pods[i].name}</h3>
                         <p>${pods[i].eventDescription}</p>
                         <p>Tags: ${tags.join(', ')}</p>
@@ -77,6 +123,7 @@ function populateStack() {
     initCards();
     makeSwipable();
 }
+
 
 // Function to handle the love swipe action
 function handleLoveSwipe(pod) {
@@ -218,7 +265,7 @@ var loveListener = createButtonListener(true);
 nope.addEventListener('click', nopeListener);
 love.addEventListener('click', loveListener);
 
-document.addEventListener('click', function(event) {
+document.addEventListener('click', function (event) {
     if (event.target.matches('.show-attenders')) {
         var podId = event.target.dataset.podId;
 
@@ -238,12 +285,12 @@ document.addEventListener('click', function(event) {
 }, false);
 
 // When the user clicks on <span> (x), close the modal
-document.getElementsByClassName('close')[0].onclick = function() {
+document.getElementsByClassName('close')[0].onclick = function () {
     document.getElementById('modal').style.display = "none";
 }
 
 // When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
+window.onclick = function (event) {
     var modal = document.getElementById('modal');
     if (event.target == modal) {
         modal.style.display = "none";

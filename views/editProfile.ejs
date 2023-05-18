@@ -2,8 +2,12 @@
 
 <div class="user-profile form">
   <div class="profile-photo">
-    <img src="https://cdn.discordapp.com/attachments/828116217285836825/1106489564949925948/orca_pfp.jpg"
+    <% if(user.image) { %>
+      <img src="<%= user.image %>" alt="Profile Photo">
+    <% } else { %>
+      <img src="https://cdn.discordapp.com/attachments/828116217285836825/1106489564949925948/orca_pfp.jpg"
       alt="Profile Photo">
+    <% } %>
   </div>
 
 
@@ -17,7 +21,9 @@
   </div>
   <h4 class="username">@<%= user.username %>
   </h4>
-  <form class="form" action="/updateProfile" method="post">
+  <form class="form" action="/updateProfile" method="post" enctype="multipart/form-data">
+    <label for="profilePhoto">Profile Photo</label>
+  <input type="file" id="profilePhoto" name="profilePhoto" accept="image/png, image/jpeg">
     <input class="btn blue-button" type="submit" value="Submit">
     <hr>
     <label for="email">Email</label>

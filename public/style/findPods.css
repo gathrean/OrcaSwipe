@@ -110,6 +110,25 @@
   text-align: center;
 }
 
+.empty-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 1.2rem;
+  color: #ffffff;
+  margin-top: 20px;
+  height: 100%;
+  /* Ensure the message takes up the full height of the parent element */
+}
+
+.button-container {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 
 .tinder--buttons {
   padding-top: 1vh;
@@ -153,11 +172,6 @@
   width: auto;
   background: linear-gradient(360deg, #3fb191, #02c78f);
   border-radius: 100%;
-}
-
-.animate {
-  opacity: 0;
-  animation: swipe-right-and-fade-in 0.5s ease 4s forwards;
 }
 
 

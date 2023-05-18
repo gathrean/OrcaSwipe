@@ -91,6 +91,10 @@ app.use(express.static("public"));
 // Serve static files from the "/views/splash" directory
 app.use('/splash', express.static('views/splash'));
 
+// Serve static files from /uplaods directory for photo rendering
+app.use('/uploads', express.static('uploads'));
+
+
 // Create a MongoStore instance for session management, using the MongoDB 
 var mongoStore = MongoStore.create({
   mongoUrl: `mongodb+srv://${mongodb_user}:${encodeURIComponent(mongodb_password)}@${mongodb_cluster}/${mongodb_database}`,
@@ -118,9 +122,19 @@ app.get("/", (req, res) => {
 });
 
 // GET request for the "/home" URL
-app.get("/home", (req, res) => {
-  res.render("home", { loggedIn: req.session.loggedIn, name: req.session.name, currentPage: 'home' });
+app.get("/home", async (req, res) => {
+  const user = await fetchUserData(req);
+  res.render("home", { loggedIn: req.session.loggedIn, name: req.session.name, currentPage: 'home', user });
 });
+
+// Fetch the user data
+async function fetchUserData(req) {
+  if (req.session.loggedIn) {
+    return await usersCollection.findOne({ email: req.session.email });
+  }
+  return null;
+}
+
 
 // GET request for the "/splash" URL
 app.get("/splash", (req, res) => {
@@ -148,15 +162,24 @@ app.get("/signup", (req, res) => {
 });
 
 // GET request for the "/resetPassword" URL
-app.get('/resetPassword', (req, res) => {
-  res.render('resetting-passwords/resetPassword');
+app.get('/resetPassword', async (req, res) => {
+  let user = null;
+  if (req.session.loggedIn) {
+    user = await usersCollection.findOne({ email: req.session.email });
+  }
+  res.render('resetting-passwords/resetPassword', { user: user });
 });
+
 
 // GET request for the "/createNewPassword" URL
 app.get('/createNewPassword', async (req, res) => {
   var email = req.params.email;
   var code = req.params.code;
-  res.render('createNewPassword', { code: code, email: email });
+  let user = null;
+  if (req.session.loggedIn) {
+    user = await usersCollection.findOne({ email: req.session.email });
+  }
+  res.render('createNewPassword', { code: code, email: email, user: user });
 })
 
 // POST request for the "/submitPassword" URL
@@ -234,8 +257,13 @@ app.post('/sendResetEmail', async (req, res) => {
 app.get('/updatePassword', async (req, res) => {
   const code = req.query.code;
   const email = req.query.email;
-  res.render('resetting-passwords/updatePassword', { code: code, email: email });
+  let user = null;
+  if (req.session.loggedIn) {
+    user = await usersCollection.findOne({ email: req.session.email });
+  }
+  res.render('resetting-passwords/updatePassword', { code: code, email: email, user: user });
 })
+
 
 // POST request for the "/updateSettings" URL
 app.post("/updateSettings", async (req, res) => {
@@ -427,13 +455,15 @@ app.get("/settings", async (req, res) => {
   }
 });
 
-app.get("/members", (req, res) => {
+app.get("/members", async (req, res) => {
   if (req.session.loggedIn) {
-    res.render("members", { name: req.session.name, currentPage: 'members' });
+    let user = await usersCollection.findOne({ email: req.session.email });
+    res.render("members", { name: req.session.name, currentPage: 'members', user: user });
   } else {
     res.status(403).send("You must be logged in to access the members area.<br><a href='/'>Go back to home page</a>");
   }
 });
+
 
 // I (ean) removed the GET request for /yourpods to better clean the code up
 
@@ -441,23 +471,31 @@ app.get("/members", (req, res) => {
 app.get("/attendedpods", async (req, res) => {
   if (req.session.loggedIn) {
     const user = await usersCollection.findOne({ email: req.session.email });
+    const attendedPods = await podsCollection.find({ attenders: user._id }).toArray();
     if (!user) {
       console.log(`User email from session: ${req.session.email}`);
       console.log('User from DB: ', user);
       return res.status(500).send('User not found');
     }
-    res.render("attendedpods", { activeTab: 'attendedpods', currentPage: 'attendedPods', attendedPods: user.eventsAttended });
+    res.render("attendedpods", { 
+        activeTab: 'attendedpods', 
+        currentPage: 'attendedPods', 
+        attendedPods: user.eventsAttended, 
+        user: user 
+    });
   } else {
     res.status(403).send("You must be logged in to access the pods page.<br><a href='/'>Go back to home page</a>")
   }
 });
 
+
 // GET request for the "/createdpods" URL
 app.get("/createdpods", async (req, res) => {
   if (req.session.loggedIn) {
+    const user = await fetchUserData(req);
     try {
       const createdPods = await podsCollection.find({ creator: req.session.email }).toArray();
-      res.render("createdpods", { activeTab: 'createdpods', currentPage: 'createdPods', createdPods: createdPods });
+      res.render("createdpods", { activeTab: 'createdpods', currentPage: 'createdPods', createdPods: createdPods, user });
     } catch (error) {
       res.status(500).send("Error retrieving created pods.<br><a href='/'>Go back to home page</a>")
     }
@@ -466,14 +504,19 @@ app.get("/createdpods", async (req, res) => {
   }
 });
 
-app.post('/deletePod', async (req, res) => {
-    console.log('req = ' + req.query.podID);
-})
+// Fetch the user data
+async function fetchUserData(req) {
+  if (req.session.loggedIn) {
+    return await usersCollection.findOne({ email: req.session.email });
+  }
+  return null;
+}
 
 // GET request for the "/createpod" URL
-app.get("/createpod", (req, res) => {
+app.get("/createpod", async (req, res) => {
   if (req.session.loggedIn) {
-    res.render("createpod", { currentPage: 'pods' });
+    const user = await fetchUserData(req);
+    res.render("createpod", { currentPage: 'pods', user: user});
   }
 });
 
@@ -486,9 +529,12 @@ app.post("/createpod", upload.single('image'), async (req, res) => {
     var location = {lat: req.body.lat, lng: req.body.lng};
 
     console.log(req.file);
+
+    let image = ''; // Define image here
+
     if (req.file) {
       // Uploads a local file to the bucket
-      await bucket.upload(req.file.path, {
+      const file = await bucket.upload(req.file.path, {
           // Support for HTTP requests made with `Accept-Encoding: gzip`
           gzip: true,
           metadata: {
@@ -497,9 +543,12 @@ app.post("/createpod", upload.single('image'), async (req, res) => {
               cacheControl: 'public, max-age=31536000',
           },
       });
+    
+      // Assign a value to image 
+      image = `https://firebasestorage.googleapis.com/v0/b/orcaswipe-8ae9b.appspot.com/o/${encodeURI(req.file.filename)}?alt=media`;
 
       console.log(`${req.file.filename} uploaded to Firebase.`);
-    }
+    } // No need for an else block because image is already defined as an empty string
 
     // If the interest is in req.body, it was checked. Otherwise, it was not.
     let tags = {}
@@ -509,7 +558,7 @@ app.post("/createpod", upload.single('image'), async (req, res) => {
 
     const creator = req.session.email;
     let attenders = [];
-    const newPod = { name, tags, eventDescription, attenders, creator, location };
+    const newPod = { name, tags, eventDescription, attenders, creator, location, image };
 
     // use Joi to validate data
     const schema = Joi.object({
@@ -521,8 +570,10 @@ app.post("/createpod", upload.single('image'), async (req, res) => {
       location: Joi.object({
         lat: Joi.number().required(),
         lng: Joi.number().required()
-      })
+      }),
+      image: Joi.string().uri()  // validates image as a URL
     });
+    
 
     const validationResult = schema.validate(newPod);
 
@@ -575,7 +626,7 @@ app.get("/findPods", async (req, res) => {
   var email = req.session.email;
   var user = await usersCollection.findOne({ email: email });
   console.log(user)
-  res.render('findPods', { currentPage: 'findPods', maxDist: user.podProximity != null ? user.podProximity : 10000 });
+  res.render('findPods', { currentPage: 'findPods', maxDist: user.podProximity != null ? user.podProximity : 10000, user: user });
 })
 
 // GET request for the "/getPods" URL
@@ -631,6 +682,35 @@ app.get("/pod/:id/attenders", async (req, res) => {
   res.json(attenders);
 });
 
+//leaving the pod
+app.post("/pod/:podId/leave", async (req, res) => {
+  if (req.session.loggedIn) {
+      try {
+          const podId = req.params.podId;
+          const user = await usersCollection.findOne({ email: req.session.email });
+
+          if (user) {
+              await podsCollection.updateOne(
+                  { _id:  new ObjectId(podId) },
+                  { $pull: { attenders: user._id } }
+              );
+              await usersCollection.updateOne(
+                { _id: new ObjectId(user._id) },
+                { $pull: { eventsAttended: { _id: podId } } }
+              );
+              res.status(200).send();
+          } else {
+              res.status(404).send('User not found');
+          }
+      } catch (error) {
+        console.error(error);
+          res.status(500).send('Error leaving pod');
+      }
+  } else {
+      res.status(403).send('You must be logged in to leave a pod');
+  }
+});
+
 // GET request for the "/viewProfile" URL  res.json(attenders);
 app.get("/viewProfile", async (req, res) => {
   if (req.session.loggedIn) {
@@ -647,7 +727,7 @@ app.get("/viewProfile", async (req, res) => {
 });
 
 // POST request for the "/updateProfile" URL
-app.post("/updateProfile", async (req, res) => {
+app.post("/updateProfile", upload.single('profilePhoto'), async (req, res) => {
   if (req.session.loggedIn) {
     const schema = Joi.object({
       name: Joi.string().max(50).optional(),
@@ -656,6 +736,7 @@ app.post("/updateProfile", async (req, res) => {
       birthday: Joi.date().optional(),
       pronouns: Joi.string().max(50).optional(),
       interests: Joi.array().items(Joi.string()).max(10).optional(),
+      image: 'uploads/' + req.file.filename,
     });
 
     if (!Array.isArray(req.body.interests)){
@@ -681,6 +762,7 @@ app.post("/updateProfile", async (req, res) => {
             birthday: new Date(req.body.birthday),
             pronouns: req.body.pronouns,
             interests: req.body.interests,
+            image: 'uploads/' + req.file.filename,
           };
           await usersCollection.updateOne({ email: req.session.email }, { $set: updatedUser });
           req.session.name = updatedUser.name;
@@ -699,10 +781,15 @@ app.post("/updateProfile", async (req, res) => {
 });
 
 // GET request to catch all other routes that are not defined
-app.get('*', (req, res) => {
+app.get('*', async (req, res) => {
+  let user = null;
+  if (req.session.loggedIn) {
+    user = await usersCollection.findOne({ email: req.session.email });
+  }
   res.status(404);
-  res.render("errors/404");
+  res.render("errors/404", { user: user });
 });
+
 
 // Start server
 app.listen(PORT, () => {

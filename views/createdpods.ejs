@@ -1,93 +1,93 @@
 <%- include("templates/header") %>
 
-    <style>
-        .card {
-            width: 90vw;
-            max-width: 450px;
-            margin-bottom: 20px;
-            /* Set a maximum width for desktop view */
-        }
+<style>
+    .card {
+        width: 90vw;
+        max-width: 450px;
+        margin-bottom: 20px;
+        /* Set a maximum width for desktop view */
+    }
 
-        /* Media query for desktop view */
-        @media (min-width: 992px) {
-            .card-container {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: space-between;
-            }
-
-            .card {
-                flex-basis: calc(33.33% - 20px);
-                /* Adjust flex-basis value for desired spacing */
-                margin-bottom: 20px;
-                /* Add bottom margin for spacing */
-            }
-        }
-
-        .pods-actions {
+    /* Media query for desktop view */
+    @media (min-width: 992px) {
+        .card-container {
             display: flex;
-        }
-
-        .action-button {
-            margin-right: 10px;
-        }
-
-        .description {
-            font-weight: 100;
-        }
-
-        .host-container {
-            display: flex;
-            align-items: center;
-        }
-
-        .host-title {
-            margin: 0;
-            color: white;
-            font-size: 3rem;
-            line-height: 1;
-        }
-
-        .pods-actions {
-            display: flex;
+            flex-wrap: wrap;
             justify-content: space-between;
         }
 
-        .action-button {
-            margin-right: 10px;
-            display: flex;
+        .card {
+            flex-basis: calc(33.33% - 20px);
+            /* Adjust flex-basis value for desired spacing */
+            margin-bottom: 20px;
+            /* Add bottom margin for spacing */
         }
+    }
 
-        .action-button {
-            margin-right: 10px;
-        }
+    .pods-actions {
+        display: flex;
+    }
 
-        .description {
-            font-weight: 100;
-        }
-    </style>
+    .action-button {
+        margin-right: 10px;
+    }
 
-    <!-- Title on top -->
-    <div class="host-container">
-        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" style="fill: white; margin-right: 10px;">
-            <!-- Add your SVG icon code here -->
-            <%- include("./icons/host-2") %>
-        </svg>
-        <h1 class="host-title">Host</h1>
-    </div>
+    .description {
+        font-weight: 100;
+    }
 
-    <!-- Caption for title -->
-    <div>
-        <p style="text-align: left; color: white">
-            List of all the Pods you are hosting
-        </p>
-    </div>
+    .host-container {
+        display: flex;
+        align-items: center;
+    }
 
-    <!-- Button for hosting a new pod -->
-    <a href="/createpod"><button class="btn white-button">
-            Host a new pod
-        </button></a>
-    <hr>
+    .host-title {
+        margin: 0;
+        color: white;
+        font-size: 3rem;
+        line-height: 1;
+    }
+
+    .pods-actions {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .action-button {
+        margin-right: 10px;
+        display: flex;
+    }
+
+    .action-button {
+        margin-right: 10px;
+    }
+
+    .description {
+        font-weight: 100;
+    }
+</style>
+
+<!-- Title on top -->
+<div class="host-container">
+    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" style="fill: white; margin-right: 10px;">
+        <!-- Add your SVG icon code here -->
+        <%- include("./icons/host-2") %>
+    </svg>
+    <h1 class="host-title">Host</h1>
+</div>
+
+<!-- Caption for title -->
+<div>
+    <p style="text-align: left; color: white">
+        List of all the Pods you are hosting
+    </p>
+</div>
+
+<!-- Button for hosting a new pod -->
+<a href="/createpod"><button class="btn white-button">
+        Host a new pod
+    </button></a>
+<hr>
 
     <script>
         // Storing the createdPods data as a JavaScript variable
@@ -108,30 +108,33 @@
                     <%= pod.name %>
                 </h1>
 
-                <h3 class="description">
-                    <%= pod.location %>
-                </h3>
+        <!-- Add the image tag here -->
+        <img src="<%= pod.image %>" alt="<%= pod.name %>">
 
-                <hr>
+        <h3 class="description">
+            <%= pod.location %>
+        </h3>
 
-                <p>
-                    <strong>Host:</strong>
-                    <%= pod.host %>
-                </p>
+        <hr>
 
-                <p>
-                    <strong>Attenders:</strong>
-                    <span class="attenders">
-                        <%= pod.attenders.length %>
-                    </span>
-                </p>
+        <p>
+            <strong>Host:</strong>
+            <%= pod.host %>
+        </p>
 
-                <p>
-                    <strong>Description:</strong>
-                    <span class="description">
-                        <%= pod.eventDescription %>
-                    </span>
-                </p>
+        <p>
+            <strong>Attenders:</strong>
+            <span class="attenders">
+                <%= pod.attenders.length %>
+            </span>
+        </p>
+
+        <p>
+            <strong>Description:</strong>
+            <span class="description">
+                <%= pod.eventDescription %>
+            </span>
+        </p>
 
                 <hr>
                 <div class="pods-actions">
@@ -146,38 +149,38 @@
                 </div>
             </div>
 
-            <% }); %>
+    <% }); %>
 
-                <!-- Modal -->
-                <div id="modal" class="modal">
-                    <div class="modal-content">
-                        <span class="close">&times;</span>
-                        <p id="modal-text"></p>
-                    </div>
-                </div>
-
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p id="modal-text"></p>
+        </div>
     </div>
 
-    <%- include("templates/footer") %>
+</div>
+
+<%- include("templates/footer") %>
 
 
-        <script>
-            document.querySelectorAll('.show-attenders').forEach(button => {
-                button.addEventListener('click', async function () {
-                    const podId = this.getAttribute('data-pod-id');
-                    const response = await fetch(`/pod/${podId}/attenders`);
-                    const attenders = await response.json();
+<script>
+    document.querySelectorAll('.show-attenders').forEach(button => {
+        button.addEventListener('click', async function () {
+            const podId = this.getAttribute('data-pod-id');
+            const response = await fetch(`/pod/${podId}/attenders`);
+            const attenders = await response.json();
 
-                    // Here you could update your page with the attenders information.
-                    // This is just an example, you will need to adjust this according to your page structure and design.
-                    const modalText = document.getElementById('modal-text');
-                    modalText.textContent = attenders.join(', ');
+            // Here you could update your page with the attenders information.
+            // This is just an example, you will need to adjust this according to your page structure and design.
+            const modalText = document.getElementById('modal-text');
+            modalText.textContent = attenders.join(', ');
 
-                    // Display the modal
-                    const modal = document.getElementById('modal');
-                    modal.style.display = "block";
-                });
-            });
+            // Display the modal
+            const modal = document.getElementById('modal');
+            modal.style.display = "block";
+        });
+    });
 
             // When the user clicks on <span> (x), close the modal
             document.querySelector('.close').addEventListener('click', function () {
