@@ -699,6 +699,11 @@ app.get("/viewProfile", async (req, res) => {
 // POST request for the "/updateProfile" URL
 app.post("/updateProfile", upload.single('profilePhoto'), async (req, res) => {
   if (req.session.loggedIn) {
+    let imagePath;
+    if(req.file) {
+      imagePath = 'uploads/' + req.file.filename;
+    }
+
     const schema = Joi.object({
       name: Joi.string().max(50).optional(),
       username: Joi.string().max(50).optional(),
@@ -706,7 +711,7 @@ app.post("/updateProfile", upload.single('profilePhoto'), async (req, res) => {
       birthday: Joi.date().optional(),
       pronouns: Joi.string().max(50).optional(),
       interests: Joi.array().items(Joi.string()).max(10).optional(),
-      image: 'uploads/' + req.file.filename,
+      image: Joi.string().optional()
     });
 
     if (!Array.isArray(req.body.interests)){
@@ -715,6 +720,10 @@ app.post("/updateProfile", upload.single('profilePhoto'), async (req, res) => {
       } else {
       req.body.interests = [];
       }
+    }
+
+    if(imagePath) {
+      req.body.image = imagePath;
     }
 
     const validationResult = schema.validate(req.body);
@@ -732,7 +741,7 @@ app.post("/updateProfile", upload.single('profilePhoto'), async (req, res) => {
             birthday: new Date(req.body.birthday),
             pronouns: req.body.pronouns,
             interests: req.body.interests,
-            image: 'uploads/' + req.file.filename,
+            image: req.body.image,
           };
           await usersCollection.updateOne({ email: req.session.email }, { $set: updatedUser });
           req.session.name = updatedUser.name;
@@ -749,6 +758,7 @@ app.post("/updateProfile", upload.single('profilePhoto'), async (req, res) => {
     res.status(403).send("You must be logged in to update your profile.<br><a href='/'>Go back to home page</a>");
   }
 });
+
 
 // GET request to catch all other routes that are not defined
 app.get('*', async (req, res) => {
