@@ -198,6 +198,14 @@ function makeSwipable() {
 
                 // Removing the swiped pod from the "pods" array
                 pods.shift()
+            } else if (!keep && event.deltaX < 0) { // <-- Add this else if to handle "Nope" swipes
+                console.log('Swiped left on:', pods[0]);
+        
+                // Handling the nope swipe action on the pod
+                handleNopeSwipe(pods[0]);
+        
+                // Removing the swiped pod from the "pods" array
+                pods.shift();
             }
 
             if (keep) {
