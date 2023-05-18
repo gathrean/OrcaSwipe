@@ -571,7 +571,7 @@ app.get("/findPods", async (req, res) => {
   var email = req.session.email;
   var user = await usersCollection.findOne({ email: email });
   console.log(user)
-  res.render('findPods', { currentPage: 'findPods', maxDist: user.podProximity });
+  res.render('findPods', { currentPage: 'findPods', maxDist: user.podProximity != null ? user.podProximity : 10000 });
 })
 
 // GET request for the "/getPods" URL
