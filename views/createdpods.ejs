@@ -193,10 +193,12 @@
                         Confirm
                     </button>
                 `)
+
+                $('#confirm-delete').on('click', async function() {
+                console.log('confirmed');
+                await fetch(`/deletePod?podID=${$(this).attr('data-pod-id')}`, 
+                    {method: 'POST', redirect: 'follow'});
+                })
             })
 
-            $('#confirm-delete').on('click', function() {
-                console.log('confirmed')
-                fetch(`/deletePod?podID=${$(this).attr('data-pod-id')}`)
-            })
         </script>
