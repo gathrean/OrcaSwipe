@@ -155,11 +155,6 @@
   border-radius: 100%;
 }
 
-.animate {
-  opacity: 0;
-  animation: swipe-right-and-fade-in 0.5s ease 4s forwards;
-}
-
 
 @keyframes swipe-right-and-fade-in {
   from {
