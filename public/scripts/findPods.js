@@ -41,6 +41,7 @@ function loadPods() {
                 pods = pods.filter((p) => {
                     return map.distance(p.location, userLocation) <= maxDist;
                 })
+                $('#map').empty();
                 populateStack();
             });  
         } else {
