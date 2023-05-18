@@ -44,9 +44,6 @@ function initCards(card, index) {
         document.getElementById('stack').appendChild(emptyMessage);
     }
 
-
-
-
     newCards.forEach(function (card, index) {
         // Setting the stacked effect for each card
         card.style.zIndex = allCards.length - index;
@@ -92,7 +89,6 @@ function loadPods() {
         } else {
             populateStack();
         }
-
         // Hide the loading circle when the pods have finished loading
         loadingCircle.style.display = 'none';
     }
@@ -103,6 +99,8 @@ function loadPods() {
 
 // Function to populate the stack with pods
 function populateStack() {
+
+    // Shows the stack
     for (var i = 0; i < pods.length; i++) {
         var tags = [];
         for (var tag in pods[i].tags) {
