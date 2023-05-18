@@ -91,6 +91,10 @@ app.use(express.static("public"));
 // Serve static files from the "/views/splash" directory
 app.use('/splash', express.static('views/splash'));
 
+// Serve static files from /uplaods directory for photo rendering
+app.use('/uploads', express.static('uploads'));
+
+
 // Create a MongoStore instance for session management, using the MongoDB 
 var mongoStore = MongoStore.create({
   mongoUrl: `mongodb+srv://${mongodb_user}:${encodeURIComponent(mongodb_password)}@${mongodb_cluster}/${mongodb_database}`,
@@ -652,7 +656,7 @@ app.get("/viewProfile", async (req, res) => {
 });
 
 // POST request for the "/updateProfile" URL
-app.post("/updateProfile", async (req, res) => {
+app.post("/updateProfile", upload.single('profilePhoto'), async (req, res) => {
   if (req.session.loggedIn) {
     const schema = Joi.object({
       name: Joi.string().max(50).optional(),
@@ -661,6 +665,7 @@ app.post("/updateProfile", async (req, res) => {
       birthday: Joi.date().optional(),
       pronouns: Joi.string().max(50).optional(),
       interests: Joi.array().items(Joi.string()).max(10).optional(),
+      image: 'uploads/' + req.file.filename,
     });
 
     if (!Array.isArray(req.body.interests)){
@@ -686,6 +691,7 @@ app.post("/updateProfile", async (req, res) => {
             birthday: new Date(req.body.birthday),
             pronouns: req.body.pronouns,
             interests: req.body.interests,
+            image: 'uploads/' + req.file.filename,
           };
           await usersCollection.updateOne({ email: req.session.email }, { $set: updatedUser });
           req.session.name = updatedUser.name;

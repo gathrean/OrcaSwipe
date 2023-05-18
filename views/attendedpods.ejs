@@ -76,51 +76,57 @@
     <a href="/findPods"><button class="btn white-button">Find new pods</button></a>
     <hr>
 
-    <!-- Card container -->
-    <div class="card-container">
-        <!-- Card for each attended pod -->
-        <% attendedPods.forEach(function(pod) { %>
-            <div class="card form">
-                <h1>
-                    <%= pod.name %>
-                </h1>
+   <!-- Card container -->
+<div class="card-container">
+    <!-- Card for each attended pod -->
+    <% attendedPods.forEach(function(pod) { %>
+        <div class="card form">
+            <h1>
+                <%= pod.name %>
+            </h1>
 
-                <h3 class="description">
-                    <%= pod.location %>
-                </h3>
+            <!-- Include image here -->
+            <% if(pod.image) { %>
+            <img src="<%= pod.image %>" alt="<%= pod.name %>">
+            <% } %>
 
-                <hr>
+            <h3 class="description">
+                <%= pod.location %>
+            </h3>
 
-                <p>
-                    <strong>Host:</strong>
-                    <%= pod.host %>
-                </p>
+            <hr>
 
-                <p>
-                    <strong>Attenders:</strong>
-                    <span class="attenders">
-                        <%= pod.attenders.length %>
-                    </span>
-                </p>
+            <p>
+                <strong>Host:</strong>
+                <%= pod.host %>
+            </p>
 
-                <p>
-                    <strong>Description:</strong>
-                    <span class="description">
-                        <%= pod.eventDescription %>
-                    </span>
-                </p>
+            <p>
+                <strong>Attenders:</strong>
+                <span class="attenders">
+                    <%= pod.attenders.length %>
+                </span>
+            </p>
 
-                <hr>
-                <div class="pods-actions">
-                    <button id="<%= pod.name %>" type="button" class="btn blue-button see-details"
-                        data-bs-toggle="modal" data-bs-target="#pod-details">See details</button>
-                    <button class="btn blue-button show-attenders" data-pod-id="<%= pod._id %>">
-                        Who's going?
-                    </button>
-                </div>
+            <p>
+                <strong>Description:</strong>
+                <span class="description">
+                    <%= pod.eventDescription %>
+                </span>
+            </p>
+
+            <hr>
+            <div class="pods-actions">
+                <button id="<%= pod.name %>" type="button" class="btn blue-button see-details"
+                    data-bs-toggle="modal" data-bs-target="#pod-details">See details</button>
+                <button class="btn blue-button show-attenders" data-pod-id="<%= pod._id %>">
+                    Who's going?
+                </button>
             </div>
+        </div>
 
-            <% }); %>
+        <% }); %>
+
 
                 <!-- Modal -->
                 <div id="modal" class="modal">

@@ -4,9 +4,14 @@
 
   <div class="user-profile form">
     <div class="profile-photo">
-      <img src="https://cdn.discordapp.com/attachments/828116217285836825/1106489564949925948/orca_pfp.jpg"
+      <% if(user.image) { %>
+        <img src="<%= user.image %>" alt="Profile Photo">
+      <% } else { %>
+        <img src="https://cdn.discordapp.com/attachments/828116217285836825/1106489564949925948/orca_pfp.jpg"
         alt="Profile Photo">
+      <% } %>
     </div>
+    
     <div class="profile-details">
       <h1 class="profile-name">
         <%= user.name %>
