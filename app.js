@@ -122,9 +122,19 @@ app.get("/", (req, res) => {
 });
 
 // GET request for the "/home" URL
-app.get("/home", (req, res) => {
-  res.render("home", { loggedIn: req.session.loggedIn, name: req.session.name, currentPage: 'home' });
+app.get("/home", async (req, res) => {
+  const user = await fetchUserData(req);
+  res.render("home", { loggedIn: req.session.loggedIn, name: req.session.name, currentPage: 'home', user });
 });
+
+// Fetch the user data
+async function fetchUserData(req) {
+  if (req.session.loggedIn) {
+    return await usersCollection.findOne({ email: req.session.email });
+  }
+  return null;
+}
+
 
 // GET request for the "/splash" URL
 app.get("/splash", (req, res) => {
@@ -152,15 +162,24 @@ app.get("/signup", (req, res) => {
 });
 
 // GET request for the "/resetPassword" URL
-app.get('/resetPassword', (req, res) => {
-  res.render('resetting-passwords/resetPassword');
+app.get('/resetPassword', async (req, res) => {
+  let user = null;
+  if (req.session.loggedIn) {
+    user = await usersCollection.findOne({ email: req.session.email });
+  }
+  res.render('resetting-passwords/resetPassword', { user: user });
 });
+
 
 // GET request for the "/createNewPassword" URL
 app.get('/createNewPassword', async (req, res) => {
   var email = req.params.email;
   var code = req.params.code;
-  res.render('createNewPassword', { code: code, email: email });
+  let user = null;
+  if (req.session.loggedIn) {
+    user = await usersCollection.findOne({ email: req.session.email });
+  }
+  res.render('createNewPassword', { code: code, email: email, user: user });
 })
 
 // POST request for the "/submitPassword" URL
@@ -238,8 +257,13 @@ app.post('/sendResetEmail', async (req, res) => {
 app.get('/updatePassword', async (req, res) => {
   const code = req.query.code;
   const email = req.query.email;
-  res.render('resetting-passwords/updatePassword', { code: code, email: email });
+  let user = null;
+  if (req.session.loggedIn) {
+    user = await usersCollection.findOne({ email: req.session.email });
+  }
+  res.render('resetting-passwords/updatePassword', { code: code, email: email, user: user });
 })
+
 
 // POST request for the "/updateSettings" URL
 app.post("/updateSettings", async (req, res) => {
@@ -431,13 +455,15 @@ app.get("/settings", async (req, res) => {
   }
 });
 
-app.get("/members", (req, res) => {
+app.get("/members", async (req, res) => {
   if (req.session.loggedIn) {
-    res.render("members", { name: req.session.name, currentPage: 'members' });
+    let user = await usersCollection.findOne({ email: req.session.email });
+    res.render("members", { name: req.session.name, currentPage: 'members', user: user });
   } else {
     res.status(403).send("You must be logged in to access the members area.<br><a href='/'>Go back to home page</a>");
   }
 });
+
 
 // I (ean) removed the GET request for /yourpods to better clean the code up
 
@@ -450,18 +476,25 @@ app.get("/attendedpods", async (req, res) => {
       console.log('User from DB: ', user);
       return res.status(500).send('User not found');
     }
-    res.render("attendedpods", { activeTab: 'attendedpods', currentPage: 'attendedPods', attendedPods: user.eventsAttended });
+    res.render("attendedpods", { 
+        activeTab: 'attendedpods', 
+        currentPage: 'attendedPods', 
+        attendedPods: user.eventsAttended, 
+        user: user 
+    });
   } else {
     res.status(403).send("You must be logged in to access the pods page.<br><a href='/'>Go back to home page</a>")
   }
 });
 
+
 // GET request for the "/createdpods" URL
 app.get("/createdpods", async (req, res) => {
   if (req.session.loggedIn) {
+    const user = await fetchUserData(req);
     try {
       const createdPods = await podsCollection.find({ creator: req.session.email }).toArray();
-      res.render("createdpods", { activeTab: 'createdpods', currentPage: 'createdPods', createdPods: createdPods });
+      res.render("createdpods", { activeTab: 'createdpods', currentPage: 'createdPods', createdPods: createdPods, user });
     } catch (error) {
       res.status(500).send("Error retrieving created pods.<br><a href='/'>Go back to home page</a>")
     }
@@ -470,10 +503,19 @@ app.get("/createdpods", async (req, res) => {
   }
 });
 
-// GET request for the "/createpod" URL
-app.get("/createpod", (req, res) => {
+// Fetch the user data
+async function fetchUserData(req) {
   if (req.session.loggedIn) {
-    res.render("createpod", { currentPage: 'pods' });
+    return await usersCollection.findOne({ email: req.session.email });
+  }
+  return null;
+}
+
+// GET request for the "/createpod" URL
+app.get("/createpod", async (req, res) => {
+  if (req.session.loggedIn) {
+    const user = await fetchUserData(req);
+    res.render("createpod", { currentPage: 'pods', user: user});
   }
 });
 
@@ -583,7 +625,7 @@ app.get("/findPods", async (req, res) => {
   var email = req.session.email;
   var user = await usersCollection.findOne({ email: email });
   console.log(user)
-  res.render('findPods', { currentPage: 'findPods', maxDist: user.podProximity != null ? user.podProximity : 10000 });
+  res.render('findPods', { currentPage: 'findPods', maxDist: user.podProximity != null ? user.podProximity : 10000, user: user });
 })
 
 // GET request for the "/getPods" URL
@@ -709,10 +751,15 @@ app.post("/updateProfile", upload.single('profilePhoto'), async (req, res) => {
 });
 
 // GET request to catch all other routes that are not defined
-app.get('*', (req, res) => {
+app.get('*', async (req, res) => {
+  let user = null;
+  if (req.session.loggedIn) {
+    user = await usersCollection.findOne({ email: req.session.email });
+  }
   res.status(404);
-  res.render("errors/404");
+  res.render("errors/404", { user: user });
 });
+
 
 // Start server
 app.listen(PORT, () => {

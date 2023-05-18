@@ -75,19 +75,23 @@
                         <hr>
                         <li class="nav-item">
                             <a class="nav-link" href="/home">Home</a>
-                        </li><hr>
+                        </li>
+                        <hr>
 
                         <li class="nav-item">
                             <a class="nav-link" href="/members">Members Area</a>
-                        </li><hr>
+                        </li>
+                        <hr>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="/resestPassword">Reset my password</a>
-                        </li><hr>
+                            <a class="nav-link" href="/resetPassword">Reset my password</a>
+                        </li>
+                        <hr>
 
                         <li class="nav-item">
                             <a class="nav-link" href="/settings">Settings</a>
-                        </li><hr>
+                        </li>
+                        <hr>
 
                         <li class="nav-item">
                             <a class="nav-link" href="/logout">Log out</a>
@@ -119,12 +123,17 @@
                 <a href="/profile"
                     class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'profile') ? 'active' : '' %>"
                     aria-current="page">
+                    <% if (user.image && user.image !== '') { %>
+                    <img src="<%= user.image %>" width="30" height="30" alt="Profile Image" />
+                    <% } else { %>
                     <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" viewBox="0 0 24 24">
                         <!-- Add your SVG icon code here -->
                         <%- include("../icons/profile") %>
                     </svg>
+                    <% } %>
                 </a>
             </li>
+
 
         </ul>
     </div>
