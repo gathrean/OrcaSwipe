@@ -654,6 +654,8 @@ app.post("/updateProfile", async (req, res) => {
       interests: Joi.array().items(Joi.string()).max(10).optional(),
     });
 
+    if (!Array.isArray(req.body.interests)){req.body.interests = [req.body.interests]}
+
     const validationResult = schema.validate(req.body);
 
     if (validationResult.error) {
