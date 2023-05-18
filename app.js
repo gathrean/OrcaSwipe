@@ -588,13 +588,10 @@ app.get('/getPods', async (req, res) => {
 
   // Prepare a query where at least one key from the list has value true
   if (userInterests && userInterests.length != 0){
-    query = { $or: keys.map(key => ({ [key]: true })) };
     for (let interest of userInterests) {
       keys.push(`tags.${interest}`);
     }
-  }
-
-  if (userInterests && userInterests.length != 0){
+    query = { $or: keys.map(key => ({ [key]: true })) };
     var pods = await podsCollection.find({
       name: { $nin: attendedPods.map(pod => pod.name) },
       ...query
