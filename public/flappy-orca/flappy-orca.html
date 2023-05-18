@@ -11,6 +11,13 @@
     <title>Flappy Orca</title>
     <link rel="stylesheet" href="flappy-orca.css">
     <script src="flappy-orca.js" defer></script>
+
+    <script>
+        // Function to redirect to the Flappy Orca page
+        function redirectToHome() {
+            window.location.href = '/';
+        }
+    </script>
 </head>
 
 <body>
@@ -21,6 +28,7 @@
         Click / SPACE to swim up
     </div>
     <div class="score">
+        <button class="btn easter-egg-button" onclick="redirectToHome()">Go back</button> <br>
         <span class="score_title"></span>
         <span class="score_val"></span>
     </div>
