@@ -466,6 +466,10 @@ app.get("/createdpods", async (req, res) => {
   }
 });
 
+app.post('/deletePod', async (req, res) => {
+  
+})
+
 // GET request for the "/createpod" URL
 app.get("/createpod", (req, res) => {
   if (req.session.loggedIn) {

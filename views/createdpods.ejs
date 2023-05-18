@@ -140,6 +140,9 @@
                     <button class="btn blue-button show-attenders" data-pod-id="<%= pod._id %>">
                         Who's going?
                     </button>
+                    <button class="btn blue-button delete" data-pod-id="<%= pod._id %>" data-bs-toggle="modal" data-bs-target="#pod-details">
+                        Delete Pod?
+                    </button>
                 </div>
             </div>
 
@@ -181,4 +184,19 @@
                 const modal = document.getElementById('modal');
                 modal.style.display = "none";
             });
+
+            $('.delete').on('click', function() {
+                $('.modal-title').empty().append(`<b>Confirm Deletion<b>`);
+                $('.modal-body').empty().append(`
+                    <div>Delete this pod?</div>
+                    <button id="confirm-delete" class="btn blue-button" data-pod-id="${$(this).attr('data-pod-id')}">
+                        Confirm
+                    </button>
+                `)
+            })
+
+            $('#confirm-delete').on('click', function() {
+                console.log('confirmed')
+                fetch(`/deletePod?podID=${$(this).attr('data-pod-id')}`)
+            })
         </script>
