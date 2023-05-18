@@ -483,9 +483,12 @@ app.post("/createpod", upload.single('image'), async (req, res) => {
     var location = {lat: req.body.lat, lng: req.body.lng};
 
     console.log(req.file);
+
+    let image = ''; // Define image here
+
     if (req.file) {
       // Uploads a local file to the bucket
-      await bucket.upload(req.file.path, {
+      const file = await bucket.upload(req.file.path, {
           // Support for HTTP requests made with `Accept-Encoding: gzip`
           gzip: true,
           metadata: {
@@ -494,9 +497,12 @@ app.post("/createpod", upload.single('image'), async (req, res) => {
               cacheControl: 'public, max-age=31536000',
           },
       });
+    
+      // Assign a value to image 
+      image = `https://firebasestorage.googleapis.com/v0/b/orcaswipe-8ae9b.appspot.com/o/${encodeURI(req.file.filename)}?alt=media`;
 
       console.log(`${req.file.filename} uploaded to Firebase.`);
-    }
+    } // No need for an else block because image is already defined as an empty string
 
     // If the interest is in req.body, it was checked. Otherwise, it was not.
     let tags = {}
@@ -506,7 +512,7 @@ app.post("/createpod", upload.single('image'), async (req, res) => {
 
     const creator = req.session.email;
     let attenders = [];
-    const newPod = { name, tags, eventDescription, attenders, creator, location };
+    const newPod = { name, tags, eventDescription, attenders, creator, location, image };
 
     // use Joi to validate data
     const schema = Joi.object({
@@ -518,8 +524,10 @@ app.post("/createpod", upload.single('image'), async (req, res) => {
       location: Joi.object({
         lat: Joi.number().required(),
         lng: Joi.number().required()
-      })
+      }),
+      image: Joi.string().uri()  // validates image as a URL
     });
+    
 
     const validationResult = schema.validate(newPod);
 
