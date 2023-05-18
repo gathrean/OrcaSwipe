@@ -441,12 +441,13 @@ app.get("/members", (req, res) => {
 app.get("/attendedpods", async (req, res) => {
   if (req.session.loggedIn) {
     const user = await usersCollection.findOne({ email: req.session.email });
+    const attendedPods = await podsCollection.find({ attenders: user._id }).toArray();
     if (!user) {
       console.log(`User email from session: ${req.session.email}`);
       console.log('User from DB: ', user);
       return res.status(500).send('User not found');
     }
-    res.render("attendedpods", { activeTab: 'attendedpods', currentPage: 'attendedPods', attendedPods: user.eventsAttended });
+    res.render("attendedpods", { activeTab: 'attendedpods', currentPage: 'attendedPods', attendedPods: attendedPods });
   } else {
     res.status(403).send("You must be logged in to access the pods page.<br><a href='/'>Go back to home page</a>")
   }
