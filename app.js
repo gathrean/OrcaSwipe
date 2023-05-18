@@ -484,8 +484,8 @@ app.get("/attendedpods", async (req, res) => {
     res.render("attendedpods", { 
         activeTab: 'attendedpods', 
         currentPage: 'attendedPods', 
-        attendedPods: user.eventsAttended, 
-        user: user 
+        attendedPods: attendedPods, 
+        user: user ,
     });
   } else {
     res.status(403).send("You must be logged in to access the pods page.<br><a href='/'>Go back to home page</a>")
