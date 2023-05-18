@@ -189,16 +189,18 @@
                 $('.modal-title').empty().append(`<b>Confirm Deletion<b>`);
                 $('.modal-body').empty().append(`
                     <div>Delete this pod?</div>
-                    <button id="confirm-delete" class="btn blue-button" data-pod-id="${$(this).attr('data-pod-id')}">
+                    <form action='deletePod' method='post'>
+                    <input name="podID" type='hidden' value='${$(this).attr('data-pod-id')}'>
+                    <button type="submit" id="confirm-delete" class="btn blue-button" data-pod-id="${$(this).attr('data-pod-id')}">
                         Confirm
                     </button>
+                    </form>
                 `)
 
-                $('#confirm-delete').on('click', async function() {
-                console.log('confirmed');
-                await fetch(`/deletePod?podID=${$(this).attr('data-pod-id')}`, 
-                    {method: 'POST', redirect: 'follow'});
-                })
+                // $('#confirm-delete').on('click', async function() {
+                // await fetch(`/deletePod?podID=${$(this).attr('data-pod-id')}`, 
+                //     {method: 'POST', redirect: 'follow'});
+                // })
             })
 
         </script>

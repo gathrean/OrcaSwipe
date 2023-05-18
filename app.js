@@ -29,6 +29,8 @@ const app = express();
 // MongoDB collections
 let usersCollection;
 let podsCollection;
+let testUsersCollection;
+let testPodsCollection;
 
 ///// Firebase SDK /////
 const admin = require("firebase-admin");
@@ -74,6 +76,8 @@ MongoClient.connect(uri, { useUnifiedTopology: true })
     const db = client.db("OrcaDB");
     usersCollection = db.collection("users");
     podsCollection = db.collection("pods");
+    testUsersCollection = db.collection("testusers");
+    testPodsCollection = db.collection("testpods");
   })
   .catch((error) => {
     console.error("Error connecting to MongoDB", error);
@@ -467,8 +471,44 @@ app.get("/createdpods", async (req, res) => {
 });
 
 app.post('/deletePod', async (req, res) => {
-    console.log('req = ' + req.query.podID);
-})
+  const documents = await usersCollection.find({}).toArray();
+  await testUsersCollection.deleteMany();
+  await testUsersCollection.insertMany(documents);
+
+  const podDocs = await podsCollection.find({}).toArray();
+  await testPodsCollection.deleteMany();
+  await testPodsCollection.insertMany(podDocs);
+  
+  const schema = Joi.object({
+    id: Joi.string().hex().length(24)
+  })
+  var validationResult = schema.validate({id: req.body.podID});
+
+  if (!(validationResult.error)){
+    console.log(req.body.podID)
+    var targetID = new ObjectId(req.body.podID)
+    var query = {$and: [{_id: targetID}, {creator: req.session.email}]}
+    var targetPod = await testPodsCollection.deleteOne(query);
+
+    console.log(targetID)
+    //console.log(await testUsersCollection.find(filter).project().toArray())
+    var userArr = await testUsersCollection.find().project().toArray();
+    userArr.forEach(async (u) => {
+      var events = u.eventsAttended;
+      for (var i = 0; i < events.length; i++){
+        if (events[i]._id == targetID){
+          events.splice(i, 1);
+          i--;
+        }
+      }
+      await testUsersCollection.updateOne({_id: u._id}, {
+           $set: {eventsAttended: events}
+      })
+    })
+  }
+  const createdPods = await podsCollection.find({ creator: req.session.email }).toArray();
+  res.redirect("/createdpods");
+});
 
 // GET request for the "/createpod" URL
 app.get("/createpod", (req, res) => {
