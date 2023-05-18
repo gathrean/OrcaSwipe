@@ -13,6 +13,7 @@ function initCards(card, index) {
 
     // Selecting all the cards that are not removed
     var newCards = document.querySelectorAll('.tinder--card:not(.removed)');
+    
     newCards.forEach(function (card, index) {
 
         // Setting the stacked effect for each card
@@ -27,26 +28,41 @@ function initCards(card, index) {
 
 // Function to load pods from the server
 function loadPods() {
+
+    // Show the loading circle
+    var loadingCircle = document.getElementById('loading-circle');
+    loadingCircle.style.display = 'block';
+
     const xhttp = new XMLHttpRequest();
+
+    // Handling the response from the server
     xhttp.onload = () => {
-        var fetchedPods = JSON.parse(xhttp.responseText); // Parsing the fetched pods from the response
+        // Parsing the fetched pods from the response
+        var fetchedPods = JSON.parse(xhttp.responseText);
+
+        // Adding each fetched pod to the "pods" array
         for (var i = 0; i < fetchedPods.length; i++) {
-            pods.push(JSON.parse(fetchedPods[i]));        // Adding each fetched pod to the "pods" array
+            pods.push(JSON.parse(fetchedPods[i]));        
         }
+
+        // If the user has specified a maximum distance, filter the pods based on the distance
         $('body').append(`<div id="map"></div>`)
         var map = L.map('map');
-        if (navigator.geolocation && typeof maxDist != undefined){
-            navigator.geolocation.getCurrentPosition(function getLocation(position){
-                userLocation = {lat: position.coords.latitude, lng: position.coords.longitude};
+        if (navigator.geolocation && typeof maxDist != undefined) {
+            navigator.geolocation.getCurrentPosition(function getLocation(position) {
+                userLocation = { lat: position.coords.latitude, lng: position.coords.longitude };
                 pods = pods.filter((p) => {
                     return map.distance(p.location, userLocation) <= maxDist;
                 })
                 $('#map').empty();
                 populateStack();
-            });  
+            });
         } else {
             populateStack();
         }
+
+        // Hide the loading circle when the pods have finished loading
+        loadingCircle.style.display = 'none';
     }
     // Making a GET request to the server to fetch the pods
     xhttp.open("GET", `getPods`);
@@ -219,7 +235,7 @@ var loveListener = createButtonListener(true);
 nope.addEventListener('click', nopeListener);
 love.addEventListener('click', loveListener);
 
-document.addEventListener('click', function(event) {
+document.addEventListener('click', function (event) {
     if (event.target.matches('.show-attenders')) {
         var podId = event.target.dataset.podId;
 
@@ -239,12 +255,12 @@ document.addEventListener('click', function(event) {
 }, false);
 
 // When the user clicks on <span> (x), close the modal
-document.getElementsByClassName('close')[0].onclick = function() {
+document.getElementsByClassName('close')[0].onclick = function () {
     document.getElementById('modal').style.display = "none";
 }
 
 // When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
+window.onclick = function (event) {
     var modal = document.getElementById('modal');
     if (event.target == modal) {
         modal.style.display = "none";
