@@ -13,9 +13,41 @@ function initCards(card, index) {
 
     // Selecting all the cards that are not removed
     var newCards = document.querySelectorAll('.tinder--card:not(.removed)');
-    
-    newCards.forEach(function (card, index) {
+    // Checking if there are no remaining cards
+    if (newCards.length === 0) {
+        // Display a message indicating that pods are empty
+        var emptyMessage = document.createElement('div');
+        emptyMessage.classList.add('empty-message');
 
+        var messageText = document.createElement('p');
+        messageText.textContent = "No more pods found.";
+        emptyMessage.appendChild(messageText);
+
+        var buttonContainer = document.createElement('div');
+        buttonContainer.classList.add('button-container');
+
+        var adjustTagsButton = document.createElement('a');
+        adjustTagsButton.textContent = "Adjust my tags";
+        adjustTagsButton.classList.add('btn', 'white-button');
+        adjustTagsButton.href = "/editProfile";
+        buttonContainer.appendChild(adjustTagsButton);
+
+        var hostPodButton = document.createElement('a');
+        hostPodButton.textContent = "Host a pod";
+        hostPodButton.classList.add('btn', 'white-button');
+        hostPodButton.href = "/createPod";
+        buttonContainer.appendChild(hostPodButton);
+
+        emptyMessage.appendChild(messageText);
+        emptyMessage.appendChild(buttonContainer);
+
+        document.getElementById('stack').appendChild(emptyMessage);
+    }
+
+
+
+
+    newCards.forEach(function (card, index) {
         // Setting the stacked effect for each card
         card.style.zIndex = allCards.length - index;
         card.style.transform = 'scale(' + (20 - index) / 20 + ') translateY(-' + 30 * index + 'px)';
@@ -42,7 +74,7 @@ function loadPods() {
 
         // Adding each fetched pod to the "pods" array
         for (var i = 0; i < fetchedPods.length; i++) {
-            pods.push(JSON.parse(fetchedPods[i]));        
+            pods.push(JSON.parse(fetchedPods[i]));
         }
 
         // If the user has specified a maximum distance, filter the pods based on the distance
