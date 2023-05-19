@@ -26,7 +26,8 @@
 
     <script>
         // Storing the createdPods data as a JavaScript variable
-        var pods = ("<%- JSON.stringify(createdPods) %>");
+        // NOTE: VSCode may suggest that the line below has error, but DO NOT adjust this line.
+        var pods = <%- JSON.stringify(createdPods) %>
     </script>
 
 
