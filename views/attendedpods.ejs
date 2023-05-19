@@ -6,57 +6,7 @@
         integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
 
     <link rel="stylesheet" href="/style/findPods.css">
-
-    <style>
-        .card {
-            width: 90vw;
-            max-width: 450px;
-            margin-bottom: 20px;
-            /* Set a maximum width for desktop view */
-        }
-
-        /* Media query for desktop view */
-        @media (min-width: 992px) {
-            .card-container {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: center;
-                /* Change this to center the cards */
-            }
-
-            .card {
-                margin: 20px;
-            }
-
-            /* Additional styles for one card */
-            @media (min-width: 992px) and (max-width: 1200px) {
-                .card {
-                    /* max-width: 450px; */
-                }
-            }
-
-            /* Additional styles for one card */
-            @media (min-width: 1200px) {
-                .card {
-                    /* flex-basis: calc(25% - 20px); */
-                    /* Set flex-basis to 25% for one card */
-                }
-            }
-        }
-
-
-        .pods-actions {
-            display: flex;
-        }
-
-        .action-button {
-            margin-right: 10px;
-        }
-
-        .description {
-            font-weight: 100;
-        }
-    </style>
+    <link rel="stylesheet" href="/style/pods.css">
 
     <!-- Title on top -->
     <div style="display: flex; align-items: center;">
@@ -87,55 +37,44 @@
     <div class="card-container">
         <!-- Card for each attended pod -->
         <% attendedPods.forEach(function(pod) { %>
-            <div class="card form">
+            <div class="card" style="text-align: left;">
+                
                 <!-- Include image here -->
                 <% if(pod.image) { %>
-                    <img class="tinder--card--img" src="<%= pod.image %>" alt="<%= pod.name %>">
+                    <div class="card-image">
+                        <img src="<%= pod.image %>" alt="<%= pod.name %>">
+                    </div>
                     <% } %>
-                        <h1>
-                            <%= pod.name %>
-                        </h1>
-
-                        <h3 class="description">
-                            <%= pod.location %>
-                        </h3>
-
-                        <hr>
-
-                        <p>
-                            <strong>Host:</strong>
-                            <%= pod.host %>
-                        </p>
-
-                        <p>
-                            <strong>Attenders:</strong>
-                            <span class="attenders">
-                                <%= pod.attenders.length %>
-                            </span>
-                        </p>
-
-                        <p>
-                            <strong>Description:</strong>
-                            <span class="description">
-                                <%= pod.eventDescription %>
-                            </span>
-                        </p>
-
-                        <hr>
-                        <div class="pods-actions">
-                            <button id="<%= pod.name %>" type="button" class="btn blue-button see-details"
-                                data-bs-toggle="modal" data-bs-target="#pod-details">See details</button>
-                            <button class="btn blue-button show-attenders" data-pod-id="<%= pod._id %>">
-                                Who's going?
-                            </button>
-                            <button class="btn blue-button leave-pod" data-pod-id="<%= pod._id %>">
-                                Leave pod
-                            </button>
+                        <div class="card-content">
+                            <h1>
+                                <%= pod.name %>
+                            </h1>
+                            <h3 class="description">
+                                <%= pod.location %>
+                            </h3>
+                            <div style="background-color: white; color: black; padding: 10px;">
+                                <p><strong>Host:</strong>
+                                    <%= pod.host %>
+                                </p>
+                                <p><strong>Attenders:</strong> <span class="attenders">
+                                        <%= pod.attenders.length %>
+                                    </span></p>
+                                <p><strong>Description:</strong> <span class="description">
+                                        <%= pod.eventDescription %>
+                                    </span></p>
+                            </div>
+                            <hr>
+                            <div class="pods-actions">
+                                <button id="<%= pod.name %>" type="button" class="btn blue-button see-details"
+                                    data-bs-toggle="modal" data-bs-target="#pod-details">See details</button>
+                                <button class="btn blue-button show-attenders" data-pod-id="<%= pod._id %>">Who's
+                                    going?</button>
+                                <button class="btn red-button leave-pod" data-pod-id="<%= pod._id %>">Leave
+                                    pod</button>
+                            </div>
                         </div>
             </div>
-
             <% }); %>
-
 
                 <!-- Modal -->
                 <div id="modal" class="modal">
@@ -144,11 +83,9 @@
                         <p id="modal-text"></p>
                     </div>
                 </div>
-
     </div>
 
     <%- include("templates/footer") %>
-
 
         <script>
             document.querySelectorAll('.show-attenders').forEach(button => {

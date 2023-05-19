@@ -55,6 +55,13 @@ body {
     width: 100%;
 }
 
+.red-button {
+    color: white;
+    background: #DF2935;
+    border-color: #cfd1d3;
+    width: 100%;
+}
+
 .blue-button:hover {
     background: #0c338e;
     border-color: #cfd1d3;
