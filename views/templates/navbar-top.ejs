@@ -38,6 +38,10 @@
     .offcanvas {
         --bs-offcanvas-width: 200px;
     }
+
+    .pfp-icon {
+        border-radius: 50%;
+    }
 </style>
 
 <header class="navbar-2 py-3 sticky-top" style="background-color: white;">
@@ -117,16 +121,17 @@
             <!-- PROFILE -->
             <li class="nav-item">
                 <a href="/profile"
-                    class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'profile') ? 'active' : '' %>"
+                    class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'profile') ? '' : '' %>"
                     aria-current="page">
-                    <% if (user.image && user.image !== '') { %>
-                    <img src="<%= user.image %>" width="30" height="30" alt="Profile Image" />
-                    <% } else { %>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" viewBox="0 0 24 24">
-                        <!-- Add your SVG icon code here -->
-                        <%- include("../icons/profile") %>
-                    </svg>
-                    <% } %>
+                    <% if (user.image && user.image !=='' ) { %>
+                        <img class ="pfp-icon" src="<%= user.image %>" width="30" height="30" alt="Profile Image" />
+                        <% } else { %>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
+                                viewBox="0 0 24 24">
+                                <!-- Add your SVG icon code here -->
+                                <%- include("../icons/profile") %>
+                            </svg>
+                            <% } %>
                 </a>
             </li>
 
