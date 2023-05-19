@@ -33,7 +33,6 @@ const setup = () => {
     $('.see-details').on('click', function (e) {
         var podName = $(this).attr('id');
         var pod = findPod(pods, podName);
-        var tags = Object.keys(pod.tags);
         $('.modal-title').empty().append(`<b>${podName}<b>`);
         $('.modal-body').empty().append(`
             <div><b>Description</b></div>
@@ -41,7 +40,7 @@ const setup = () => {
             <br>
             <div><b>Tags</b></div>
             <ul>
-                ${tags.map((tag) => { return `<li>${tag}</li>` }).join('')}
+                ${pod.tags.map((tag) => { return `<li>${tag}</li>` }).join('')}
             </ul>
             <div><b>Location</b></div>
             <div id="map"></div>
