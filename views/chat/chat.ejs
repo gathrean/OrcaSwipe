@@ -1,11 +1,82 @@
 <style>
     #chatbox {
-        width: 300px;
-        height: 200px;
-        border: 1px solid #ccc;
+        /* border: 1px solid #ccc; */
+        max-height: 50vh;
+        /* Set a fixed height for the chatbox */
         overflow: auto;
+        list-style: none;
+        padding: 0;
+    }
+
+    .chat-message {
+        font-size: 12px;
+        max-width: auto;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        word-break: break-word;
+    }
+
+    /* SYSTEM MESSAGE */
+    .system {
+        max-width: 100%;
+        background-color: #787878;
+        border-radius: 20px;
+        padding: 5px 20px;
+        margin-bottom: 10px;
+        color: #ffffff;
+    }
+
+    /* RIGHT */
+    .outgoing {
+        max-width: 60%;
+        background-color: #02c78f;
+        border-radius: 20px;
+        padding: 10px 0 10px 10px;
+        margin-bottom: 5px;
+        margin-left: auto;
+    }
+
+    /* LEFT */
+    .incoming {
+        max-width: 60%;
+        background-color: #e9e9eb;
+        border-radius: 20px;
+        padding: 5px 10px;
+        margin-bottom: 5px;
+        text-align: left;
+    }
+
+    /* USERNAME */
+    .chat-username {
+        font-weight: bold;
+    }
+
+    .chat-form {
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 20px;
+        text-align: left;
+        position: relative;
+    }
+
+    .chat-input-container {
+        display: flex;
+        align-items: center;
+    }
+
+    .chat-text {
+        width: 100%;
+        /* height: 10vh; */
+        border-radius: 20px;
+        border: 1px solid #ced4da;
+        padding: 10px;
+        margin-bottom: 10px;
+        margin-left: auto;
     }
 </style>
+
 
 <script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-database.js"></script>
@@ -35,7 +106,7 @@
         var message = messageInput.value;
 
         // Get the username from the session or any other source
-        var username = "<%= user.username %>"; // Replace with the actual source of the username
+        var username = "<%= user.username %>";
 
         // Save the message and the username to Firebase Realtime Database
         firebase.database().ref('PodChat10').push().set({
@@ -46,17 +117,47 @@
 
         // Clear the input field
         messageInput.value = '';
+
+        // Add event listener for the Enter key press event
+        document.getElementById('message').addEventListener('keyup', function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                sendMessage();
+            }
+        });
     }
 
     function displayMessage(message) {
         var listItem = document.createElement('li');
-        var sender = document.createElement('strong');
-        sender.appendChild(document.createTextNode(message.username + ': ')); // Add the username as a prefix
-        listItem.appendChild(sender);
-        listItem.appendChild(document.createTextNode(message.content));
+        var chatMessage = document.createElement('div');
+        chatMessage.classList.add('chat-message');
+
+        if (message.username === "<%= user.username %>") {
+            chatMessage.classList.add('outgoing'); // Apply a class for outgoing messages
+        } else if (message.username === 'System') {
+            chatMessage.classList.add('system'); // Apply a class for system messages
+        } else {
+            chatMessage.classList.add('incoming'); // Apply a class for incoming messages
+        }
+        if (message.username !== 'System') {
+            var sender = document.createElement('span');
+            sender.classList.add('chat-username');
+            sender.innerHTML = '@' + message.username + '<br>';
+            chatMessage.appendChild(sender);
+        }
 
         var chatbox = document.getElementById('chatbox');
+        var shouldScroll = chatbox.scrollTop + chatbox.clientHeight === chatbox.scrollHeight;
+
+        chatMessage.appendChild(document.createTextNode(message.content));
+
+        listItem.appendChild(chatMessage);
+
         chatbox.appendChild(listItem);
+
+        if (shouldScroll) {
+            chatbox.scrollTop = chatbox.scrollHeight;
+        }
     }
 
 
@@ -110,12 +211,17 @@
 </script>
 
 <%- include("../templates/header") %>
-    <div class="container form">
-        <h1>Chat Box Demo</h1>
-        <ul id="chatbox"></ul>
-        <input type="text" id="message">
-        <button onclick="sendMessage()">Send</button>
-        <br>
-        <button onclick="createNode()">Create Node</button>
+
+    <div>
+        <div class="chat-form">
+            <ul id="chatbox"></ul>
+            <div>
+                <input class="chat-text" type="text" id="message">
+                <button class="blue-button btn" onclick="sendMessage()">Send</button>
+                <!-- <button class="btn blue-button" onclick="createNode()">Create Node</button> -->
+            </div>
+        </div>
     </div>
+    </div>
+
     <%- include("../templates/footer") %>
