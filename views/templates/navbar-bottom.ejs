@@ -13,7 +13,7 @@
 
 
         .nav.nav-pills {
-                height: 35px;
+                height: 30px;
                 flex-wrap: nowrap;
                 justify-content: space-between;
         }
@@ -25,7 +25,7 @@
         .icon-label {
                 display: block;
                 text-align: center;
-                font-size: 10px;
+                font-size: 12px;
         }
 
         .nav-link {
@@ -51,7 +51,7 @@
                         <a href="/findPods"
                                 class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'findPods') ? 'active' : '' %>"
                                 aria-current="page">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none"
                                         viewBox="0 0 24 24">
                                         <!-- Add your SVG icon code here -->
                                         <%- include("../icons/find") %>
@@ -65,7 +65,7 @@
                         <a href="/createdPods"
                                 class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'createdPods') ? 'active' : '' %>"
                                 aria-current="page">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none"
                                         viewBox="0 0 24 24">
                                         <!-- Add your SVG icon code here -->
                                         <%- include("../icons/host") %>
@@ -79,7 +79,7 @@
                         <a href="/attendedPods"
                                 class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'attendedPods') ? 'active' : '' %>"
                                 aria-current="page">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="20" fill="none"
                                         viewBox="0 0 24 24">
                                         <!-- Add your SVG icon code here -->
                                         <%- include("../icons/pods") %>
