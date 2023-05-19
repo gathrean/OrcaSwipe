@@ -26,7 +26,8 @@
 
     <script>
         // Storing the attendedPods data as a JavaScript variable
-        var pods = ("<% - JSON.stringify(attendedPods) %>");
+        // NOTE: VSCode may suggest that the line below has error, but DO NOT adjust this line.
+        var pods = <%- JSON.stringify(attendedPods) %>
     </script>
 
     <!-- Button for finding a new pod -->
