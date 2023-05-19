@@ -76,6 +76,16 @@
         margin-bottom: 10px;
         margin-left: auto;
     }
+
+    .delete-button {
+        background-color: red;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 5px 10px;
+        margin-left: 10px;
+        cursor: pointer;
+    }
 </style>
 
 
@@ -109,10 +119,14 @@
         // Get the username from the session or any other source
         var username = "<%= user.username %>";
 
-        // Save the message and the username to Firebase Realtime Database
-        firebase.database().ref('PodChat10').push().set({
+        // Generate a unique ID for the message
+        var messageId = firebase.database().ref().child('PodChat10').push().key;
+
+        // Save the message, username, and messageId to Firebase Realtime Database
+        firebase.database().ref('PodChat10/' + messageId).set({
+            messageId: messageId, // Add the messageId to the message object
             content: message,
-            username: username, // Add the username to the message object
+            username: username,
             timestamp: Date.now()
         });
 
@@ -128,18 +142,50 @@
         });
     }
 
+    function deleteMessage(message) {
+        var messageId = message.messageId; // Assuming you have a unique messageId property in the message object
+
+        // Remove the message from the database
+        firebase
+            .database()
+            .ref('PodChat10/' + messageId)
+            .remove()
+            .then(() => {
+                // Update the message in the UI to display "Deleted message"
+                var messageElement = document.getElementById(messageId);
+                messageElement.textContent = 'Deleted message';
+            })
+            .catch((error) => {
+                console.error('Error deleting message:', error);
+            });
+    }
+
+
+
     function displayMessage(message) {
         var listItem = document.createElement('li');
         var chatMessage = document.createElement('div');
         chatMessage.classList.add('chat-message');
+        chatMessage.setAttribute('id', message.messageId); // Assign unique ID to the chat message element
 
         if (message.username === "<%= user.username %>") {
             chatMessage.classList.add('outgoing'); // Apply a class for outgoing messages
+
+            // Add delete button for the user's messages
+            var deleteButton = document.createElement('button');
+            deleteButton.classList.add('delete-button');
+            deleteButton.innerHTML = 'Delete';
+            deleteButton.addEventListener('click', function () {
+                deleteMessage(message); // Call the deleteMessage function passing the message object
+            });
+
+            chatMessage.appendChild(deleteButton);
         } else if (message.username === 'System') {
             chatMessage.classList.add('system'); // Apply a class for system messages
         } else {
             chatMessage.classList.add('incoming'); // Apply a class for incoming messages
         }
+
         if (message.username !== 'System') {
             var sender = document.createElement('span');
             sender.classList.add('chat-username');
@@ -160,6 +206,8 @@
             chatbox.scrollTop = chatbox.scrollHeight;
         }
     }
+
+
 
 
     // Listen for changes in the Firebase Realtime Database
