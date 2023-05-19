@@ -35,7 +35,7 @@ let testPodsCollection;
 ///// Firebase SDK /////
 const admin = require("firebase-admin");
 
-const serviceAccount = require("./orcaswipe-8ae9b-firebase-adminsdk-a4otn-1e3c2ae04e.json");
+const serviceAccount = JSON.parse(process.env.IMAGE_FIREBASE_JSON);
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
