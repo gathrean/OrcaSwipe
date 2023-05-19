@@ -50,6 +50,31 @@ const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
 
 
+///// CSV Parser for Kaggle dataset for tags //////
+// parsed keywords from the CSV file are globally accessible //////
+const fs = require('fs');
+const csv = require('csv-parser');
+let interests = [];
+
+function parseHobbiesCSV() {
+  return new Promise((resolve, reject) => {
+    fs.createReadStream('hobbies.csv')
+      .pipe(csv())
+      .on('data', (row) => {
+        interests.push(row.short);
+      })
+      .on('end', () => {
+        console.log('CSV file successfully processed');
+        resolve();
+      })
+      .on('error', reject);
+  });
+}
+
+parseHobbiesCSV().catch(console.error);  // Run when application starts
+
+
+
 // Environment variables
 const mongodb_user = process.env.MONGODB_USER;
 const mongodb_password = process.env.MONGODB_PASSWORD;
@@ -559,14 +584,15 @@ async function fetchUserData(req) {
 app.get("/createpod", async (req, res) => {
   if (req.session.loggedIn) {
     const user = await fetchUserData(req);
-    res.render("createpod", { currentPage: 'pods', user: user});
+    res.render("createpod", { interests: interests, currentPage: 'pods', user: user});
   }
 });
 
 
 
 app.post("/createpod", upload.single('image'), async (req, res) => {
-  const interests=['outdoors', 'video games' , 'reading' , 'cooking' , 'music' , 'sports' , 'art', 'travel' , 'coding' , 'photography' ];
+  // Pass 'interests' to the template
+  res.render('your_template.ejs', { interests: interests });
   if(req.session.loggedIn) {
     let { name, eventDescription} = req.body;
     var location = {lat: req.body.lat, lng: req.body.lng};
@@ -655,7 +681,7 @@ app.get("/editProfile", async (req, res) => {
   if (req.session.loggedIn) {
     try {
       const user = await usersCollection.findOne({ email: req.session.email });
-      res.render("editProfile", { user: user, currentPage: 'editProfile' });
+      res.render("editProfile", { user: user, interests: interests, currentPage: 'editProfile' });
     } catch (error) {
       res.status(500).send("Error retrieving user data.");
     }
@@ -783,7 +809,7 @@ app.post("/updateProfile", upload.single('profilePhoto'), async (req, res) => {
       email: Joi.string().email().optional(),
       birthday: Joi.date().optional(),
       pronouns: Joi.string().max(50).optional(),
-      interests: Joi.array().items(Joi.string()).max(10).optional(),
+      interests: Joi.array().items(Joi.string()).optional(),
       image: Joi.string().optional()
     });
 
