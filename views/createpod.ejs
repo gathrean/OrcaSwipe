@@ -4,6 +4,10 @@
     integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
 <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
     integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
 
     
 <script defer src="scripts/map.js"></script>
@@ -19,20 +23,21 @@
 <form class="form" action="/createpod" method="post" enctype="multipart/form-data">
     <h4>Enter pod information:</h4>
     <input type="text" name="name" placeholder="Name of the pod"><br>
-    <label>Pod Tags </label>
-    <div id="interests">
-        <% interests.forEach((interest, index) => { %>
+    <label>Pod Tags</label>
+    <input type="text" id="interests" name="interests" placeholder="Start typing an interest...">
     
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="<%= interest %>"
-                        id="interest<%= index %>" name="<%= interest %>">
-
-                    <label class="form-check-label" for="interest<%= index %>">
-                        <%= interest %>
-                    </label>
-                </div>
-                <% }) %>
-    </div>
+    <script>
+    $(function() {
+      var availableTags = <%- JSON.stringify(interests) %>;
+      $("#interests").autocomplete({
+        source: availableTags
+      });
+    });
+    </script>
+    
+    <br>
+    <br>
+    <br>
     <textarea name="eventDescription" placeholder="Enter event description"></textarea><br>
     <input id="lat" name="lat" type="hidden">
     <input id="lng" name="lng" type="hidden">
