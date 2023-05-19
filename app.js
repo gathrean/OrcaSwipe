@@ -340,27 +340,27 @@ app.post('/savePod', async (req, res) => {
 
   const user = await usersCollection.findOne({ email: email });
   if (!user) {
-      console.error('User not found');
-      return res.sendStatus(500);
+    console.error('User not found');
+    return res.sendStatus(500);
   }
 
   usersCollection.updateOne({ email: email }, { $push: { eventsAttended: pod } })
-  .then(() => {
-    const attendee = [];
+    .then(() => {
+      const attendee = [];
       // update the attenders field in the pod (CHANGE THIS LATER TO HAVE FULL USER INFO)
       podsCollection.updateOne({ _id: new ObjectId(pod._id) }, { $push: { attenders: user._id } })
-      .then(() => {
+        .then(() => {
           res.sendStatus(200);
-      })
-      .catch((err) => {
+        })
+        .catch((err) => {
           console.error(err);
           res.sendStatus(500);
-      });
-  })
-  .catch((err) => {
+        });
+    })
+    .catch((err) => {
       console.error(err);
       res.sendStatus(500);
-  });
+    });
 });
 
 // GET request for the "/login" URL
@@ -468,9 +468,6 @@ app.get("/members", async (req, res) => {
   }
 });
 
-
-// I (ean) removed the GET request for /yourpods to better clean the code up
-
 // GET request for the "/pods" URL
 app.get("/attendedpods", async (req, res) => {
   if (req.session.loggedIn) {
@@ -481,17 +478,16 @@ app.get("/attendedpods", async (req, res) => {
       console.log('User from DB: ', user);
       return res.status(500).send('User not found');
     }
-    res.render("attendedpods", { 
-        activeTab: 'attendedpods', 
-        currentPage: 'attendedPods', 
-        attendedPods: attendedPods, 
-        user: user ,
+    res.render("attendedpods", {
+      activeTab: 'attendedpods',
+      currentPage: 'attendedPods',
+      attendedPods: attendedPods,
+      user: user,
     });
   } else {
     res.status(403).send("You must be logged in to access the pods page.<br><a href='/'>Go back to home page</a>")
   }
 });
-
 
 // GET request for the "/createdpods" URL
 app.get("/createdpods", async (req, res) => {
@@ -516,16 +512,16 @@ app.post('/deletePod', async (req, res) => {
   // const podDocs = await podsCollection.find({}).toArray();
   // await testPodsCollection.deleteMany();
   // await testPodsCollection.insertMany(podDocs);
-  
+
   const schema = Joi.object({
     id: Joi.string().hex().length(24)
   })
-  var validationResult = schema.validate({id: req.body.podID});
+  var validationResult = schema.validate({ id: req.body.podID });
 
-  if (!(validationResult.error)){
+  if (!(validationResult.error)) {
     console.log(req.body.podID)
     var targetID = new ObjectId(req.body.podID)
-    var query = {$and: [{_id: targetID}, {creator: req.session.email}]}
+    var query = { $and: [{ _id: targetID }, { creator: req.session.email }] }
     var targetPod = await podsCollection.deleteOne(query);
 
     console.log(targetID)
@@ -533,14 +529,14 @@ app.post('/deletePod', async (req, res) => {
     var userArr = await usersCollection.find().project().toArray();
     userArr.forEach(async (u) => {
       var events = u.eventsAttended;
-      for (var i = 0; i < events.length; i++){
-        if (events[i]._id == targetID){
+      for (var i = 0; i < events.length; i++) {
+        if (events[i]._id == targetID) {
           events.splice(i, 1);
           i--;
         }
       }
-      await usersCollection.updateOne({_id: u._id}, {
-           $set: {eventsAttended: events}
+      await usersCollection.updateOne({ _id: u._id }, {
+        $set: { eventsAttended: events }
       })
     })
   }
@@ -559,17 +555,15 @@ async function fetchUserData(req) {
 app.get("/createpod", async (req, res) => {
   if (req.session.loggedIn) {
     const user = await fetchUserData(req);
-    res.render("createpod", { currentPage: 'pods', user: user});
+    res.render("createpod", { currentPage: 'pods', user: user });
   }
 });
 
-
-
 app.post("/createpod", upload.single('image'), async (req, res) => {
-  const interests=['outdoors', 'video games' , 'reading' , 'cooking' , 'music' , 'sports' , 'art', 'travel' , 'coding' , 'photography' ];
-  if(req.session.loggedIn) {
-    let { name, eventDescription} = req.body;
-    var location = {lat: req.body.lat, lng: req.body.lng};
+  const interests = ['outdoors', 'video games', 'reading', 'cooking', 'music', 'sports', 'art', 'travel', 'coding', 'photography'];
+  if (req.session.loggedIn) {
+    let { name, eventDescription } = req.body;
+    var location = { lat: req.body.lat, lng: req.body.lng };
 
     console.log(req.file);
 
@@ -578,15 +572,15 @@ app.post("/createpod", upload.single('image'), async (req, res) => {
     if (req.file) {
       // Uploads a local file to the bucket
       const file = await bucket.upload(req.file.path, {
-          // Support for HTTP requests made with `Accept-Encoding: gzip`
-          gzip: true,
-          metadata: {
-              // Enable long-lived HTTP caching headers
-              // Use only if the contents of the file will never change
-              cacheControl: 'public, max-age=31536000',
-          },
+        // Support for HTTP requests made with `Accept-Encoding: gzip`
+        gzip: true,
+        metadata: {
+          // Enable long-lived HTTP caching headers
+          // Use only if the contents of the file will never change
+          cacheControl: 'public, max-age=31536000',
+        },
       });
-    
+
       // Assign a value to image 
       image = `https://firebasestorage.googleapis.com/v0/b/orcaswipe-8ae9b.appspot.com/o/${encodeURI(req.file.filename)}?alt=media`;
 
@@ -616,7 +610,7 @@ app.post("/createpod", upload.single('image'), async (req, res) => {
       }),
       image: Joi.string().uri()  // validates image as a URL
     });
-    
+
 
     const validationResult = schema.validate(newPod);
 
@@ -685,7 +679,7 @@ app.get('/getPods', async (req, res) => {
   let query;
 
   // Prepare a query where at least one key from the list has value true
-  if (userInterests && userInterests.length != 0){
+  if (userInterests && userInterests.length != 0) {
     for (let interest of userInterests) {
       keys.push(`tags.${interest}`);
     }
@@ -712,15 +706,15 @@ app.get("/pod/:id/attenders", async (req, res) => {
   const pod = await podsCollection.findOne({ _id: podId });
 
   if (!pod) {
-      return res.status(404).send("Pod not found");
+    return res.status(404).send("Pod not found");
   }
 
   // Fetch user data for each attender
   const attenders = await Promise.all(
-      pod.attenders.map(async (userId) => {
-          const user = await usersCollection.findOne({ _id: userId });
-          return user.email;  // return the user's email for example
-      })
+    pod.attenders.map(async (userId) => {
+      const user = await usersCollection.findOne({ _id: userId });
+      return user.email;  // return the user's email for example
+    })
   );
   res.json(attenders);
 });
@@ -728,29 +722,29 @@ app.get("/pod/:id/attenders", async (req, res) => {
 //leaving the pod
 app.post("/pod/:podId/leave", async (req, res) => {
   if (req.session.loggedIn) {
-      try {
-          const podId = req.params.podId;
-          const user = await usersCollection.findOne({ email: req.session.email });
+    try {
+      const podId = req.params.podId;
+      const user = await usersCollection.findOne({ email: req.session.email });
 
-          if (user) {
-              await podsCollection.updateOne(
-                  { _id:  new ObjectId(podId) },
-                  { $pull: { attenders: user._id } }
-              );
-              await usersCollection.updateOne(
-                { _id: new ObjectId(user._id) },
-                { $pull: { eventsAttended: { _id: podId } } }
-              );
-              res.status(200).send();
-          } else {
-              res.status(404).send('User not found');
-          }
-      } catch (error) {
-        console.error(error);
-          res.status(500).send('Error leaving pod');
+      if (user) {
+        await podsCollection.updateOne(
+          { _id: new ObjectId(podId) },
+          { $pull: { attenders: user._id } }
+        );
+        await usersCollection.updateOne(
+          { _id: new ObjectId(user._id) },
+          { $pull: { eventsAttended: { _id: podId } } }
+        );
+        res.status(200).send();
+      } else {
+        res.status(404).send('User not found');
       }
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Error leaving pod');
+    }
   } else {
-      res.status(403).send('You must be logged in to leave a pod');
+    res.status(403).send('You must be logged in to leave a pod');
   }
 });
 
@@ -773,7 +767,7 @@ app.get("/viewProfile", async (req, res) => {
 app.post("/updateProfile", upload.single('profilePhoto'), async (req, res) => {
   if (req.session.loggedIn) {
     let imagePath;
-    if(req.file) {
+    if (req.file) {
       imagePath = 'uploads/' + req.file.filename;
     }
 
@@ -787,15 +781,15 @@ app.post("/updateProfile", upload.single('profilePhoto'), async (req, res) => {
       image: Joi.string().optional()
     });
 
-    if (!Array.isArray(req.body.interests)){
-      if (typeof req.body.interests != 'undefined'){
+    if (!Array.isArray(req.body.interests)) {
+      if (typeof req.body.interests != 'undefined') {
         req.body.interests = [req.body.interests];
       } else {
-      req.body.interests = [];
+        req.body.interests = [];
       }
     }
 
-    if(imagePath) {
+    if (imagePath) {
       req.body.image = imagePath;
     }
 
@@ -855,7 +849,6 @@ app.get('*', async (req, res) => {
   res.status(404);
   res.render("errors/404", { user: user });
 });
-
 
 // Start server
 app.listen(PORT, () => {
