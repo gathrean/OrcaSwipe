@@ -63,15 +63,32 @@
 
     <br>
     <label>Your Pod Tags</label>
-<input type="text" id="interests" name="interests" placeholder="Start typing an interest...">
+    <div id="tag-inputs">
+      <input type="text" class="interests" name="interests[]" placeholder="Start typing an interest...">
+    </div>
+    <button type="button" id="add-tag">Add Tag</button>
+    
 
 <script>
 $(function() {
   var availableTags = <%- JSON.stringify(interests) %>;
-  $("#interests").autocomplete({
-    source: availableTags
+
+  function initAutocomplete($el) {
+    $el.autocomplete({
+      source: availableTags
+    });
+  }
+
+  // Initialize autocomplete for the first input
+  initAutocomplete($(".interests"));
+
+  $("#add-tag").click(function() {
+    var $newInput = $('<input type="text" class="interests" name="interests[]" placeholder="Start typing an interest...">');
+    initAutocomplete($newInput);
+    $("#tag-inputs").append($newInput);
   });
 });
+
 </script>
 
     

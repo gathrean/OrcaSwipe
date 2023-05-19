@@ -608,7 +608,7 @@ app.get("/createpod", async (req, res) => {
 
 app.post("/createpod", upload.single('image'), async (req, res) => {
   if(req.session.loggedIn) {
-    let { name, eventDescription} = req.body;
+    let { name, eventDescription, interests } = req.body;
     var location = {lat: req.body.lat, lng: req.body.lng};
 
     console.log(req.file);
@@ -633,11 +633,16 @@ app.post("/createpod", upload.single('image'), async (req, res) => {
       console.log(`${req.file.filename} uploaded to Firebase.`);
     } // No need for an else block because image is already defined as an empty string
 
-    // If the interest is in req.body, it was checked. Otherwise, it was not.
-    let tags = {}
-    interests.forEach(interest => {
-      tags[interest] = !!req.body[interest];
-    });
+    // Use the interests array from the form to create the tags object
+    let tags = [];
+    if (Array.isArray(interests)) {
+      tags = interests.map(interest => interest.toLowerCase());
+    } else if (interests) { // If interests is a single value
+      tags = [interests.toLowerCase()];
+    }
+    
+    
+
 
     const creator = req.session.email;
     let attenders = [];
@@ -646,7 +651,7 @@ app.post("/createpod", upload.single('image'), async (req, res) => {
     // use Joi to validate data
     const schema = Joi.object({
       name: Joi.string().required(),
-      tags: Joi.object().pattern(Joi.string(), Joi.boolean()),
+      tags: Joi.array().items(Joi.string().lowercase()),
       eventDescription: Joi.string().required(),
       attenders: Joi.array(),
       creator: Joi.string(),
@@ -718,33 +723,24 @@ app.get('/getPods', async (req, res) => {
   var email = req.session.email;
   var user = await usersCollection.findOne({ email: email });
   var attendedPods = user.eventsAttended || [];
-  var userInterests = user.interests;  // Get the user's interests
+  var userInterests = user.interests || [];
 
-  // Prepare a list of keys from user interests where value is true
-  let keys = [];
-  let query;
+  let podsQuery = {
+    name: { $nin: attendedPods.map(pod => pod.name) },
+    tags: { $exists: true } // to filter pods with the "tags" field
+  };
 
-  // Prepare a query where at least one key from the list has value true
-  if (userInterests && userInterests.length != 0){
-    for (let interest of userInterests) {
-      keys.push(`tags.${interest}`);
-    }
-    query = { $or: keys.map(key => ({ [key]: true })) };
-    var pods = await podsCollection.find({
-      name: { $nin: attendedPods.map(pod => pod.name) },
-      ...query
-    }).project().toArray();
-  } else {
-    var pods = await podsCollection.find({
-      name: { $nin: attendedPods.map(pod => pod.name) }
-    }).project().toArray();
-  }
+  let pods = await podsCollection.find(podsQuery).toArray();
 
-  for (var i = 0; i < pods.length; i++) {
-    pods[i] = JSON.stringify(pods[i]);
-  }
-  res.json(pods);
+  // Filter the pods to only include those with at least one matching interest
+  let matchingPods = pods.filter(pod => userInterests.some(interest => pod.tags.includes(interest)));
+
+  res.json(matchingPods);
 });
+
+
+
+
 
 //Populates the show attenders card
 app.get("/pod/:id/attenders", async (req, res) => {
@@ -823,7 +819,7 @@ app.post("/updateProfile", upload.single('profilePhoto'), async (req, res) => {
       email: Joi.string().email().optional(),
       birthday: Joi.date().optional(),
       pronouns: Joi.string().max(50).optional(),
-      interests: Joi.array().items(Joi.string()).optional(),
+      interests: Joi.array().items(Joi.string().lowercase()).optional(),
       image: Joi.string().optional()
     });
 
@@ -834,6 +830,11 @@ app.post("/updateProfile", upload.single('profilePhoto'), async (req, res) => {
       req.body.interests = [];
       }
     }
+
+    req.body.interests = req.body.interests.filter(interest => interest.trim() !== '');
+req.body.interests = req.body.interests.map(interest => interest.toLowerCase());
+
+
 
     if(imagePath) {
       req.body.image = imagePath;

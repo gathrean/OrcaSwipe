@@ -1,10 +1,10 @@
 // Based on code from Rob Vermeer at https://codepen.io/RobVermeer/pen/japZpY
 
 // Selecting elements from the DOM
-var tinderContainer = document.querySelector('.tinder');       // Tinder container element
-var allCards = document.querySelectorAll('.tinder--card');     // All card elements
-var nope = document.getElementById('nope');                    // "Nope" button element
-var love = document.getElementById('love');                    // "Love" button element
+var tinderContainer = document.querySelector('.tinder'); // Tinder container element
+var allCards = document.querySelectorAll('.tinder--card'); // All card elements
+var nope = document.getElementById('nope'); // "Nope" button element
+var love = document.getElementById('love'); // "Love" button element
 
 var pods = []; // Array to store pods
 
@@ -66,12 +66,14 @@ function loadPods() {
 
     // Handling the response from the server
     xhttp.onload = () => {
+        console.log("Response received: ", xhttp.responseText);
+        // Parsing the fetched pods from the response
         // Parsing the fetched pods from the response
         var fetchedPods = JSON.parse(xhttp.responseText);
 
         // Adding each fetched pod to the "pods" array
         for (var i = 0; i < fetchedPods.length; i++) {
-            pods.push(JSON.parse(fetchedPods[i]));
+            pods.push(fetchedPods[i]); // there's no need to parse the fetchedPods[i] as it's already an object
         }
 
         // If the user has specified a maximum distance, filter the pods based on the distance
@@ -79,7 +81,10 @@ function loadPods() {
         var map = L.map('map');
         if (navigator.geolocation && typeof maxDist != undefined) {
             navigator.geolocation.getCurrentPosition(function getLocation(position) {
-                userLocation = { lat: position.coords.latitude, lng: position.coords.longitude };
+                userLocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
                 pods = pods.filter((p) => {
                     return map.distance(p.location, userLocation) <= maxDist;
                 })
@@ -93,28 +98,26 @@ function loadPods() {
         loadingCircle.style.display = 'none';
     }
     // Making a GET request to the server to fetch the pods
+    console.log("Sending GET request");
     xhttp.open("GET", `getPods`);
     xhttp.send();
 }
 
 // Function to populate the stack with pods
 function populateStack() {
-
     // Shows the stack
     for (var i = 0; i < pods.length; i++) {
-        var tags = [];
-        for (var tag in pods[i].tags) {
-            if (pods[i].tags.hasOwnProperty(tag) && pods[i].tags[tag]) {
-                tags.push(tag);
-            }
-        }
+        // No need to check for keys, tags is now an array
+        var tags = pods[i].tags;
+        // Creating HTML for each card using pod data
         // Creating HTML for each card using pod data
         var card = `<div class="tinder--card">
-                        <img src="${pods[i].image}">
-                        <h3>${pods[i].name}</h3>
-                        <p>${pods[i].eventDescription}</p>
-                        <p>Tags: ${tags.join(', ')}</p>
-                    </div>`;
+<img src="${pods[i].image}">
+<h3>${pods[i].name}</h3>
+<p>${pods[i].eventDescription}</p>
+<p>Tags: ${pods[i].tags.join(', ')}</p> <!-- join the tags array directly -->
+</div>`;
+
         $('#stack').append(card); // Appending the card to the stack
     }
 
@@ -123,6 +126,7 @@ function populateStack() {
     initCards();
     makeSwipable();
 }
+
 
 
 // Function to handle the love swipe action
@@ -134,7 +138,9 @@ function handleLoveSwipe(pod) {
     xhttp.setRequestHeader('Content-Type', 'application/json');
 
     // Sending the pod data in the request body
-    xhttp.send(JSON.stringify({ pod: pod }));
+    xhttp.send(JSON.stringify({
+        pod: pod
+    }));
 }
 
 // Function to handle the nope swipe action
@@ -146,7 +152,9 @@ function handleNopeSwipe(pod) {
     xhttp.setRequestHeader('Content-Type', 'application/json');
 
     // Sending the pod data in the request body
-    xhttp.send(JSON.stringify({ pod: pod }));
+    xhttp.send(JSON.stringify({
+        pod: pod
+    }));
 }
 
 // Function to make the cards swipable
@@ -200,10 +208,10 @@ function makeSwipable() {
                 pods.shift()
             } else if (!keep && event.deltaX < 0) { // <-- Add this else if to handle "Nope" swipes
                 console.log('Swiped left on:', pods[0]);
-        
+
                 // Handling the nope swipe action on the pod
                 handleNopeSwipe(pods[0]);
-        
+
                 // Removing the swiped pod from the "pods" array
                 pods.shift();
             }
@@ -280,7 +288,7 @@ document.addEventListener('click', function (event) {
         const xhttp = new XMLHttpRequest();
         xhttp.onload = () => {
             var attenders = JSON.parse(xhttp.responseText);
-            var attendersText = attenders.map(attender => attender.name).join(', ');  // assuming attenders have a 'name' field
+            var attendersText = attenders.map(attender => attender.name).join(', '); // assuming attenders have a 'name' field
             document.getElementById('modal-text').innerText = `Attenders: ${attendersText}`;
 
             // Show modal
