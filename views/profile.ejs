@@ -4,9 +4,14 @@
 
   <div class="user-profile form">
     <div class="profile-photo">
-      <img src="https://cdn.discordapp.com/attachments/828116217285836825/1106489564949925948/orca_pfp.jpg"
+      <% if(user.image) { %>
+        <img src="<%= user.image %>" alt="Profile Photo">
+      <% } else { %>
+        <img src="https://cdn.discordapp.com/attachments/828116217285836825/1106489564949925948/orca_pfp.jpg"
         alt="Profile Photo">
+      <% } %>
     </div>
+    
     <div class="profile-details">
       <h1 class="profile-name">
         <%= user.name %>
@@ -31,34 +36,21 @@
       <br>
       <label for="birthday">Birthday</label>
       <input class="form-control" id="disabledInput" type="text"
-        placeholder="<%= user.birthday instanceof Date ? user.birthday.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'America/Los_Angeles' }) : '' %> "
-        disabled>
-    </form>
-  </div>
-
-
-
-  <!-- <form id="profile-form" action="/updateProfile" method="POST">
-        <div>
-            <label for="name">Edit Name:</label>
-            <input type="text" id="name" name="name" value="<%= user.name %>" required>
+        placeholder="<%= user.birthday instanceof Date ? user.birthday.toISOString().substring(0, 10) : '' %>" disabled>
+    <br>
+    <label for="interests"> Tags </label>
+    <div id="interests">
+      <% user.interests.forEach((interest) => { %>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="<%= interest %>" disabled>
+          <label class="form-check-label">
+            <%= interest %>
+          </label>
         </div>
-
-
-    </form>
-
-    <div id="user-info">
-        <h2>User Information</h2>
-        <p><strong>Name:</strong> <%= user.name %></p>
-        <p><strong>Username:</strong> <%= user.username %></p>
-        <p><strong>Password:</strong> Hidden for security</p>
-        <p><strong>Email:</strong> <%= user.email %></p>
-        <p><strong>Age:</strong> <%= user.age %></p>
+      <% }) %>
     </div>
-
-    <button type="submit">Save Changes</button> -->
-
-
+  </form>
+</div>
 
   <%- include("templates/footer") %>
 

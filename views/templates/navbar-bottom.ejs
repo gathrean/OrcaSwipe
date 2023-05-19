@@ -1,0 +1,92 @@
+<style>
+        .nav {
+                padding-left: 0;
+                padding-right: 0;
+                font-weight: 600;
+        }
+
+        .nav-item {
+                flex: 1;
+                margin-right: 1px;
+                margin-left: 1px;
+        }
+
+
+        .nav.nav-pills {
+                height: 30px;
+                flex-wrap: nowrap;
+                justify-content: space-between;
+        }
+
+        header {
+                box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .icon-label {
+                display: block;
+                text-align: center;
+                font-size: 12px;
+        }
+
+        .nav-link {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+        }
+
+
+        .sticky-bottom {
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+        }
+</style>
+
+<header class="d-flex justify-content-center py-3 sticky-bottom" style="background-color: white;">
+
+        <ul class="nav nav-pills container-fluid justify-content-center align-items-center">
+
+                <!-- FIND PODS -->
+                <li class="nav-item">
+                        <a href="/findPods"
+                                class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'findPods') ? 'active' : '' %>"
+                                aria-current="page">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none"
+                                        viewBox="0 0 24 24">
+                                        <!-- Add your SVG icon code here -->
+                                        <%- include("../icons/find") %>
+                                </svg>
+                                <span class="icon-label">find</span>
+                        </a>
+                </li>
+
+                <!-- HOST PODS -->
+                <li class="nav-item">
+                        <a href="/createdPods"
+                                class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'createdPods') ? 'active' : '' %>"
+                                aria-current="page">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none"
+                                        viewBox="0 0 24 24">
+                                        <!-- Add your SVG icon code here -->
+                                        <%- include("../icons/host") %>
+                                </svg>
+                                <span class="icon-label">host</span>
+                        </a>
+                </li>
+
+                <!-- LINK UP WITH YOUR PODS -->
+                <li class="nav-item">
+                        <a href="/attendedPods"
+                                class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'attendedPods') ? 'active' : '' %>"
+                                aria-current="page">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="20" fill="none"
+                                        viewBox="0 0 24 24">
+                                        <!-- Add your SVG icon code here -->
+                                        <%- include("../icons/pods") %>
+                                </svg>
+                                <span class="icon-label">pods</span>
+                        </a>
+                </li>
+                
+        </ul>
+</header>

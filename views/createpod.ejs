@@ -1,16 +1,47 @@
 <%- include("templates/header") %>
 
-    <form class="form" action="/createpod" method="post">
-        <h4>Enter pod information:</h4>
-        <input type="text" name="name" placeholder="Name of the pod"><br>
-        <input type="checkbox" id="event1" name="event1">
-        <label for="event1"> Outdoor activity</label><br>
-        <input type="checkbox" id="event2" name="event2">
-        <label for="event2"> Music Festival</label><br>
-        <input type="checkbox" id="event3" name="event3">
-        <label for="event3"> Sport activity</label><br>
-        <textarea name="eventDescription" placeholder="Enter event description"></textarea><br>
-        <input class="btn blue-button" type="submit" value="Create!">
-    </form>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+    integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+    integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
 
-    <%- include("templates/footer") %>
+    
+<script defer src="scripts/map.js"></script>
+<style>
+    #map {
+        width: 80vw;
+        max-width: 90%;
+        height: 40vh;
+        margin: 0 auto;
+    }
+</style>
+
+<form class="form" action="/createpod" method="post" enctype="multipart/form-data">
+    <h4>Enter pod information:</h4>
+    <input type="text" name="name" placeholder="Name of the pod"><br>
+    <label>Pod Tags </label>
+    <div id="interests">
+        <% const interests=['outdoors', 'video games' , 'reading' , 'cooking' , 'music' , 'sports' , 'art'
+            , 'travel' , 'coding' , 'photography' ]; %>
+            <% interests.forEach((interest, index)=> { %>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="<%= interest %>"
+                        id="interest<%= index %>" name="<%= interest %>">
+
+                    <label class="form-check-label" for="interest<%= index %>">
+                        <%= interest %>
+                    </label>
+                </div>
+                <% }) %>
+    </div>
+    <textarea name="eventDescription" placeholder="Enter event description"></textarea><br>
+    <input id="lat" name="lat" type="hidden">
+    <input id="lng" name="lng" type="hidden">
+    <label for="map">Where is this Pod?</label>
+    <div id="map"></div>
+    <br>
+
+    <input type="file" name="image" accept="image/*"><br>
+    <input class="btn blue-button" type="submit" value="Create!">
+</form>
+<%- include("templates/footer") %>

@@ -1,0 +1,141 @@
+<style>
+    .navbar-2 {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 0 0 5px;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .navbar-2__logo {
+        height: 100%;
+        pointer-events: none;
+    }
+
+    .navbar-2__logo img {
+        height: 100%;
+        width: auto;
+    }
+
+    .navbar-2__icons {
+        display: flex;
+        align-items: center;
+    }
+
+    .navbar-2__icon-label--active {
+        color: blue;
+    }
+
+    .nav-link {
+        align-items: left;
+    }
+
+    .offcanvas {
+        --bs-offcanvas-width: 200px;
+    }
+
+    .pfp-icon {
+        border-radius: 50%;
+    }
+</style>
+
+<header class="navbar-2 py-3 sticky-top" style="background-color: white;">
+
+    <!-- LEFT -->
+    <div class="navbar-2__icons">
+        <ul class="nav nav-pills container-fluid justify-content-center align-items-center">
+
+            <!-- MENU / HAMBURGER -->
+            <li class="nav-item">
+                <a href="#offcanvasExample" class="navbar-2__icon nav-link" data-bs-toggle="offcanvas" role="button"
+                    aria-current="page" id="navbar-2__menu-toggle">
+
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" viewBox="0 0 24 24">
+                        <!-- Add your SVG icon code here -->
+                        <%- include("../icons/hamburger") %>
+                    </svg>
+                </a>
+            </li>
+
+            <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample"
+                aria-labelledby="offcanvasExampleLabel">
+
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasExampleLabel">OrcaSwipe</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+
+                <div class="offcanvas-body">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <hr>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/home">Home</a>
+                        </li>
+                        <hr>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="/members">Members Area</a>
+                        </li>
+                        <hr>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="/resetPassword">Reset my password</a>
+                        </li>
+                        <hr>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="/settings">Settings</a>
+                        </li>
+                        <hr>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="/logout">Log out</a>
+                        </li>
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </ul>
+    </div>
+
+    <!-- CENTER -->
+    <div class="navbar-2__logo">
+        <a>
+            <!-- logo image -->
+            <img src="https://cdn.discordapp.com/attachments/828116217285836825/1107519097756983306/Mobile_Logo.png"
+                alt="OrcaSwipe Logo">
+        </a>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="navbar-2__icons">
+        <ul class="nav nav-pills container-fluid justify-content-center align-items-center">
+
+            <!-- PROFILE -->
+            <li class="nav-item">
+                <a href="/profile"
+                    class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'profile') ? '' : '' %>"
+                    aria-current="page">
+                    <% if (user.image && user.image !=='' ) { %>
+                        <img class ="pfp-icon" src="<%= user.image %>" width="30" height="30" alt="Profile Image" />
+                        <% } else { %>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
+                                viewBox="0 0 24 24">
+                                <!-- Add your SVG icon code here -->
+                                <%- include("../icons/profile") %>
+                            </svg>
+                            <% } %>
+                </a>
+            </li>
+
+
+        </ul>
+    </div>
+</header>

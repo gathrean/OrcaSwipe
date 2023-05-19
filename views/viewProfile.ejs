@@ -1,8 +1,7 @@
 <%- include("templates/header") %>
 
-<h1>User Profile Details</h1>
-
   <div class="user-profile-details form">
+    <h1>User Profile Details</h1>
     <br>
     <h2>Hello, <%= user.name %></h2>
     <br>
@@ -13,8 +12,13 @@
     <h3>Email: <%= user.email %></h3>
     <br>
     <h3>Birthday: <%= user.birthday instanceof Date ? user.birthday.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : '' %></h3>
-
-  </div>
+      <input class="form-control" id="disabledInput" type="text"
+        placeholder="<%= user.birthday instanceof Date ? user.birthday.toISOString().substring(0, 10) : '' %>" disabled>
+    <br>
+    <h3> Tags: </h3>
+    <br>
+    <%= user.interests %>
+      </div>
 
 
 

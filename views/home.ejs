@@ -1,13 +1,24 @@
 <%- include("templates/header") %>
     <% if (loggedIn) { %>
         <div class="form">
-            Welcome back, <%= name %>!<br>
-                <hr>
-                <a href='/members'><button class="btn blue-button">Go to Members area</button></a>
-                <hr>
-                <a href='/logout'><button class="btn blue-button">Log out</button></a>
-                <hr>
-                <a href='/findPods'><button class="btn blue-button">Find Pods</button></a>
+            <h1>
+                Welcome back, <br>
+                <%= name %>!
+            </h1>
+            <p>
+                Below, you will see Pods that you saved from the <a href='/findPods'>Find</a> page.
+            </p>
+            <hr>
+            <h3>Quick Actions</h3>
+            <div class="profile-actions">
+                <div class="action-button">
+                    <button class="btn blue-button" onclick="window.location.href='/members'">Go to Members
+                        Area</button>
+                </div>
+                <div class="action-button">
+                    <button class="btn blue-button" onclick="window.location.href='/logout'">Log out</button>
+                </div>
+            </div>
         </div>
         <% } else { %>
             <div class="form">
@@ -16,3 +27,14 @@
             </div>
             <% } %>
                 <%- include("templates/footer") %>
+
+
+                    <style>
+                        .profile-actions {
+                            display: flex;
+                        }
+
+                        .action-button {
+                            margin-right: 10px;
+                        }
+                    </style>
