@@ -63,10 +63,10 @@
 
     <br>
     <label>Your Pod Tags</label>
-    <div id="tag-inputs">
-      <input type="text" class="interests" name="interests[]" placeholder="Start typing an interest...">
-    </div>
-    <button type="button" id="add-tag">Add Tag</button>
+<div id="tag-inputs">
+  <input type="text" class="interests" name="interests[]" placeholder="Start typing an interest...">
+</div>
+<button type="button" id="add-tag">Add Tag</button>
     
 
 <script>
@@ -75,7 +75,29 @@ $(function() {
 
   function initAutocomplete($el) {
     $el.autocomplete({
-      source: availableTags
+      source: availableTags,
+      select: function(event, ui) {
+        if (ui.item) {
+          // Existing tag selected, nothing to do
+        } else {
+          // New tag entered
+          var newTag = $el.val().trim();
+          if (newTag) {
+            // Check if the new tag seems to be a valid word
+            // TODO: Replace with real NLP-based validation
+            if (isProbablyValidWord(newTag)) {
+              // Add to the list of available tags
+              availableTags.push(newTag);
+              // Update the autocomplete source
+              $(".interests").autocomplete("option", "source", availableTags);
+            } else {
+              // Let the user know the tag is not accepted
+              alert('The tag "' + newTag + '" does not seem to be a valid word. Please check and try again.');
+              event.preventDefault();
+            }
+          }
+        }
+      }
     });
   }
 
@@ -89,7 +111,14 @@ $(function() {
   });
 });
 
+function isProbablyValidWord(word) {
+  // TODO: Replace with real NLP-based validation
+  // For now, just checking if the word contains at least one vowel and one consonant, 
+  // which is a very simplistic and somewhat English-centric way to guess if a word is probably real
+  return /[aeiou]/i.test(word) && /[^aeiou\s]/i.test(word);
+}
 </script>
+
 
     
 
