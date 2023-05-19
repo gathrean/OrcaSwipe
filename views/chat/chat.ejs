@@ -1,0 +1,121 @@
+<style>
+    #chatbox {
+        width: 300px;
+        height: 200px;
+        border: 1px solid #ccc;
+        overflow: auto;
+    }
+</style>
+
+<script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-database.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> <!-- Add this line -->
+
+<script src="/app.js"></script>
+<script src="chat.js"></script>
+
+<script>
+    // Initialize Firebase
+    var firebaseConfig = {
+        databaseURL: "https://orcachat-896f1-default-rtdb.firebaseio.com/",
+        apiKey: "AIzaSyCqohTy2xTnkLispHSq2TGRP2VDyhRcEB0",
+        authDomain: "orcachat-896f1.firebaseapp.com",
+        projectId: "orcachat-896f1",
+        storageBucket: "orcachat-896f1.appspot.com",
+        messagingSenderId: "1069412700995",
+        appId: "1:1069412700995:web:c4b568bb2df7c9351055f6"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+</script>
+
+<script>
+    function sendMessage() {
+        var messageInput = document.getElementById('message');
+        var message = messageInput.value;
+
+        // Get the username from the session or any other source
+        var username = "<%= user.username %>"; // Replace with the actual source of the username
+
+        // Save the message and the username to Firebase Realtime Database
+        firebase.database().ref('PodChat10').push().set({
+            content: message,
+            username: username, // Add the username to the message object
+            timestamp: Date.now()
+        });
+
+        // Clear the input field
+        messageInput.value = '';
+    }
+
+    function displayMessage(message) {
+        var listItem = document.createElement('li');
+        var sender = document.createElement('strong');
+        sender.appendChild(document.createTextNode(message.username + ': ')); // Add the username as a prefix
+        listItem.appendChild(sender);
+        listItem.appendChild(document.createTextNode(message.content));
+
+        var chatbox = document.getElementById('chatbox');
+        chatbox.appendChild(listItem);
+    }
+
+
+    // Listen for changes in the Firebase Realtime Database
+    firebase.database().ref('PodChat10').on('child_added', function (snapshot) {
+        var message = snapshot.val();
+        displayMessage(message);
+    });
+
+    function createNode() {
+        // Get the current count of nodes
+        firebase.database().ref('nodeCount').once('value')
+            .then(snapshot => {
+                var count = snapshot.val() || 0; // If no count exists, initialize it to 0
+                count++; // Increment the count
+
+                // Generate the node name
+                var nodeName = 'PodChat' + count;
+
+                // Update the count in the database
+                firebase.database().ref('nodeCount').set(count)
+                    .then(() => {
+                        // Generate a unique push key for the messages object
+                        var messagesKey = firebase.database().ref().child(nodeName).push().key;
+
+                        // Create the new node in the database at the same level as "messages"
+                        firebase.database().ref().child(nodeName).set({
+                            // Use the push key as the key for the messages object
+                            [messagesKey]: {
+                                username: 'System',
+                                content: 'Welcome to your new Pod Chat! Be nice to everyone :)',
+                                timestamp: Date.now()
+                            }
+                        })
+                            .then(() => {
+                                console.log('New node created successfully.');
+                                console.log('New node name:', nodeName); // Print the new node name in the console
+                            })
+                            .catch(error => {
+                                console.error('Error creating new node:', error);
+                            });
+                    })
+                    .catch(error => {
+                        console.error('Error updating node count:', error);
+                    });
+            })
+            .catch(error => {
+                console.error('Error retrieving node count:', error);
+            });
+    }
+</script>
+
+<%- include("../templates/header") %>
+    <div class="container form">
+        <h1>Chat Box Demo</h1>
+        <ul id="chatbox"></ul>
+        <input type="text" id="message">
+        <button onclick="sendMessage()">Send</button>
+        <br>
+        <button onclick="createNode()">Create Node</button>
+    </div>
+    <%- include("../templates/footer") %>

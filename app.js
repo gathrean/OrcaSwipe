@@ -708,6 +708,20 @@ app.post("/updateProfile", upload.single('profilePhoto'), async (req, res) => {
   }
 });
 
+// GET request for the "/chat" URL
+app.get("/chat", async (req, res) => {
+  if (req.session.loggedIn) {
+    try {
+      const user = await usersCollection.findOne({ email: req.session.email });
+      res.render("chat/chat", { user: user, currentPage: 'chat' });
+    } catch (error) {
+      res.status(500).send("Error retrieving user data.");
+    }
+  } else {
+    res.status(403).send("You must be logged in to access this page.<br><a href='/'>Go back to home page</a>");
+  }
+});
+
 // GET request to catch all other routes that are not defined
 app.get('*', (req, res) => {
   res.status(404);
