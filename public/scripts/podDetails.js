@@ -35,6 +35,7 @@ const setup = () => {
         var pod = findPod(pods, podName);
         $('.modal-title').empty().append(`<b>${podName}<b>`);
         $('.modal-body').empty().append(`
+            <img src="${pod.image}" style="width:90%; height:auto;">
             <div><b>Description</b></div>
             <div>${pod.eventDescription}</div>
             <br>
@@ -42,6 +43,7 @@ const setup = () => {
             <ul>
                 ${pod.tags.map((tag) => { return `<li>${tag}</li>` }).join('')}
             </ul>
+            <div><b>Number of Attendees:</b> ${pod.attenders.length}</div>
             <div><b>Location</b></div>
             <div id="map"></div>
         `)
