@@ -95,6 +95,9 @@ app.use(express.static("public"));
 // Serve static files from the "/views/splash" directory
 app.use('/splash', express.static('views/splash'));
 
+// Serve static files from the "/views/chat" directory
+app.use('/chat', express.static('views/chat'));
+
 // Serve static files from /uplaods directory for photo rendering
 app.use('/uploads', express.static('uploads'));
 
