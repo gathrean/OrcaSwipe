@@ -56,22 +56,38 @@ const fs = require('fs');
 const csv = require('csv-parser');
 let interests = [];
 
-function parseHobbiesCSV() {
+function parseCSVFile(fileName, columnNames) {
   return new Promise((resolve, reject) => {
-    fs.createReadStream('hobbies.csv')
+    fs.createReadStream(fileName)
       .pipe(csv())
       .on('data', (row) => {
-        interests.push(row.short);
+        for (const columnName of columnNames) {
+          const value = row[columnName];
+          if (value && !interests.includes(value)) { // avoid duplicates
+            interests.push(value);
+          }
+        }
       })
       .on('end', () => {
-        console.log('CSV file successfully processed');
+        console.log(`CSV file ${fileName} successfully processed`);
         resolve();
       })
       .on('error', reject);
   });
 }
 
-parseHobbiesCSV().catch(console.error);  // Run when application starts
+async function parseHobbiesCSVs() {
+  try {
+    await parseCSVFile('hobbies.csv', ['short']);
+    await parseCSVFile('hobbies2.csv', ['Hobby-name', 'Type']);
+    console.log('All CSV files successfully processed');
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+parseHobbiesCSVs();  // Run this when your application starts
+
 
 
 
@@ -591,8 +607,6 @@ app.get("/createpod", async (req, res) => {
 
 
 app.post("/createpod", upload.single('image'), async (req, res) => {
-  // Pass 'interests' to the template
-  res.render('your_template.ejs', { interests: interests });
   if(req.session.loggedIn) {
     let { name, eventDescription} = req.body;
     var location = {lat: req.body.lat, lng: req.body.lng};
