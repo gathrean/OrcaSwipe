@@ -834,7 +834,7 @@ app.get("/chat", async (req, res) => {
   if (req.session.loggedIn) {
     try {
       const user = await usersCollection.findOne({ email: req.session.email });
-      res.render("chat/chat", { user: user, currentPage: 'chat' });
+      res.render("chat", { user: user, currentPage: 'chat' });
     } catch (error) {
       res.status(500).send("Error retrieving user data.");
     }
