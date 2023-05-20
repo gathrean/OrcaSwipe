@@ -94,6 +94,22 @@
     .deleted-message .deleted-message-content {
         color: #888888;
     }
+
+    .chat-list-container {
+        display: flex;
+        overflow-x: auto;
+    }
+
+    .chat-list {
+        display: flex;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .chat-list-item {
+        margin-right: 10px;
+    }
 </style>
 
 
@@ -193,8 +209,6 @@
             });
     }
 
-
-
     function displayMessage(message) {
         var listItem = document.createElement('li');
         var chatMessage = document.createElement('div');
@@ -262,7 +276,6 @@
         }
     }
 
-
     // Listen for changes in the Firebase Realtime Database
     firebase.database().ref('chatName').on('child_added', function (snapshot) {
         var message = snapshot.val();
@@ -275,6 +288,51 @@
             var message = snapshot.val();
             displayMessage(message);
         });
+    }
+
+    function fetchChats() {
+        // Fetch the list of available chats
+        firebase
+            .database()
+            .ref()
+            .once('value')
+            .then((snapshot) => {
+                var chats = snapshot.val();
+                if (chats) {
+                    // Clear the chat list container
+                    var chatListContainer = document.getElementById('chatList');
+                    chatListContainer.innerHTML = '';
+
+                    // Create a scrollable list container
+                    var listContainer = document.createElement('div');
+                    listContainer.classList.add('chat-list-container');
+                    chatListContainer.appendChild(listContainer);
+
+                    // Create a horizontal scrollable list
+                    var chatList = document.createElement('ul');
+                    chatList.classList.add('horizontal-scroll');
+
+                    // Loop through the chats and create a button for each chat
+                    for (var chat in chats) {
+                        var listItem = document.createElement('li');
+                        var chatButton = document.createElement('button');
+                        chatButton.classList.add('btn', 'blue-button');
+                        chatButton.innerHTML = chat;
+                        chatButton.addEventListener('click', function () {
+                            // Redirect to the chat page with the selected chat name
+                            window.location.href = '/chat?name=' + this.innerHTML;
+                        });
+                        listItem.appendChild(chatButton);
+                        chatList.appendChild(listItem);
+                    }
+
+                    // Add the horizontal scrollable list to the container
+                    listContainer.appendChild(chatList);
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching chats:', error);
+            });
     }
 
     function createNode() {
@@ -341,19 +399,23 @@
     }
 
 </script>
-<script src="/scripts/chat.js"></script>
+<!-- <script src="/scripts/chat.js"></script> -->
+<link rel="stylesheet" href="style/chat.css">
 
 <%- include("templates/header") %>
 
     <div>
-        <div id="chatList"></div>
         <div class="chat-form">
             <ul id="chatbox"></ul>
             <div>
                 <input class="chat-text" type="text" id="message">
                 <button class="blue-button btn" onclick="sendMessage()">Send</button>
                 <button class="btn blue-button" onclick="createNode()">Create Node</button>
+                <button class="btn blue-button" onclick="fetchChats()">Fetch Chats</button>
             </div>
+        </div>
+        <div class="chat-list-container">
+            <ul id="chatList" class="chat-list"></ul>
         </div>
     </div>
     <%- include("templates/footer") %>
