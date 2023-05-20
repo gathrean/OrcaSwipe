@@ -1,6 +1,23 @@
 <%- include("templates/header") %>
 
     <div>
+        <!-- Title on top -->
+        <div style="display: flex;align-items: center;justify-content: center;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" style="fill: white; margin-right: 10px;">
+                <!-- Add your SVG icon code here -->
+                <%- include("./icons/chat-2") %>
+            </svg>
+            <h1 style="text-align: left; color: white; font-size: 3rem; line-height: 50px; margin: 0;">Chats</h1>
+        </div>
+
+        <!-- Caption for title -->
+        <div style="display: flex;align-items: center;justify-content: center;">
+            <p style="text-align: left; color: white">
+                Chat with other users within your Pods here.
+            </p>
+        </div>
+        <hr>
+
         <div class="chat-form">
             <ul id="chatbox"></ul>
             <div>
