@@ -8,103 +8,105 @@
     <link rel="stylesheet" href="/style/findPods.css">
     <link rel="stylesheet" href="/style/pods.css">
 
-    <!-- Title on top -->
-    <div style="display: flex; align-items: center;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" style="fill: white; margin-right: 10px;">
-            <!-- Add your SVG icon code here -->
-            <%- include("./icons/pods-2") %>
-        </svg>
-        <h1 style="text-align: left; color: white; font-size: 3rem; line-height: 50px; margin: 0;">Pods</h1>
-    </div>
+    <div class="">
+        <!-- Title on top -->
+        <div style="display: flex; align-items: center;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" style="fill: white; margin-right: 10px;">
+                <!-- Add your SVG icon code here -->
+                <%- include("./icons/pods-2") %>
+            </svg>
+            <h1 style="text-align: left; color: white; font-size: 3rem; line-height: 50px; margin: 0;">Pods</h1>
+        </div>
 
-    <!-- Caption for title -->
-    <div>
-        <p style="text-align: left; color: white">
-            List of all the Pods you are attending
-        </p>
-    </div>
+        <!-- Caption for title -->
+        <div>
+            <p style="text-align: left; color: white">
+                List of all the Pods you are attending
+            </p>
+        </div>
 
-    <script>
-        // Storing the attendedPods data as a JavaScript variable
-        // NOTE: VSCode may suggest that the line below has error, but DO NOT adjust this line.
-        var pods = <%- JSON.stringify(attendedPods) %>
-    </script>
+        <script>
+            // Storing the attendedPods data as a JavaScript variable
+            // NOTE: VSCode may suggest that the line below has error, but DO NOT adjust this line.
+            var pods = <% - JSON.stringify(attendedPods) %>
+        </script>
 
-    <!-- Button for finding a new pod -->
-    <a href="/findPods"><button class="btn white-button">Find new pods</button></a>
-    <hr>
+        <!-- Button for finding a new pod -->
+        <a href="/findPods"><button class="btn white-button">Find new pods</button></a>
+        <hr>
 
-    <!-- Card container -->
-    <div class="card-container">
-        <!-- Card for each attended pod -->
-        <% attendedPods.forEach(function(pod) { %>
-            <div class="card" style="text-align: left;">
-                
-                <!-- Include image here -->
-                <% if(pod.image) { %>
-                    <div class="card-image">
-                        <img src="<%= pod.image %>" alt="<%= pod.name %>">
-                    </div>
-                    <% } %>
-                        <div class="card-content">
-                            <h1>
-                                <%= pod.name %>
-                            </h1>
-                            <h3 class="description">
-                                <%= pod.location %>
-                            </h3>
-                            <div style="background-color: white; color: black; padding: 10px;">
-                                <p><strong>Host:</strong>
-                                    <%= pod.host %>
-                                </p>
-                                <p><strong>Attenders:</strong> <span class="attenders">
-                                        <%= pod.attenders.length %>
-                                    </span></p>
-                                <p><strong>Description:</strong> <span class="description">
-                                        <%= pod.eventDescription %>
-                                    </span></p>
-                            </div>
-                            <hr>
-                            <div class="pods-actions">
-                                <button id="<%= pod.name %>" type="button" class="btn blue-button see-details"
-                                    data-bs-toggle="modal" data-bs-target="#pod-details">See details</button>
-                                <button class="btn blue-button show-attenders" data-pod-id="<%= pod._id %>">Who's
-                                    going?</button>
-                                <button class="btn red-button leave-pod" data-pod-id="<%= pod._id %>">Leave
-                                    pod</button>
-                            </div>
+        <!-- Card container -->
+        <div class="card-container">
+            <!-- Card for each attended pod -->
+            <% attendedPods.forEach(function(pod) { %>
+                <div class="card" style="text-align: left;">
+
+                    <!-- Include image here -->
+                    <% if(pod.image) { %>
+                        <div class="card-image">
+                            <img src="<%= pod.image %>" alt="<%= pod.name %>">
                         </div>
-            </div>
-            <% }); %>
-
-                <!-- Modal -->
-                <div id="modal" class="modal">
-                    <div class="modal-content">
-                        <span class="close">&times;</span>
-                        <p id="modal-text"></p>
-                    </div>
+                        <% } %>
+                            <div class="card-content">
+                                <h1>
+                                    <%= pod.name %>
+                                </h1>
+                                <h3 class="description">
+                                    <%= pod.location %>
+                                </h3>
+                                <div style="background-color: white; color: black; padding: 10px;">
+                                    <p><strong>Host:</strong>
+                                        <%= pod.host %>
+                                    </p>
+                                    <p><strong>Attenders:</strong> <span class="attenders">
+                                            <%= pod.attenders.length %>
+                                        </span></p>
+                                    <p><strong>Description:</strong> <span class="description">
+                                            <%= pod.eventDescription %>
+                                        </span></p>
+                                </div>
+                                <hr>
+                                <div class="pods-actions">
+                                    <button id="<%= pod.name %>" type="button" class="btn blue-button see-details"
+                                        data-bs-toggle="modal" data-bs-target="#pod-details">See details</button>
+                                    <button class="btn blue-button show-attenders" data-pod-id="<%= pod._id %>">Who's
+                                        going?</button>
+                                    <button class="btn red-button leave-pod" data-pod-id="<%= pod._id %>">Leave
+                                        pod</button>
+                                </div>
+                            </div>
                 </div>
+                <% }); %>
+
+                    <!-- Modal -->
+                    <div id="modal" class="modal">
+                        <div class="modal-content">
+                            <span class="close">&times;</span>
+                            <p id="modal-text"></p>
+                        </div>
+                    </div>
+        </div>
     </div>
 
     <%- include("templates/footer") %>
 
         <script>
-            document.querySelectorAll('.show-attenders').forEach(button => {
-                button.addEventListener('click', async function () {
-                    const podId = this.getAttribute('data-pod-id');
-                    const response = await fetch(`/pod/${podId}/attenders`);
-                    const attenders = await response.json();
+                document.querySelectorAll('.show-attenders').forEach(button => {
+                    button.addEventListener('click', async function () {
+                        const podId = this.getAttribute('data-pod-id');
+                        const response = await fetch(`/pod/${podId}/attenders`);
+                        const attenders = await response.json();
 
-                    // Here you could update your page with the attenders information.
-                    // This is just an example, you will need to adjust this according to your page structure and design.
-                    const modalText = document.getElementById('modal-text');
-                    modalText.textContent = attenders.join(', ');
+                        // Here you could update your page with the attenders information.
+                        // This is just an example, you will need to adjust this according to your page structure and design.
+                        const modalText = document.getElementById('modal-text');
+                        modalText.textContent = attenders.join(', ');
 
-                    // Display the modal
-                    const modal = document.getElementById('modal');
-                    modal.style.display = "block";
+                        // Display the modal
+                        const modal = document.getElementById('modal');
+                        modal.style.display = "block";
+                    });
                 });
-            });
 
             // When the user clicks on <span> (x), close the modal
             document.querySelector('.close').addEventListener('click', function () {
