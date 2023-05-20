@@ -13,8 +13,9 @@
     <ul class="sidebar__pages">
 
         <li class="sidebar__page">
-            <a class="sidebar__link" href="/home">
-                <svg class="sidebar__icon" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none"
+            <a class="sidebar__link <%= (typeof currentPage !== 'undefined' && currentPage === 'home') ? 'active' : '' %>"
+                href="/home">
+                <svg class="sidebar__icon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
                     viewBox="0 0 24 24">
                     <!-- Add your SVG icon code here -->
                     <%- include("../icons/home") %>
@@ -27,12 +28,12 @@
         <li class="sidebar__page">
             <a href="/findPods"
                 class="sidebar__link <%= (typeof currentPage !== 'undefined' && currentPage === 'findPods') ? 'active' : '' %>">
-                <svg class="sidebar__icon" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none"
+                <svg class="sidebar__icon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
                     viewBox="0 0 24 24">
                     <!-- Add your SVG icon code here -->
                     <%- include("../icons/find") %>
                 </svg>
-                Find
+                Discover
             </a>
         </li>
 
@@ -41,7 +42,8 @@
             <a href="/createdPods"
                 class="sidebar__link <%= (typeof currentPage !== 'undefined' && currentPage === 'createdPods') ? 'active' : '' %>"
                 aria-current="page">
-                <svg class="sidebar__icon" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none" viewBox="0 0 24 24">
+                <svg class="sidebar__icon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
+                    viewBox="0 0 24 24">
                     <!-- Add your SVG icon code here -->
                     <%- include("../icons/host") %>
                 </svg>
@@ -49,73 +51,78 @@
             </a>
         </li>
 
-        <!-- LINK UP WITH YOUR PODS -->
+        <!-- ATTENDING PODS -->
         <li class="sidebar__page">
             <a href="/attendedPods"
-                class="sidebar__link<%= (typeof currentPage !== 'undefined' && currentPage === 'attendedPods') ? 'active' : '' %>"
+                class="sidebar__link <%= (typeof currentPage !== 'undefined' && currentPage === 'attendedPods') ? 'active' : '' %>"
                 aria-current="page">
-                <svg class="sidebar__icon" xmlns="http://www.w3.org/2000/svg" width="25" height="20" fill="none" viewBox="0 0 24 24">
+                <svg class="sidebar__icon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
+                    viewBox="0 0 24 24">
+                    <!-- Add your SVG icon code here -->
+                    <%- include("../icons/love") %>
+                </svg>
+                Saved
+            </a>
+        </li>
+
+        <!-- PODS CHAT -->
+        <li class="sidebar__page">
+            <a href="/chat"
+                class="sidebar__link <%= (typeof currentPage !== 'undefined' && currentPage === 'chat') ? 'active' : '' %>"
+                aria-current="page">
+                <svg class="sidebar__icon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
+                    viewBox="0 0 24 24">
                     <!-- Add your SVG icon code here -->
                     <%- include("../icons/pods") %>
                 </svg>
-                Pods
+                Chat
             </a>
         </li>
 
+        <!-- SETTINGS -->
         <li class="sidebar__page">
-            <a class="sidebar__link" href="/members">
-                <svg class="sidebar__icon" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none"
+            <a class="sidebar__link <%= (typeof currentPage !== 'undefined' && currentPage === 'settings') ? 'active' : '' %>"
+                href="
+                /settings">
+                <svg class="sidebar__icon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
                     viewBox="0 0 24 24">
                     <!-- Add your SVG icon code here -->
-                </svg>
-                Members Area
-            </a>
-        </li>
-
-        <li class="sidebar__page">
-            <a class="sidebar__link" href="/resetPassword">
-                <svg class="sidebar__icon" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none"
-                    viewBox="0 0 24 24">
-                    <!-- Add your SVG icon code here -->
-                </svg>
-                Reset my password
-            </a>
-        </li>
-
-        <li class="sidebar__page">
-            <a class="sidebar__link" href="/settings">
-                <svg class="sidebar__icon" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none"
-                    viewBox="0 0 24 24">
-                    <!-- Add your SVG icon code here -->
-
+                    <%- include("../icons/settings") %>
                 </svg>
                 Settings
             </a>
         </li>
 
+        <hr>
+
+        <!-- LOG OUT -->
         <li class="sidebar__page">
             <a class="sidebar__link" href="/logout">
-                <svg class="sidebar__icon" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none"
+                <svg class="sidebar__icon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
                     viewBox="0 0 24 24">
                     <!-- Add your SVG icon code here -->
-
+                    <%- include("../icons/logout") %>
                 </svg>
                 Log out
             </a>
         </li>
     </ul>
 
+    <!-- USER's PROFILE -->
     <div class="sidebar__profile">
-        <a href="/profile">
+        <a class="sidebar__link <%= (typeof currentPage !== 'undefined' && currentPage === 'profile') ? 'profile' : '' %>"
+            href="/profile">
             <% if (user.image && user.image !=='' ) { %>
-                <img class="pfp-icon" src="<%= user.image %>" width="30" height="30" alt="Profile Image" />
+                <img class="sidebar__icon pfp-icon" src="<%= user.image %>" width="30" height="30"
+                    alt="Profile Image" />
                 <% } else { %>
-                    <svg class="sidebar__icon" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none"
-                        viewBox="0 0 24 24">
+                    <svg class="sidebar__icon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
+                        viewBox="0 0 30 30">
                         <!-- Add your SVG icon code here -->
                         <%- include("../icons/profile") %>
                     </svg>
                     <% } %>
+                        @<%= user.username %>
         </a>
     </div>
 </aside>
@@ -125,13 +132,15 @@
         top: 0;
         left: 0;
         width: 250px;
-        height: 100vh;
+        height: 100vh; /* Set a fixed height */
         display: flex;
         flex-direction: column;
         background-color: white;
         padding: 20px;
         box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+        overflow-y: auto; /* Enable vertical scrolling */
     }
+
 
     .sidebar__logo {
         display: flex;
@@ -143,8 +152,6 @@
         height: auto;
         object-fit: contain;
     }
-
-
 
     .sidebar__pages {
         list-style: none;
@@ -158,13 +165,22 @@
 
     .sidebar__link {
         display: flex;
-        align-items: center;
         text-decoration: none;
         color: black;
+        justify-content: flex-start;
+        align-items: center;
+        font-size: 20px;
+        padding: 10 0 0 10px;
+        border-radius: 10px;
+    }
+
+    .sidebar__link.active {
+        background: linear-gradient(360deg, #4676EE, #134ACC);
+        color: white
     }
 
     .sidebar__icon {
-        margin-right: 10px;
+        margin: 10px;
     }
 
     .sidebar__profile {
@@ -177,4 +193,32 @@
         text-decoration: none;
         color: black;
     }
+
+    .sidebar__submenu {
+        display: none;
+        list-style: none;
+        margin-left: 10px;
+        padding: 0;
+    }
+
+    .sidebar__submenu li {
+        margin-bottom: 5px;
+    }
+
+    /* Show/hide the submenu when the "Settings" link is clicked */
+    .sidebar__submenu.show {
+        display: block;
+    }
+
+    .sidebar__dropdown-icon::after {
+        content: "\25BC";
+        margin-left: auto;
+    }
 </style>
+
+<script>
+    function toggleSettings() {
+        const submenu = document.getElementById("settingsSubmenu");
+        submenu.classList.toggle("show");
+    }
+</script>
