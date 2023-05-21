@@ -54,7 +54,7 @@
         <!-- ATTENDING PODS -->
         <li class="sidebar__page">
             <a href="/attendedPods"
-                class="sidebar__link <%= (typeof currentPage !== 'undefined' && currentPage === 'attendedPods') ? 'active-2' : '' %>"
+                class="sidebar__link <%= (typeof currentPage !== 'undefined' && currentPage === 'attendedPods') ? 'active-pods' : '' %>"
                 aria-current="page">
                 <svg class="sidebar__icon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
                     viewBox="0 0 24 24">
@@ -68,7 +68,7 @@
         <!-- PODS CHAT -->
         <li class="sidebar__page">
             <a href="/chat"
-                class="sidebar__link <%= (typeof currentPage !== 'undefined' && currentPage === 'chat') ? 'active-2' : '' %>"
+                class="sidebar__link <%= (typeof currentPage !== 'undefined' && currentPage === 'chat') ? 'active-pods' : '' %>"
                 aria-current="page">
                 <svg class="sidebar__icon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
                     viewBox="0 0 24 24">
@@ -81,7 +81,7 @@
 
         <!-- SETTINGS -->
         <li class="sidebar__page">
-            <a class="sidebar__link <%= (typeof currentPage !== 'undefined' && currentPage === 'settings') ? 'active' : '' %>"
+            <a class="sidebar__link <%= (typeof currentPage !== 'undefined' && currentPage === 'settings') ? 'active-settings' : '' %>"
                 href="
                 /settings">
                 <svg class="sidebar__icon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
@@ -181,8 +181,13 @@
         color: white
     }
 
-    .sidebar__link.active-2 {
+    .sidebar__link.active-pods {
         background: linear-gradient(360deg, #3fb191, #02c78f);
+        color: white
+    }
+
+    .sidebar__link.active-settings {
+        background: linear-gradient(360deg, #929292, #4c4c4c);
         color: white
     }
 
