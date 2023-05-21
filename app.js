@@ -96,7 +96,7 @@ app.use(express.static("public"));
 app.use('/splash', express.static('views/splash'));
 
 // Serve static files from the "/views/chat" directory
-app.use('/chat', express.static('views/chat'));
+app.use('/chat/uploads', express.static('uploads'));
 
 // Serve static files from /uplaods directory for photo rendering
 app.use('/uploads', express.static('uploads'));
@@ -834,7 +834,7 @@ app.get("/chat", async (req, res) => {
   if (req.session.loggedIn) {
     try {
       const user = await usersCollection.findOne({ email: req.session.email });
-      res.render("chat/chat", { user: user, currentPage: 'chat' });
+      res.render("chat", { user: user, currentPage: 'chat' });
     } catch (error) {
       res.status(500).send("Error retrieving user data.");
     }

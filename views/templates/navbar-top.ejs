@@ -42,7 +42,18 @@
     .pfp-icon {
         border-radius: 50%;
     }
+
+    .sidebar-visible {
+        display: block;
+    }
 </style>
+
+<script>
+    document.getElementById('navbar-2__menu-toggle').addEventListener('click', function () {
+        document.getElementById('offcanvasExample').classList.toggle('sidebar-visible');
+    });
+</script>
+
 
 <header class="navbar-2 py-3 sticky-top" style="background-color: white;">
 
@@ -53,7 +64,7 @@
             <!-- MENU / HAMBURGER -->
             <li class="nav-item">
                 <a href="#offcanvasExample" class="navbar-2__icon nav-link" data-bs-toggle="offcanvas" role="button"
-                    aria-current="page" id="navbar-2__menu-toggle">
+                    aria-current="page" id="navbar-2__menu-toggle" data-bs-target="#sidebar">
 
                     <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" viewBox="0 0 24 24">
                         <!-- Add your SVG icon code here -->
@@ -62,44 +73,15 @@
                 </a>
             </li>
 
-            <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample"
-                aria-labelledby="offcanvasExampleLabel">
-
+            <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar" aria-labelledby="sidebarLabel">
                 <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasExampleLabel">OrcaSwipe</h5>
+                    <h5 class="offcanvas-title" id="sidebarLabel">Sidebar</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
-
                 <div class="offcanvas-body">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <hr>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/home">Home</a>
-                        </li>
-                        <hr>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="/members">Members Area</a>
-                        </li>
-                        <hr>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="/resetPassword">Reset my password</a>
-                        </li>
-                        <hr>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="/settings">Settings</a>
-                        </li>
-                        <hr>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="/logout">Log out</a>
-                        </li>
-                    </ul>
-
+                    <!-- Content of the sidebar goes here -->
+                    <%- include("sidebar") %>
                 </div>
-
             </div>
 
         </ul>
@@ -124,7 +106,7 @@
                     class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'profile') ? '' : '' %>"
                     aria-current="page">
                     <% if (user.image && user.image !=='' ) { %>
-                        <img class ="pfp-icon" src="<%= user.image %>" width="30" height="30" alt="Profile Image" />
+                        <img class="pfp-icon" src="<%= user.image %>" width="30" height="30" alt="Profile Image" />
                         <% } else { %>
                             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
                                 viewBox="0 0 24 24">

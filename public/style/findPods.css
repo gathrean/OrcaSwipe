@@ -23,7 +23,7 @@
   left: 0;
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   z-index: 2;
 }
 
@@ -65,7 +65,7 @@
   height: 75vh;
   background: #FFFFFF;
   padding-bottom: 40px;
-  border-radius: 20px;
+  border-radius: 50px;
   overflow: hidden;
   position: absolute;
   will-change: transform;
