@@ -34,10 +34,19 @@
     <%- include("templates/footer") %>
 
         <style>
+            .chat-message-content {
+                font-size: 14px;
+            }
+
+            .chat-timestamp {
+                font-size: 8px;
+                display: block;
+                margin-top: 5px;
+            }
+
             .user-image {
-                width: 20px;
-                /* Adjust the size as needed */
-                height: 20px;
+                width: 30px;
+                height: 30px;
                 border-radius: 50%;
                 margin-right: 5px;
             }
@@ -52,7 +61,7 @@
             }
 
             .chat-message {
-                font-size: 16px;
+                font-size: 20px;
                 max-width: auto;
                 word-wrap: break-word;
                 overflow-wrap: break-word;
@@ -72,12 +81,13 @@
             /* Your messages */
             .outgoing {
                 max-width: 60%;
-                background-color: #02c78f;
+                background: #4676EE;
                 border-radius: 20px;
                 padding: 10px 0 10px 10px;
                 margin-bottom: 5px;
                 margin-left: auto;
                 color: white;
+                position: relative;
             }
 
             /* Other messages */
@@ -93,6 +103,8 @@
             /* USERNAME */
             .chat-username {
                 font-weight: bold;
+                color: black;
+                font-size: medium;
             }
 
             .chat-form {
@@ -120,17 +132,25 @@
                 margin-left: auto;
             }
 
+            .delete-button-container {
+                position: absolute;
+                top: -5px;
+                /* Adjust the vertical position as needed */
+                right: 10px;
+                /* Adjust the horizontal position as needed */
+            }
+
             .delete-button {
                 background-color: red;
                 color: white;
                 border: none;
-                border-radius: 5px;
+                border-radius: 50%;
                 padding: 5px 10px;
                 cursor: pointer;
             }
 
             .deleted-message {
-                background-color: #cccccc;
+                background: #cccccc;
             }
 
             .deleted-message .chat-username,
@@ -270,15 +290,25 @@
                 if (message.username !== 'System') {
                     var sender = document.createElement('span');
                     sender.classList.add('chat-username');
-                    sender.innerHTML = '<img src="' + message.imageUrl + '" alt="pfp" class="user-image">' + '@' + message.username + '<br>';
+                    sender.innerHTML =
+                        '<img src="' +
+                        message.imageUrl +
+                        '" alt="pfp" class="user-image">' +
+                        '@' +
+                        message.username +
+                        '<br>';
                     chatMessage.appendChild(sender);
                 }
-                if (message.username === "<%= user.username %>") {
 
+                if (message.username === '<%= user.username %>') {
                     // Turn the message into an outgoing message
                     chatMessage.classList.add('outgoing');
 
-                    // Add the delete button to the message if it is not already deleted
+                    // Add the delete button container
+                    var deleteButtonContainer = document.createElement('span');
+                    deleteButtonContainer.classList.add('delete-button-container');
+
+                    // Add the delete button to the container if it is not already deleted
                     if (!message.deleted) {
                         var deleteButton = document.createElement('button');
                         deleteButton.classList.add('delete-button');
@@ -286,21 +316,23 @@
                         deleteButton.addEventListener('click', function () {
                             deleteMessage(message);
                         });
-                        chatMessage.appendChild(deleteButton);
+                        deleteButtonContainer.appendChild(deleteButton);
                     }
-                } else if (message.username === 'System') {
 
+                    // Add the delete button container to the message
+                    chatMessage.appendChild(deleteButtonContainer);
+                } else if (message.username === 'System') {
                     // Turn the message into a system message
                     chatMessage.classList.add('system');
                 } else {
-
                     // Turn the message into an incoming message
                     chatMessage.classList.add('incoming');
                 }
 
                 // Make sure the chatbox is scrolled to the bottom to show the latest messages
                 var chatbox = document.getElementById('chatbox');
-                var shouldScroll = chatbox.scrollTop + chatbox.clientHeight === chatbox.scrollHeight;
+                var shouldScroll =
+                    chatbox.scrollTop + chatbox.clientHeight === chatbox.scrollHeight;
 
                 // Add the message content to the message
                 var contentElement = document.createElement('span');
@@ -314,6 +346,23 @@
                     contentElement.innerHTML = message.content;
                 }
 
+                // Create a timestamp element
+                var timestampElement = document.createElement('span');
+                timestampElement.classList.add('chat-timestamp');
+                var timestamp = new Date(message.timestamp);
+                var formattedTimestamp =
+                    timestamp.toLocaleString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        hour: 'numeric',
+                        minute: 'numeric',
+                        hour12: true
+                    });
+                timestampElement.textContent = formattedTimestamp;
+
+                // Append the timestamp element to the content element
+                contentElement.appendChild(timestampElement);
+
                 chatMessage.appendChild(contentElement);
 
                 listItem.appendChild(chatMessage);
@@ -324,6 +373,7 @@
                     chatbox.scrollTop = chatbox.scrollHeight;
                 }
             }
+
 
             // Listen for changes in the Firebase Realtime Database
             firebase.database().ref('chatName').on('child_added', function (snapshot) {
