@@ -54,7 +54,7 @@
         <!-- ATTENDING PODS -->
         <li class="sidebar__page">
             <a href="/attendedPods"
-                class="sidebar__link <%= (typeof currentPage !== 'undefined' && currentPage === 'attendedPods') ? 'active' : '' %>"
+                class="sidebar__link <%= (typeof currentPage !== 'undefined' && currentPage === 'attendedPods') ? 'active-2' : '' %>"
                 aria-current="page">
                 <svg class="sidebar__icon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
                     viewBox="0 0 24 24">
@@ -68,7 +68,7 @@
         <!-- PODS CHAT -->
         <li class="sidebar__page">
             <a href="/chat"
-                class="sidebar__link <%= (typeof currentPage !== 'undefined' && currentPage === 'chat') ? 'active' : '' %>"
+                class="sidebar__link <%= (typeof currentPage !== 'undefined' && currentPage === 'chat') ? 'active-2' : '' %>"
                 aria-current="page">
                 <svg class="sidebar__icon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
                     viewBox="0 0 24 24">
@@ -178,6 +178,11 @@
 
     .sidebar__link.active {
         background: linear-gradient(360deg, #4676EE, #134ACC);
+        color: white
+    }
+
+    .sidebar__link.active-2 {
+        background: linear-gradient(360deg, #3fb191, #02c78f);
         color: white
     }
 
