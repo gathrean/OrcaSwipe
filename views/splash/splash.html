@@ -112,6 +112,20 @@
         .features {
             padding-bottom: 20px;
         }
+
+        .my-card {
+            margin: 0;
+            padding: 0;
+        }
+
+        .backwards-row {
+            flex-direction: row-reverse;
+        }
+
+        .features-container {
+            display: flex;
+            flex-direction: column;
+        }
     </style>
 </head>
 
@@ -165,12 +179,40 @@
         </div>
     </div>
 
-    <!-- FAQs -->
-    <div class="features container px-4 py-5" id="featured-3">
-        <h2 class="pb-2 border-bottom">Core Features</h2>
-        <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+    <div class="features-container container px-4 py-5" id="custom-cards">
+        <h2 class="pb-2 border-bottom">Our Core Features</h2>
 
-            <!-- Find Pods -->
+        <!-- Finding Pods -->
+        <div class="row row-cols-1 row-cols-lg-2 align-items-stretch g-4 py-5">
+            <!-- IMAGE CARD -->
+            <div class="col">
+                <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg my-card" style="background-image: url('https://images.unsplash.com/photo-1444210971048-6130cf0c46cf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1473&q=80');
+                           background-size: cover;
+                           background-position: center;">
+                    <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+                        <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold"><br>Discover</h3>
+                        <ul class="d-flex list-unstyled mt-auto">
+                            <li class="me-auto">
+                                <img src="https://cdn.discordapp.com/attachments/828116217285836825/1110080746795847710/OrcaSwipe_Logo.png"
+                                    alt="Bootstrap" width="32" height="32">
+                            </li>
+                            <li class="d-flex align-items-center me-3">
+                                <svg class="bi me-2" width="1em" height="1em">
+                                    <use xlink:href="#geo-fill"></use>
+                                </svg>
+                                <small>English Bay</small>
+                            </li>
+                            <li class="d-flex align-items-center">
+                                <svg class="bi me-2" width="1em" height="1em">
+                                    <use xlink:href="#calendar3"></use>
+                                </svg>
+                                <small>3d</small>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- DETAILS -->
             <div class="feature col">
                 <div
                     class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
@@ -185,8 +227,39 @@
                     with your passions and captivate your curiosity.</p>
                 <a href="#" class="icon-link">Join now</a>
             </div>
+        </div>
 
-            <!-- Host Pods -->
+        <!-- HOST PODS -->
+        <div class="backwards-row row row-cols-1 row-cols-lg-2 align-items-stretch g-4 py-5">
+            <!-- IMAGE CARD -->
+            <div class="col">
+                <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg" style="background-image: url('https://images.unsplash.com/photo-1543633550-f431af584afd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');                            
+                    background-size: cover;
+                    background-position: center;">
+                    <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+                        <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold"><br><br>Hosting</h3>
+                        <ul class="d-flex list-unstyled mt-auto">
+                            <li class="me-auto">
+                                <img src="https://cdn.discordapp.com/attachments/828116217285836825/1110080746795847710/OrcaSwipe_Logo.png"
+                                    alt="Bootstrap" width="32" height="32">
+                            </li>
+                            <li class="d-flex align-items-center me-3">
+                                <svg class="bi me-2" width="1em" height="1em">
+                                    <use xlink:href="#geo-fill"></use>
+                                </svg>
+                                <small>Kitsilano</small>
+                            </li>
+                            <li class="d-flex align-items-center">
+                                <svg class="bi me-2" width="1em" height="1em">
+                                    <use xlink:href="#calendar3"></use>
+                                </svg>
+                                <small>4d</small>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- DETAILS -->
             <div class="feature col">
                 <div
                     class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
@@ -199,8 +272,40 @@
                     ensuring your event reaches the right people who share your interests.</p>
                 <a href="#" class="icon-link">Join now</a>
             </div>
+        </div>
 
-            <!-- Saved Pods -->
+        <!-- Saving Pods -->
+        <div class="row row-cols-1 row-cols-lg-2 align-items-stretch g-4 py-5">
+            <!-- IMAGE CARD -->
+            <div class="col">
+                <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg" style="background-image: url('https://images.unsplash.com/photo-1506452601243-1add60811bfd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'); 
+                    background-size: cover; background-position: center;">
+                    <div class="d-flex flex-column h-100 p-5 pb-3 text-shadow-1">
+
+                        <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold"><br><br>Link Up</h3>
+
+                        <ul class="d-flex list-unstyled mt-auto">
+                            <li class="me-auto">
+                                <img src="https://cdn.discordapp.com/attachments/828116217285836825/1110080746795847710/OrcaSwipe_Logo.png"
+                                    alt="Bootstrap" width="32" height="32">
+                            </li>
+                            <li class="d-flex align-items-center me-3">
+                                <svg class="bi me-2" width="1em" height="1em">
+                                    <use xlink:href="#geo-fill"></use>
+                                </svg>
+                                <small>North Vancouver</small>
+                            </li>
+                            <li class="d-flex align-items-center">
+                                <svg class="bi me-2" width="1em" height="1em">
+                                    <use xlink:href="#calendar3"></use>
+                                </svg>
+                                <small>5d</small>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- DETAILS -->
             <div class="feature col">
                 <div
                     class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
