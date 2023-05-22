@@ -34,11 +34,20 @@
                 align-items: center;
         }
 
-
         .sticky-bottom {
                 position: fixed;
                 bottom: 0;
                 width: 100%;
+        }
+
+        .nav-link.active {
+                background: linear-gradient(360deg, #4676EE, #134ACC);
+                color: white
+        }
+
+        .nav-link.active-pods {
+                background: linear-gradient(360deg, #3fb191, #02c78f);
+                color: white
         }
 </style>
 
@@ -56,7 +65,7 @@
                                         <!-- Add your SVG icon code here -->
                                         <%- include("../icons/find") %>
                                 </svg>
-                                <span class="icon-label">find</span>
+                                <span class="icon-label">Discover</span>
                         </a>
                 </li>
 
@@ -70,7 +79,7 @@
                                         <!-- Add your SVG icon code here -->
                                         <%- include("../icons/host") %>
                                 </svg>
-                                <span class="icon-label">host</span>
+                                <span class="icon-label">Host</span>
                         </a>
                 </li>
 
@@ -79,14 +88,28 @@
                         <a href="/attendedPods"
                                 class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'attendedPods') ? 'active' : '' %>"
                                 aria-current="page">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="20" fill="none"
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none"
+                                        viewBox="0 0 24 24">
+                                        <!-- Add your SVG icon code here -->
+                                        <%- include("../icons/love") %>
+                                </svg>
+                                <span class="icon-label">Saved</span>
+                        </a>
+                </li>
+
+                <!-- CHAT -->
+                <li class="nav-item">
+                        <a href="/chat"
+                                class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'chat') ? 'active' : '' %>"
+                                aria-current="page">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none"
                                         viewBox="0 0 24 24">
                                         <!-- Add your SVG icon code here -->
                                         <%- include("../icons/pods") %>
                                 </svg>
-                                <span class="icon-label">pods</span>
+                                <span class="icon-label">Chat</span>
                         </a>
                 </li>
-                
+
         </ul>
 </header>
