@@ -782,7 +782,8 @@ app.post("/pod/:podId/leave", async (req, res) => {
       if (user) {
         await podsCollection.updateOne(
           { _id: new ObjectId(podId) },
-          { $pull: { attenders: user._id } }
+          { $pull: { attenders: user._id,upvotes: user._id,
+            downvotes: user._id } }
         );
         await usersCollection.updateOne(
           { _id: new ObjectId(user._id) },
