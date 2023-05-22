@@ -18,6 +18,8 @@
         }
 
         .navbar {
+            display: flex;
+            justify-content: center;
             background: linear-gradient(360deg, #134ACC, #134ACC);
             width: 100%;
             padding: 10px 20px 0 20px;
@@ -36,7 +38,7 @@
             flex-direction: column;
             align-items: center;
             color: #fff;
-            padding: 10%;
+            padding: 5% 10% 20% 10%;
         }
 
         .splash-heading {
@@ -54,8 +56,8 @@
         }
 
         .splash-button {
-            padding: 10px 20px;
-            margin: 30px;
+            padding: 10px 10px;
+            margin: 20px;
             font-size: 20px;
             border: none;
             border-radius: 4px;
@@ -126,7 +128,86 @@
             display: flex;
             flex-direction: column;
         }
+
+        /* Adjustments for smaller screens */
+        @media (max-width: 768px) {
+            .splash-container {
+                height: fit-content;
+                padding: 15%;
+            }
+
+            .splash-heading {
+                font-size: 36px;
+                padding: 0px 20px 0px 20px;
+            }
+
+            .splash-caption {
+                font-size: 16px;
+                margin-bottom: 20px;
+            }
+
+            .splash-button {
+                width: 200px;
+                height: 50px;
+                font-size: 16px;
+                margin: 10px;
+            }
+
+            .action-container {
+                flex-direction: column;
+            }
+
+            /* Adjustments for smaller screens in landscape mode */
+            @media (max-width: 992px) and (orientation: landscape) {
+                .splash-container {
+                    height: 40vh;
+                    padding: 2%;
+                }
+
+                .splash-heading {
+                    font-size: 32px;
+                }
+
+                .splash-caption {
+                    font-size: 16px;
+                    margin-bottom: 10px;
+                }
+
+                .splash-button {
+                    width: 180px;
+                    height: 40px;
+                    font-size: 14px;
+                    margin: 10px;
+                }
+            }
+        }
+
+        .animate {
+            opacity: 0;
+            transform: translateX(-50px);
+            animation: swipe-right-and-fade-in 0.5s ease 0.5s forwards;
+        }
+
+        @keyframes swipe-right-and-fade-in {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
     </style>
+
+    <script>
+        // Function to redirect to the Flappy Orca page
+        function redirectToFlappyOrca() {
+            window.location.href = '/flappy-orca/flappy-orca.html';
+        }
+    </script>
+
 </head>
 
 <body>
@@ -168,9 +249,17 @@
 
     <!-- HEADER -->
     <div class="splash-container">
+        <!-- Orca! -->
+        <div class="animate">
+            <img onclick="redirectToFlappyOrca()"
+                src="https://cdn.discordapp.com/attachments/1101692795921645680/1106310966070755388/OrcaSwipe_Logo.png"
+                alt="logo" class="logo" height="100px">
+        </div>
+        <br>
+        <!-- Header -->
         <div class="splash-text">
             <h1 class="splash-heading">Discover, Host, and Link Up</h1>
-            <p class="splash-caption">Uncover hidden gems in your city and cultivate lasting friendships with the swipe
+            <p class="splash-caption">Uncover hidden gems in your city and grow lasting communities with the swipe
                 of a finger.</p>
             <div class="action-container">
                 <button href="/" class="splash-button join">JOIN NOW</button>
@@ -179,8 +268,8 @@
         </div>
     </div>
 
-    <div class="features-container container px-4 py-5" id="custom-cards">
-        <h2 class="pb-2 border-bottom">Our Core Features</h2>
+    <div class="features-container container px-4 py-2" id="custom-cards">
+        <!-- <h2 class="pb-2 border-bottom">Our Core Features</h2> -->
 
         <!-- Finding Pods -->
         <div class="row row-cols-1 row-cols-lg-2 align-items-stretch g-4 py-5">
