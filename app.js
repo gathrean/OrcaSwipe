@@ -492,6 +492,52 @@ app.get("/attendedpods", async (req, res) => {
   }
 });
 
+app.post("/pod/:podId/upvote", async (req, res) => {
+  if (!req.session.loggedIn) {
+    return res.status(403).send("You must be logged in to vote.<br><a href='/'>Go back to home page</a>")
+  }
+  
+  const user = await usersCollection.findOne({ email: req.session.email });
+  const podId = req.params.podId;
+  
+  if (!user) {
+    return res.status(404).send('User not found');
+  }
+  
+  try {
+    await podsCollection.updateOne({ _id: new ObjectId(podId) }, { 
+      $addToSet: { upvotes: user._id }, 
+      $pull: { downvotes: user._id } 
+    });
+    res.status(200).send();
+  } catch (error) {
+    res.status(500).send('Error voting on pod');
+  }
+});
+
+app.post("/pod/:podId/downvote", async (req, res) => {
+  if (!req.session.loggedIn) {
+    return res.status(403).send("You must be logged in to vote.<br><a href='/'>Go back to home page</a>")
+  }
+  
+  const user = await usersCollection.findOne({ email: req.session.email });
+  const podId = req.params.podId;
+  
+  if (!user) {
+    return res.status(404).send('User not found');
+  }
+  
+  try {
+    await podsCollection.updateOne({ _id: new ObjectId(podId) }, { 
+      $addToSet: { downvotes: user._id }, 
+      $pull: { upvotes: user._id } 
+    });
+    res.status(200).send();
+  } catch (error) {
+    res.status(500).send('Error voting on pod');
+  }
+});
+
 // GET request for the "/createdpods" URL
 app.get("/createdpods", async (req, res) => {
   if (req.session.loggedIn) {
@@ -598,7 +644,9 @@ app.post("/createpod", upload.single('image'), async (req, res) => {
 
     const creator = req.session.email;
     let attenders = [];
-    const newPod = { name, tags, eventDescription, attenders, creator, location, image };
+    let upvotes = []; // Empty array for upvotes
+    let downvotes = []; // Empty array for downvotes
+    const newPod = { name, tags, eventDescription, attenders, creator, location, image, upvotes, downvotes }; 
 
     // use Joi to validate data
     const schema = Joi.object({
@@ -611,7 +659,9 @@ app.post("/createpod", upload.single('image'), async (req, res) => {
         lat: Joi.number().required(),
         lng: Joi.number().required()
       }),
-      image: Joi.string().uri()  // validates image as a URL
+      image: Joi.string().uri(),  // validates image as a URL
+      upvotes: Joi.array(), // Validates upvotes as an array
+      downvotes: Joi.array() // Validates downvotes as an array
     });
 
 
