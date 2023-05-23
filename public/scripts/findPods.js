@@ -92,6 +92,8 @@ function loadPods() {
             // Only push pod if it contains a tag that matches one of the user's tags
             if (pod.tags.some(tag => userTags.includes(tag))) {
                 pods.push(pod);
+            } else {
+                console.log("Please choose tags");
             }
         }
 

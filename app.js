@@ -673,7 +673,7 @@ app.post("/createpod", upload.single('image'), async (req, res) => {
     } else {
       try {
         const result = await podsCollection.insertOne(newPod);
-        res.redirect("/createdPods");
+        res.redirect("/attendedPods");
       } catch (error) {
         res.status(500).send("Error creating pod.<br><a href='/createpod'>Go back</a>");
       }
@@ -739,14 +739,12 @@ app.get('/getPods', async (req, res) => {
   let pods;
 
   // Prepare a query where at least one tag from the list overlaps with user's interests
-  if (userInterests && userInterests.length != 0) {
     pods = await podsCollection.find({
       name: { $nin: attendedPods.map(pod => pod.name) },
       tags: { $in: userInterests }
     }).toArray();
-  } 
   
-
+  // console.log(pods.length);
   for (var i = 0; i < pods.length; i++) {
     pods[i] = JSON.stringify(pods[i]);
   }
