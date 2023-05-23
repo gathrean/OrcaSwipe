@@ -311,7 +311,7 @@ app.post("/signup", async (req, res) => {
   usersCollection.createIndex({ "email" : 1 }, { unique : true });
 
   if (validationResult.error) {
-    res.status(400).send(validationResult.error.details[0].message + "<br><a href='/signup'>Go back to sign up</a>");
+    res.render('splash/signup', {errorMessage: validationResult.error.details[0].message});
   } else {
     try {
       const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -334,7 +334,7 @@ app.post("/signup", async (req, res) => {
       if (error.code == 11000){
         res.render('splash/signup', {errorMessage: 'This email is already in use.'});
       } else {
-      res.status(500).send("Error signing up.");
+        res.render('splash/signup', {errorMessage: 'Error signing up.'});
       }
     }
   }
