@@ -55,14 +55,30 @@ function initCards(card, index) {
 }
 
 
+let userTags;  
+
+// Fetch user's interests before fetching pods
+const xhrUser = new XMLHttpRequest();
+xhrUser.open("GET", "/getUserInterests");  // Replace with your route that fetches user's interests
+xhrUser.onload = () => {
+    userTags = JSON.parse(xhrUser.responseText);
+    // Once userTags is loaded, then fetch pods
+    loadPods();
+};
+xhrUser.send();
+
+
+
+
+
 // Function to load pods from the server
 function loadPods() {
-
+    const xhttp = new XMLHttpRequest();
     // Show the loading circle
     var loadingCircle = document.getElementById('loading-circle');
     loadingCircle.style.display = 'block';
 
-    const xhttp = new XMLHttpRequest();
+
 
     // Handling the response from the server
     xhttp.onload = () => {
@@ -71,7 +87,11 @@ function loadPods() {
 
         // Adding each fetched pod to the "pods" array
         for (var i = 0; i < fetchedPods.length; i++) {
-            pods.push(JSON.parse(fetchedPods[i]));
+            var pod = JSON.parse(fetchedPods[i]);
+            // Only push pod if it contains a tag that matches one of the user's tags
+            if (pod.tags.some(tag => userTags.includes(tag))) {
+                pods.push(pod);
+            }
         }
 
         // If the user has specified a maximum distance, filter the pods based on the distance

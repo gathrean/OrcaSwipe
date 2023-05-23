@@ -563,6 +563,8 @@ app.get("/createpod", async (req, res) => {
 });
 
 app.post("/createpod", upload.single('image'), async (req, res) => {
+  console.log(req.body);
+
   const interests = ['outdoors', 'video games', 'reading', 'cooking', 'music', 'sports', 'art', 'travel', 'coding', 'photography'];
   if (req.session.loggedIn) {
     let { name, eventDescription } = req.body;
@@ -590,29 +592,30 @@ app.post("/createpod", upload.single('image'), async (req, res) => {
       console.log(`${req.file.filename} uploaded to Firebase.`);
     } // No need for an else block because image is already defined as an empty string
 
-    // If the interest is in req.body, it was checked. Otherwise, it was not.
-    let tags = {}
-    interests.forEach(interest => {
-      tags[interest] = !!req.body[interest];
-    });
+   // Create an array of checked interests.
+   let tags = []
+   if (req.body.interests) {
+       tags = Array.isArray(req.body.interests) ? req.body.interests : [req.body.interests];
+   }
+   
 
-    const creator = req.session.email;
-    let attenders = [];
-    const newPod = { name, tags, eventDescription, attenders, creator, location, image };
+   const creator = req.session.email;
+   let attenders = [];
+   const newPod = { name, tags, eventDescription, attenders, creator, location, image };
 
-    // use Joi to validate data
-    const schema = Joi.object({
-      name: Joi.string().required(),
-      tags: Joi.object().pattern(Joi.string(), Joi.boolean()),
-      eventDescription: Joi.string().required(),
-      attenders: Joi.array(),
-      creator: Joi.string(),
-      location: Joi.object({
-        lat: Joi.number().required(),
-        lng: Joi.number().required()
-      }),
-      image: Joi.string().uri()  // validates image as a URL
-    });
+   // Adjust the Joi validation schema.
+   const schema = Joi.object({
+     name: Joi.string().required(),
+     tags: Joi.array().items(Joi.string()), // Now tags should be an array of strings.
+     eventDescription: Joi.string().required(),
+     attenders: Joi.array(),
+     creator: Joi.string(),
+     location: Joi.object({
+       lat: Joi.number().required(),
+       lng: Joi.number().required()
+     }),
+     image: Joi.string().uri()  // validates image as a URL
+   });
 
 
     const validationResult = schema.validate(newPod);
@@ -669,6 +672,14 @@ app.get("/findPods", async (req, res) => {
   res.render('findPods', { currentPage: 'findPods', maxDist: user.podProximity != null ? user.podProximity : 10000, user: user });
 })
 
+
+app.get("/getUserInterests", async (req, res) => {
+  var email = req.session.email;
+  var user = await usersCollection.findOne({ email: email });
+  res.json(user.interests);
+});
+
+
 // GET request for the "/getPods" URL
 // (NOT to be confused with /findPods)
 app.get('/getPods', async (req, res) => {
@@ -677,25 +688,16 @@ app.get('/getPods', async (req, res) => {
   var attendedPods = user.eventsAttended || [];
   var userInterests = user.interests;  // Get the user's interests
 
-  // Prepare a list of keys from user interests where value is true
-  let keys = [];
-  let query;
+  let pods;
 
-  // Prepare a query where at least one key from the list has value true
+  // Prepare a query where at least one tag from the list overlaps with user's interests
   if (userInterests && userInterests.length != 0) {
-    for (let interest of userInterests) {
-      keys.push(`tags.${interest}`);
-    }
-    query = { $or: keys.map(key => ({ [key]: true })) };
-    var pods = await podsCollection.find({
+    pods = await podsCollection.find({
       name: { $nin: attendedPods.map(pod => pod.name) },
-      ...query
-    }).project().toArray();
-  } else {
-    var pods = await podsCollection.find({
-      name: { $nin: attendedPods.map(pod => pod.name) }
-    }).project().toArray();
-  }
+      tags: { $in: userInterests }
+    }).toArray();
+  } 
+  
 
   for (var i = 0; i < pods.length; i++) {
     pods[i] = JSON.stringify(pods[i]);

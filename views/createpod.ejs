@@ -25,13 +25,12 @@
             , 'travel' , 'coding' , 'photography' ]; %>
             <% interests.forEach((interest, index)=> { %>
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="<%= interest %>"
-                        id="interest<%= index %>" name="<%= interest %>">
-
+                    <input class="form-check-input" type="checkbox" value="<%= interest %>" id="interest<%= index %>" name="interests">
                     <label class="form-check-label" for="interest<%= index %>">
                         <%= interest %>
                     </label>
                 </div>
+                
                 <% }) %>
     </div>
     <textarea name="eventDescription" placeholder="Enter event description"></textarea><br>
