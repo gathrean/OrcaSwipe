@@ -309,6 +309,7 @@ app.post("/signup", async (req, res) => {
   });
   const validationResult = schema.validate(req.body);
   usersCollection.createIndex({ "email" : 1 }, { unique : true });
+  usersCollection.createIndex({ "username" : 1 }, { unique : true });
 
   if (validationResult.error) {
     res.render('splash/signup', {errorMessage: validationResult.error.details[0].message});
@@ -332,7 +333,8 @@ app.post("/signup", async (req, res) => {
       res.redirect("/editProfile");
     } catch (error) {
       if (error.code == 11000){
-        res.render('splash/signup', {errorMessage: 'This email is already in use.'});
+        var problemField = Object.keys(error.keyValue);
+        res.render('splash/signup', {errorMessage: `${problemField} is already in use.`});
       } else {
         res.render('splash/signup', {errorMessage: 'Error signing up.'});
       }
