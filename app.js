@@ -332,7 +332,7 @@ app.post("/signup", async (req, res) => {
       res.redirect("/editProfile");
     } catch (error) {
       if (error.code == 11000){
-        res.send(`<div>This email is already in use.</div><a id="retry" href="/signup"Try Again</a>`);
+        res.render('splash/signup', {errorMessage: 'This email is already in use.'});
       } else {
       res.status(500).send("Error signing up.");
       }

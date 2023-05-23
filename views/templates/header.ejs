@@ -84,6 +84,14 @@
       /* Additional styling for the sidebar */
     }
   </style>
+    <script>
+      var errorMessage = <%- JSON.stringify(errorMessage) %>;
+      this.addEventListener('load', () => {
+        if (errorMessage){
+          window.alert(errorMessage);
+        }
+      })
+    </script>
 </head>
 
 <body>

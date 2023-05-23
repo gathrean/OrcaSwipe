@@ -26,6 +26,14 @@
     crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="/style/splash-style.css">
+    <script>
+      var errorMessage = <%- JSON.stringify(errorMessage) %>;
+      this.addEventListener('load', () => {
+        if (errorMessage){
+          window.alert(errorMessage);
+        }
+      })
+    </script>
 </head>
 
 <body>
