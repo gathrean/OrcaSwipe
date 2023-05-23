@@ -1,146 +1,333 @@
-<%- include("splash-header.ejs") %>
+<%- include("header-splash") %>
 
-    <div class="container-initial">
-        <div class="animate">
-            <img onclick="redirectToFlappyOrca()"
-                src="https://cdn.discordapp.com/attachments/1101692795921645680/1106310966070755388/OrcaSwipe_Logo.png"
-                alt="logo" class="logo">
-            <h1 class="splash-text">OrcaSwipe</h1>
+    <body>
+        <!-- NAVBAR -->
+        <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top">
+            <div class="container-fluid d-flex justify-content-between">
+
+                <a class="navbar-brand" href="#">
+                    <img
+                        src="https://cdn.discordapp.com/attachments/828116217285836825/1110053979540430969/OrcaSwipe_Header_Logo.png">
+                </a>
+
+                <form method="POST" action="/splash">
+                    <div class="d-flex">
+                        <button href="/" class="navbar-button join" name="action" value="signup">JOIN</button>
+                        <button href="/" class="navbar-button login" name="action" value="login">LOG IN</button>
+                    </div>
+                </form>
+
+            </div>
+        </nav>
+
+
+        <!-- HEADER -->
+        <div class="splash-container">
+            <!-- Orca! -->
+            <div class="animate-orca">
+                <img onclick="redirectToFlappyOrca()"
+                    src="https://cdn.discordapp.com/attachments/1101692795921645680/1106310966070755388/OrcaSwipe_Logo.png"
+                    alt="logo" class="logo" height="100px">
+            </div>
+            <br>
+            <!-- Header -->
+            <div class="splash-text">
+                <h1 class="splash-heading">Discover, Host, and Link Up</h1>
+                <p class="splash-caption">Uncover hidden gems in your city and grow lasting communities with the swipe
+                    of a finger.</p>
+                <form method="POST" action="/splash">
+                    <div class="action-container">
+                        <button href="/" class="splash-button join shadow" name="action" value="signup">JOIN
+                            NOW</button>
+                        <button href="/" class="splash-button login shadow" name="action" value="login">LOG IN</button>
+                    </div>
+                </form>
+            </div>
         </div>
 
-        <h3 class="animate-2"><i>Link up with your Pod!</i></h3>
+        <!-- FEATURES -->
+        <main class="body-container">
+            <div class="features-container container px-4 py-2" id="custom-cards">
+                <!-- Finding Pods -->
+                <div class="row row-cols-1 row-cols-lg-2 align-items-stretch g-4 py-5 reveal shadow p-5 mb-5 bg-body-tertiary"
+                    style="background-color: #f6f6f6; border-radius: 50px; padding: 20px;">
+                    <!-- IMAGE CARD -->
+                    <div class="col">
+                        <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg my-card"
+                            style="background-image: url('https://images.unsplash.com/photo-1444210971048-6130cf0c46cf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1473&q=80');
+                       background-size: cover;
+                       background-position: center;">
+                            <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+                                <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">
+                                    <br>
+                                </h3>
+                                <ul class="d-flex list-unstyled mt-auto">
+                                    <li class="me-auto">
+                                        <img src="https://cdn.discordapp.com/attachments/828116217285836825/1110080746795847710/OrcaSwipe_Logo.png"
+                                            alt="Bootstrap" width="32" height="32">
+                                    </li>
+                                    <li class="d-flex align-items-center me-3">
+                                        <svg class="bi me-2" width="1em" height="1em">
+                                            <use xlink:href="#geo-fill"></use>
+                                        </svg>
+                                        <small>English Bay</small>
+                                    </li>
+                                    <li class="d-flex align-items-center">
+                                        <svg class="bi me-2" width="1em" height="1em">
+                                            <use xlink:href="#calendar3"></use>
+                                        </svg>
+                                        <small>3d</small>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- DETAILS -->
+                    <div class="feature col">
+                        <div
+                            class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
+                            <svg class="sidebar__icon" xmlns="http://www.w3.org/2000/svg" width="80%" height="80%"
+                                fill="none" viewBox="0 0 24 24">
+                                <!-- Add your SVG icon code here -->
+                                <%- include("../icons/find") %>
+                            </svg>
+                        </div>
 
-        <form method="POST" action="/splash">
-            <button class="btn white-button animate-3" type="submit" name="action" value="signup">Create
-                account</button><br><br>
-            <button class="btn animate-4" type="submit" name="action" value="login">Log in</button>
-        </form>
-        <br>
-    </div>
-    <br><br>
-    <div class="container-splash-section">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="about-section form animate-5">
-                    <h2>📲 <i>What's our app?</i> </h2>
-                    <p>
-                        Our app, <b>OrcaSwipe</b>, is a community and event search application designed to connect
-                        Vancouverites with local communities.
-                        <br><br>
-                        With OrcaSwipe, users can swipe left or right on various
-                        events based on their interests, effectively addressing the issue of post-pandemic isolation.
-                    </p>
+                        <h3 class="fs-2">Find Pods</h3>
+                        <h4>
+                            Explore New Pods that match your Interests
+                        </h4>
+                        <p>
+                            Swipe right on the Discover page to join Pods that
+                            align
+                            with your passions and captivate your curiosity.
+                        </p>
+                        <a href="/signup" class="icon-link">Join now</a>
+                    </div>
                 </div>
+
+                <!-- HOST PODS -->
+                <div class="backwards-row row row-cols-1 row-cols-lg-2 align-items-stretch g-4 py-5 reveal shadow p-5 mb-5 bg-body-tertiary"
+                    style="background-color: #f6f6f6; border-radius: 50px; padding: 20px;">
+                    <!-- IMAGE CARD -->
+                    <div class="col">
+                        <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg" style="background-image: url('https://images.unsplash.com/photo-1543633550-f431af584afd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');                            
+                background-size: cover;
+                background-position: center;">
+                            <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+                                <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">
+                                    <!-- <br><br>Hosting -->
+                                </h3>
+                                <ul class="d-flex list-unstyled mt-auto">
+                                    <li class="me-auto">
+                                        <img src="https://cdn.discordapp.com/attachments/828116217285836825/1110080746795847710/OrcaSwipe_Logo.png"
+                                            alt="Bootstrap" width="32" height="32">
+                                    </li>
+                                    <li class="d-flex align-items-center me-3">
+                                        <svg class="bi me-2" width="1em" height="1em">
+                                            <use xlink:href="#geo-fill"></use>
+                                        </svg>
+                                        <small>Kitsilano</small>
+                                    </li>
+                                    <li class="d-flex align-items-center">
+                                        <svg class="bi me-2" width="1em" height="1em">
+                                            <use xlink:href="#calendar3"></use>
+                                        </svg>
+                                        <small>4d</small>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- DETAILS -->
+                    <div class="feature col">
+                        <div
+                            class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
+                            <svg class="sidebar__icon" xmlns="http://www.w3.org/2000/svg" width="80%" height="80%"
+                                fill="none" viewBox="0 0 24 24">
+                                <!-- Add your SVG icon code here -->
+                                <%- include("../icons/host") %>
+                            </svg>
+                        </div>
+                        <h3 class="fs-2">Host Pods</h3>
+                        <h4>
+                            Connect with the Ideal Audience
+                        </h4>
+                        <p>
+                            Attract the perfect audience to your event by adding relevant tags to your Pod. OrcaSwipe
+                            will
+                            seamlessly match you with people who share your passions, ensuring your event reaches the
+                            right
+                            people.
+                        </p>
+                        <a href="/signup" class="icon-link">Join now</a>
+                    </div>
+                </div>
+
+                <!-- Saving Pods -->
+                <div class="row row-cols-1 row-cols-lg-2 align-items-stretch g-4 py-5 reveal shadow p-5 mb-5 bg-body-tertiary"
+                    style="background-color: #f6f6f6; border-radius: 50px; padding: 20px;">
+                    <!-- IMAGE CARD -->
+                    <div class="col">
+                        <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg" style="background-image: url('https://images.unsplash.com/photo-1506452601243-1add60811bfd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'); 
+                background-size: cover; background-position: center;">
+                            <div class="d-flex flex-column h-100 p-5 pb-3 text-shadow-1">
+
+                                <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">
+                                    <!-- br><br>Link Up -->
+                                </h3>
+
+                                <ul class="d-flex list-unstyled mt-auto">
+                                    <li class="me-auto">
+                                        <img src="https://cdn.discordapp.com/attachments/828116217285836825/1110080746795847710/OrcaSwipe_Logo.png"
+                                            alt="Bootstrap" width="32" height="32">
+                                    </li>
+                                    <li class="d-flex align-items-center me-3">
+                                        <svg class="bi me-2" width="1em" height="1em">
+                                            <use xlink:href="#geo-fill"></use>
+                                        </svg>
+                                        <small>North Vancouver</small>
+                                    </li>
+                                    <li class="d-flex align-items-center">
+                                        <svg class="bi me-2" width="1em" height="1em">
+                                            <use xlink:href="#calendar3"></use>
+                                        </svg>
+                                        <small>5d</small>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- DETAILS -->
+                    <div class="feature col">
+                        <div
+                            class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
+                            <svg class="sidebar__icon" xmlns="http://www.w3.org/2000/svg" width="80%" height="80%"
+                                fill="none" viewBox="0 0 24 24">
+                                <!-- Add your SVG icon code here -->
+                                <%- include("../icons/love") %>
+                            </svg>
+                        </div>
+                        <h3 class="fs-2">Saved Pods</h3>
+                        <h4>
+                            Never Lose Sight of the Pods You've Discovered
+                        </h4>
+                        <p>
+                            With our convenient Saved page, you can effortlessly keep track of the Pods you've
+                            discovered.
+                            Gain
+                            access to attendee lists, event locations, and engage in meaningful conversations with
+                            fellow
+                            Pod
+                            members, ensuring you stay connected and well-informed.
+                        </p>
+                        <a href="/signup" class="icon-link">Join now</a>
+                    </div>
+                </div>
+
+                <div class="row row-cols-1 row-cols-lg-2 align-items-stretch g-4 py-5 reveal shadow p-3 mb-5 bg-body-tertiary"
+                    style="background-color: #f6f6f6; border-radius: 50px; padding: 20px;" id="icon-grid">
+
+                    <!-- Chat -->
+                    <div class="col d-flex align-items-start">
+                        <svg class="bi text-body-secondary flex-shrink-0 me-3" width="3em" height="3em">
+                            <%- include("../icons/pods") %>
+                        </svg>
+                        <div>
+                            <h3 class="fw-bold mb-0 fs-4">Communication</h3>
+                            <p>Chat with your Pod members in a groupchat.</p>
+                        </div>
+                    </div>
+
+                    <!-- OrcaScore -->
+                    <div class="col d-flex align-items-start">
+                        <svg class="bi text-body-secondary flex-shrink-0 me-3" width="3em" height="3em">
+                            <%- include("../icons/tree") %>
+                        </svg>
+                        <div>
+                            <h3 class="fw-bold mb-0 fs-4">OrcaScore</h3>
+                            <p>Reward Pods that do good for the Earth by upvoting them.</p>
+                        </div>
+                    </div>
+
+                    <!-- Personalization -->
+                    <div class="col d-flex align-items-start">
+                        <svg class="bi text-body-secondary flex-shrink-0 me-3" width="3em" height="3em">
+                            <%- include("../icons/profile") %>
+                        </svg>
+                        <div>
+                            <h3 class="fw-bold mb-0 fs-4">Personalization</h3>
+                            <p>You can also upload a profile photo and add your birthday!</p>
+                        </div>
+                    </div>
+
+                    <!-- Reporting -->
+                    <div class="col d-flex align-items-start">
+                        <svg class="bi text-body-secondary flex-shrink-0 me-3" width="3em" height="3em">
+                            <%- include("../icons/report") %>
+                        </svg>
+                        <div>
+                            <h3 class="fw-bold mb-0 fs-4">Reporting</h3>
+                            <p>Anonymously report suspicious Pods with Report.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- </div> -->
             </div>
-            <br><br>
-            <div class="col-md-6">
-                <div class="team-section form animate-5">
-                    <h2>🐋 <i>What are Pods?</i></h2>
-                    <p><b>Pods</b> are social groups, often observed in marine mammals like Orcas. Initially appearing
-                        unfriendly, they become friendlier when they find their community.
-                        <br><br>
-                        Our app aims to help you discover and connect with your own real-world Pod: a supportive
-                        network that fosters friendshipand community.
-                    </p>
-                </div>
+
+        </main>
+
+        <!-- CALL TO ACTION -->
+        <div class="call-to-action-container">
+            <div class="splash-text">
+                <h1 class="splash-heading">Ready to dive in?</h1>
+
+                <form method="POST" action="/splash">
+                    <div class="action-container">
+                        <button href="/signup" class="splash-button join shadow" name="action" value="signup">JOIN
+                            NOW</button>
+                    </div>
+                </form>
+                
             </div>
         </div>
-    </div>
 
-    <div class="splash-footer container-splash-section"></div>
 
-    <%- include("splash-footer.ejs") %>
+        <%- include("footer-splash") %>
 
-        <style>
-            h3 {
-                color: white;
-            }
-
-            h3.animate-2 {
-                padding-top: 50px;
-                /* Adjust the value as needed */
-                padding-bottom: 50px;
-                /* Adjust the value as needed */
-            }
-
-            .animate-2 {
-                opacity: 0;
-                transform: translateX(-50px);
-                animation: swipe-right-and-fade-in 0.5s ease 0.5s forwards;
-            }
-
-            .animate-3 {
-                opacity: 0;
-                transform: translateX(-50px);
-                animation: swipe-right-and-fade-in 0.5s ease 1s forwards;
-            }
-
-            .animate-4 {
-                opacity: 0;
-                transform: translateX(-50px);
-                animation: swipe-right-and-fade-in 0.5s ease 1.5s forwards;
-            }
-
-            .animate-5 {
-                opacity: 0;
-                transform: translateX(-50px);
-                animation: swipe-right-and-fade-in 0.5s ease 2s forwards;
-            }
-
-            .animate-secret {
-                opacity: 0;
-                transform: translateX(-50px);
-                animation: swipe-right-and-fade-in 0.5s ease 4s forwards;
-            }
-
-            easter-egg-button {
-                background-color: #FFD700;
-                /* Adjust the color as desired */
-                color: #000;
-                /* Adjust the color as desired */
-                padding: 10px 20px;
-                font-size: 16px;
-                border-radius: 5px;
-                margin-top: 20px;
-                cursor: pointer;
-            }
-
-            /* Media query for screens smaller than 768px */
-            @media (max-width: 767px) {
-                .container-splash-section {
-                    display: block;
+            <style>
+                .feature-icon {
+                    width: 4rem;
+                    height: 4rem;
+                    border-radius: .75rem;
                 }
 
-                .row {
-                    display: block;
+                .icon-square {
+                    width: 3rem;
+                    height: 3rem;
+                    border-radius: .75rem;
                 }
 
-                .col-md-6 {
-                    width: 100%;
-                }
-            }
-
-            /* Media query for screens larger than 768px */
-            @media (min-width: 768px) {
-                .container-splash-section {
-                    display: flex;
-                    /* justify-content: space-between; */
+                .text-shadow-1 {
+                    text-shadow: 0 .125rem .25rem rgba(0, 0, 0, .25);
                 }
 
-                .row {
-                    display: flex;
-                    justify-content: space-between;
+                .text-shadow-2 {
+                    text-shadow: 0 .25rem .5rem rgba(0, 0, 0, .25);
                 }
 
-                .col-md-6 {
-                    width: 48%;
+                .text-shadow-3 {
+                    text-shadow: 0 .5rem 1.5rem rgba(0, 0, 0, .25);
                 }
-            }
-        </style>
 
-        <script>
-            // Function to redirect to the Flappy Orca page
-            function redirectToFlappyOrca() {
-                window.location.href = '/flappy-orca/flappy-orca.html';
-            }
-        </script>
+                .card-cover {
+                    background-repeat: no-repeat;
+                    background-position: center center;
+                    background-size: cover;
+                }
+
+                .feature-icon-small {
+                    width: 3rem;
+                    height: 3rem;
+                }
+            </style>
