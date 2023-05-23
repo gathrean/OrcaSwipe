@@ -33,13 +33,6 @@ const setup = () => {
     $('.see-details').on('click', function (e) {
         var podName = $(this).attr('id');
         var pod = findPod(pods, podName);
-        var tags = Object.keys(pod.tags);
-        for (var i = 0; i < tags.length; i++) {
-            if (!pod.tags[tags[i]]) {
-                tags.splice(i, 1);
-                i--;
-            }
-        }
         $('.modal-title').empty().append(`<b>${podName}<b>`);
         $('.modal-body').empty().append(`
             <img src="${pod.image}" style="width:90%; height:auto;">
@@ -48,7 +41,7 @@ const setup = () => {
             <br>
             <div><b>Tags</b></div>
             <ul>
-                ${tags.map((tag) => { return `<li>${tag}</li>` }).join('')}
+                ${pod.tags.map((pod) => { return `<li>${pod.tag}</li>` }).join('')}
             </ul>
             <div><b>Number of Attendees:</b> ${pod.attenders.length}</div>
             <div><b>Location</b></div>
