@@ -1,4 +1,6 @@
 <%- include("templates/header") %>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 
 <div class="user-profile form">
   <div class="profile-photo">
@@ -59,18 +61,26 @@
 
     <br>
     <label>Your Pod Tags </label>
-    <div id="interests">
-      <% const interests = ['outdoors', 'video games', 'reading', 'cooking', 'music', 'sports', 'art', 'travel', 'coding', 'photography']; %>
+    <select id="interests-select" multiple="multiple" name="interests">
+      <% const interests = ['Ocean Clean-up', 'Volunteer', 'Charity', 'Black Lives Matter', 'Clothing drive', 'Blood drive', 'Art', 'Cancer Walk', 'Travel', 'Photography']; %>
       <% interests.forEach((interest, index) => { %>
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="<%= interest %>" id="interest<%= index %>"
-          name="interests" <%= user.interests && user.interests.includes(interest) ? 'checked' : '' %>>
-        <label class="form-check-label" for="interest<%= index %>">
-          <%= interest %>
-        </label>
-      </div>
+      <option value="<%= interest %>" <%= user.interests && user.interests.includes(interest) ? 'selected' : '' %>><%= interest %></option>
       <% }) %>
-    </div>
+    </select>
+    
+    <script>
+      $(document).ready(function() {
+          $('#interests-select').select2({
+              placeholder: "Select interests",
+              allowClear: true,
+              closeOnSelect : false,
+              tags: true
+          });
+      });
+      </script>
+      
+</div>
+
 
   </form>
 
