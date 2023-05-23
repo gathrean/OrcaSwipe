@@ -27,7 +27,7 @@
 
     <link rel="stylesheet" href="/style/splash-style.css">
     <script>
-      var errorMessage = <%- JSON.stringify(errorMessage) %>;
+      var errorMessage = <%- (typeof errorMessage != 'undefined') ? JSON.stringify(errorMessage) : undefined %>
       this.addEventListener('load', () => {
         if (errorMessage){
           window.alert(errorMessage);
