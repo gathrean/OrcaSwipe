@@ -1,7 +1,7 @@
 /*Based on code from Rob Vermeer at https://codepen.io/RobVermeer/pen/japZpY */
 
 .tinder {
-  width: 100vw;
+  /* width: 100vw; */
   height: 75vh;
   display: grid;
   grid-template-rows: 90% 10%;
