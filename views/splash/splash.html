@@ -2,15 +2,15 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- FAVICON -->
     <link rel="icon" type="image/png"
         href="https://cdn.discordapp.com/attachments/828116217285836825/1107541475576791100/favicon-32x32.png">
-    <title>Welcome to OrcaSwipe</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <!-- TITLE -->
+    <title>Welcome to OrcaSwipe</title>
 
 
     <style>
@@ -75,6 +75,37 @@
             text-align: center;
             font-size: 24px;
             margin-bottom: 40px;
+        }
+
+        .navbar-button {
+            padding: 10px 10px;
+            margin: 0px 10px;
+            /* font-size: 12px; */
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 90px;
+            border-radius: 20px;
+        }
+
+        .navbar-button.join {
+            background-color: white;
+            color: #134ACC;
+        }
+
+        .navbar-button.join:hover {
+            background-color: #4676EE;
+            color: white;
+        }
+
+        .navbar-button.login {
+            background-color: #22272a;
+            color: white;
+        }
+
+        .navbar-button.login:hover {
+            background-color: #4676EE;
+            color: white;
         }
 
         .splash-button {
@@ -160,7 +191,11 @@
             width: 100%;
         }
 
-        .nav-item:hover{
+        .nav-item {
+            color: white;
+        }
+
+        .nav-item:hover {
             text-decoration: underline;
             color: white;
         }
@@ -285,53 +320,28 @@
         }
     </style>
 
-    <script>
-        // Function to redirect to the Flappy Orca page
-        function redirectToFlappyOrca() {
-            window.location.href = '/flappy-orca/flappy-orca.html';
-        }
-    </script>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 </head>
 
 <body>
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="">
+        <div class="container-fluid d-flex justify-content-between">
+
+            <a class="navbar-brand" href="#">
                 <img
                     src="https://cdn.discordapp.com/attachments/828116217285836825/1110053979540430969/OrcaSwipe_Header_Logo.png">
             </a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
-                aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarText">
-                <ul class="nav justify-content-around">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Features</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">FAQs</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Review</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Contact Us</a>
-                    </li>
-                </ul>
+            <div class="d-flex">
+                <button href="/" class="navbar-button join">JOIN</button>
+                <button href="/" class="navbar-button login">LOG IN</button>
             </div>
 
         </div>
     </nav>
+
 
     <!-- HEADER -->
     <div class="splash-container c">
@@ -578,7 +588,7 @@
     <!-- CALL TO ACTION -->
     <div class="call-to-action-container">
         <div class="splash-text">
-            <h1 class="splash-heading">Ready to start your journey?</h1>
+            <h1 class="splash-heading">Ready to dive in?</h1>
             <div class="action-container">
                 <button href="/" class="splash-button join shadow">JOIN NOW</button>
             </div>
@@ -586,15 +596,33 @@
     </div>
 
     <footer class="footer py-3" style="width: 100%;">
-        <ul class="nav justify-content-center pb-3 mb-3">
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Features</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">About</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">FAQs</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Review</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Contact Us</a></li>
+        <ul class="nav justify-content-center pb-3 mb-3" style="color:white;">
+            <li class="nav-item"><a href="#" class="nav-link px-2">Features</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-2">About</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-2">FAQs</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-2">Review</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-2">Contact Us</a></li>
         </ul>
         <p class="text-center" style="color:white; font-weight: bold;">© 2023 ALOE - Team BBY-38</p>
     </footer>
+
+    <script>
+        // Function to redirect to the Flappy Orca page
+        function redirectToFlappyOrca() {
+            window.location.href = '/flappy-orca/flappy-orca.html';
+        }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"
+        integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"
+        integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ"
+        crossorigin="anonymous"></script>
 </body>
 
 </html>
