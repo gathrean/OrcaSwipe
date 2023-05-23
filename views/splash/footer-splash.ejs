@@ -14,6 +14,28 @@
     function redirectToFlappyOrca() {
         window.location.href = '/flappy-orca/flappy-orca.html';
     }
+
+    function reveal() {
+        var reveals = document.querySelectorAll(".reveal");
+        for (var i = 0; i < reveals.length; i++) {
+            var windowHeight = window.innerHeight;
+            var elementTop = reveals[i].getBoundingClientRect().top;
+            var elementVisible = 150;
+
+            if (elementTop < windowHeight - elementVisible && elementTop > -reveals[i].offsetHeight) {
+                reveals[i].classList.add("active");
+            } else {
+                reveals[i].classList.remove("active");
+            }
+        }
+    }
+
+    window.addEventListener("scroll", reveal);
+
+    // To check the scroll position on page load
+    reveal();
+
+
 </script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

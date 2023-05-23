@@ -40,6 +40,7 @@ body {
     align-items: center;
     color: #fff;
     padding: 5% 10% 20% 10%;
+    height: 100vh;
 }
 
 .call-to-action-container {
@@ -279,50 +280,14 @@ body {
     }
 }
 
-.animate-pod1 {
+.reveal {
+    position: relative;
+    transform: translatex(-50px);
     opacity: 0;
-    transform: translateX(-50px);
-    animation: swipe-right-and-fade-in 0.5s ease 1s forwards;
+    transition: 0.5s all ease;
 }
 
-.animate-pod2 {
-    opacity: 0;
-    transform: translateX(-50px);
-    animation: swipe-left-and-fade-in 0.5s ease 2s forwards;
-}
-
-.animate-pod3 {
-    opacity: 0;
-    transform: translateX(-50px);
-    animation: swipe-right-and-fade-in 0.5s ease 3s forwards;
-}
-
-.animate-pod4 {
-    opacity: 0;
-    transform: translateX(-50px);
-    animation: swipe-left-and-fade-in 0.5s ease 4s forwards;
-}
-
-@keyframes swipe-right-and-fade-in {
-    from {
-        opacity: 0;
-        transform: translateX(-50px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-@keyframes swipe-left-and-fade-in {
-    from {
-        opacity: 0;
-        transform: translateX(50px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
+.reveal.active {
+    transform: translateY(0);
+    opacity: 1;
 }
