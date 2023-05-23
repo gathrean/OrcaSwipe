@@ -87,10 +87,9 @@
     <script>
       var errorMessage = <%- (typeof errorMessage != 'undefined') ? JSON.stringify(errorMessage) : undefined %>
       this.addEventListener('load', () => {
-        setTimeout(() => {if (errorMessage){
-          window.alert(errorMessage);
-        }}, 500)
-      })
+        if (errorMessage){
+          setTimeout(() => {window.alert(errorMessage);}, 500)
+        }});
     </script>
 </head>
 
