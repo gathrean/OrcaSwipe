@@ -34,7 +34,9 @@
         </select>
     </div>
 
-    <label class="form-label">You must join at least one recommended Orca-Approved pod. You can edit this later.</label>
+    <label class="form-label">Discover some of our recommended Orca-approved pod tags below. Join us in our mission to bring
+        together like-minded individuals to make a difference in the community.
+    </label>
     <div id="interests-buttons">
         <% interests.forEach((interest, index) => { %>
             <button type="button" class="interest-button <%= user.interests && user.interests.includes(interest) ? 'selected' : '' %>" data-interest="<%= interest %>"><%= interest %></button>
@@ -76,7 +78,7 @@
 <script>
     $(document).ready(function () {
         $('#interests-select').select2({
-            placeholder: "Select interests",
+            placeholder: "Select interests or type to add your own",
             allowClear: true,
             closeOnSelect : false,
             tags: true
