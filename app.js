@@ -308,6 +308,7 @@ app.post("/signup", async (req, res) => {
     password: Joi.string().min(6).max(50).required(),
   });
   const validationResult = schema.validate(req.body);
+  usersCollection.createIndex({ "email" : 1 }, { unique : true });
 
   if (validationResult.error) {
     res.status(400).send(validationResult.error.details[0].message + "<br><a href='/signup'>Go back to sign up</a>");
@@ -330,7 +331,11 @@ app.post("/signup", async (req, res) => {
       req.session.email = newUser.email;
       res.redirect("/editProfile");
     } catch (error) {
+      if (error.code == 11000){
+        res.send(`<div>This email is already in use.</div><a id="retry" href="/signup"Try Again</a>`);
+      } else {
       res.status(500).send("Error signing up.");
+      }
     }
   }
 });
