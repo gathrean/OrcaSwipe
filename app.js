@@ -245,8 +245,102 @@ app.post('/sendResetEmail', async (req, res) => {
         from: appEmail,
         to: email,
         subject: 'OrcaSwipe - Reset Your Password',
-        html: `<a href="${target}">Reset Your Password</a>`
+        html: `
+        <html>
+          <head>
+            <style>
+              /* Add your CSS styles here */
 
+              body {
+                background: linear-gradient(360deg, #4676EE, #134ACC);
+                font-family: 'Montserrat', sans-serif;
+                display: flex;
+                flex-direction: column;
+                height: 50vh;
+                width: 50vw;
+                font-size: 16px;
+                ;
+              }
+
+              h1 {
+                color: white;
+                font-size: 24px;
+                font-weight: bold;
+                display: flex;
+                align-items: center;
+              }
+
+              p {
+                color: white;
+                font-size: 16px;
+              }
+
+              a {
+                display: inline-block;
+                padding: 10px 20px;
+                background-color: #007bff;
+                color: #fff;
+                text-decoration: none;
+                border-radius: 4px;
+              }
+
+              .btn {
+                display: inline-block;
+                padding: 10px 20px;
+                border: 2px solid white;
+                border-radius: 50px;
+                color: white;
+                background-color: transparent;
+                font-size: 13px;
+                text-decoration: none;
+                cursor: pointer;
+                transition: background-color 0.3s ease, color 0.3s ease;
+                width: 200px;
+              }
+            
+              .btn:hover {
+                  background-color: rgba(0, 0, 0, 0.75);
+                  color: white;
+              }
+            
+              .white-button {
+                  color: #134ACC;
+                  background: white;
+                  border-color: #cfd1d3;
+                  width: min-content;
+              }
+
+              .navbar {
+                display: flex;
+                justify-content: center;
+                background: linear-gradient(360deg, #134ACC, #134ACC);
+                width: 100%;
+                padding: 10px 20px 10px 20px;
+            }
+              .navbar-brand img {
+                height: 30px;
+                width: auto;
+              } 
+            </style>
+          </head>
+          <body>
+            <div class="navbar-brand">
+                <img
+                    src="https://cdn.discordapp.com/attachments/828116217285836825/1110053979540430969/OrcaSwipe_Header_Logo.png">
+            </div>
+
+            <h1>Did you change your password?</h1>
+
+            <p>
+              We noticed the password for your OrcaSwipe account was recently changed. 
+              <br><br>
+              If you didn't make this change, you can ignore this message.
+            </p>
+            <hr>
+            <a class="btn blue-button" href="${target}">Reset Your Password</a>
+          </body>
+        </html>
+        `
       };
       await usersCollection.updateOne(
         { email: email },
@@ -308,7 +402,7 @@ app.post("/signup", async (req, res) => {
     password: Joi.string().min(6).max(50).required(),
   });
   const validationResult = schema.validate(req.body);
-  usersCollection.createIndex({ "email" : 1 }, { unique : true });
+  usersCollection.createIndex({ "email": 1 }, { unique: true });
 
   if (validationResult.error) {
     res.status(400).send(validationResult.error.details[0].message + "<br><a href='/signup'>Go back to sign up</a>");
@@ -331,10 +425,10 @@ app.post("/signup", async (req, res) => {
       req.session.email = newUser.email;
       res.redirect("/editProfile");
     } catch (error) {
-      if (error.code == 11000){
+      if (error.code == 11000) {
         res.send(`<div>This email is already in use.</div><a id="retry" href="/signup"Try Again</a>`);
       } else {
-      res.status(500).send("Error signing up.");
+        res.status(500).send("Error signing up.");
       }
     }
   }
@@ -500,18 +594,18 @@ app.post("/pod/:podId/upvote", async (req, res) => {
   if (!req.session.loggedIn) {
     return res.status(403).send("You must be logged in to vote.<br><a href='/'>Go back to home page</a>")
   }
-  
+
   const user = await usersCollection.findOne({ email: req.session.email });
   const podId = req.params.podId;
-  
+
   if (!user) {
     return res.status(404).send('User not found');
   }
-  
+
   try {
-    await podsCollection.updateOne({ _id: new ObjectId(podId) }, { 
-      $addToSet: { upvotes: user._id }, 
-      $pull: { downvotes: user._id } 
+    await podsCollection.updateOne({ _id: new ObjectId(podId) }, {
+      $addToSet: { upvotes: user._id },
+      $pull: { downvotes: user._id }
     });
     res.status(200).send();
   } catch (error) {
@@ -523,18 +617,18 @@ app.post("/pod/:podId/downvote", async (req, res) => {
   if (!req.session.loggedIn) {
     return res.status(403).send("You must be logged in to vote.<br><a href='/'>Go back to home page</a>")
   }
-  
+
   const user = await usersCollection.findOne({ email: req.session.email });
   const podId = req.params.podId;
-  
+
   if (!user) {
     return res.status(404).send('User not found');
   }
-  
+
   try {
-    await podsCollection.updateOne({ _id: new ObjectId(podId) }, { 
-      $addToSet: { downvotes: user._id }, 
-      $pull: { upvotes: user._id } 
+    await podsCollection.updateOne({ _id: new ObjectId(podId) }, {
+      $addToSet: { downvotes: user._id },
+      $pull: { upvotes: user._id }
     });
     res.status(200).send();
   } catch (error) {
@@ -634,34 +728,34 @@ app.post("/createpod", upload.single('image'), async (req, res) => {
       console.log(`${req.file.filename} uploaded to Firebase.`);
     } // No need for an else block because image is already defined as an empty string
 
-   // Create an array of checked interests.
-   let tags = []
-   if (req.body.interests) {
-       tags = Array.isArray(req.body.interests) ? req.body.interests : [req.body.interests];
-   }
-   
+    // Create an array of checked interests.
+    let tags = []
+    if (req.body.interests) {
+      tags = Array.isArray(req.body.interests) ? req.body.interests : [req.body.interests];
+    }
+
 
     const creator = req.session.email;
     let attenders = [];
     let upvotes = []; // Empty array for upvotes
     let downvotes = []; // Empty array for downvotes
-    const newPod = { name, tags, eventDescription, attenders, creator, location, image, upvotes, downvotes }; 
+    const newPod = { name, tags, eventDescription, attenders, creator, location, image, upvotes, downvotes };
 
-   // Adjust the Joi validation schema.
-   const schema = Joi.object({
-     name: Joi.string().required(),
-     tags: Joi.array().items(Joi.string()), 
-     eventDescription: Joi.string().required(),
-     attenders: Joi.array(),
-     creator: Joi.string(),
-     location: Joi.object({
-       lat: Joi.number().required(),
-       lng: Joi.number().required()
-     }),
-     image: Joi.string().uri(),  // validates image as a URL
-     upvotes: Joi.array(), // Validates upvotes as an array
-     downvotes: Joi.array() // Validates downvotes as an array
-   });
+    // Adjust the Joi validation schema.
+    const schema = Joi.object({
+      name: Joi.string().required(),
+      tags: Joi.array().items(Joi.string()),
+      eventDescription: Joi.string().required(),
+      attenders: Joi.array(),
+      creator: Joi.string(),
+      location: Joi.object({
+        lat: Joi.number().required(),
+        lng: Joi.number().required()
+      }),
+      image: Joi.string().uri(),  // validates image as a URL
+      upvotes: Joi.array(), // Validates upvotes as an array
+      downvotes: Joi.array() // Validates downvotes as an array
+    });
 
 
     const validationResult = schema.validate(newPod);
@@ -737,11 +831,11 @@ app.get('/getPods', async (req, res) => {
   let pods;
 
   // Prepare a query where at least one tag from the list overlaps with user's interests
-    pods = await podsCollection.find({
-      name: { $nin: attendedPods.map(pod => pod.name) },
-      tags: { $in: userInterests }
-    }).toArray();
-  
+  pods = await podsCollection.find({
+    name: { $nin: attendedPods.map(pod => pod.name) },
+    tags: { $in: userInterests }
+  }).toArray();
+
   // console.log(pods.length);
   for (var i = 0; i < pods.length; i++) {
     pods[i] = JSON.stringify(pods[i]);
@@ -778,8 +872,12 @@ app.post("/pod/:podId/leave", async (req, res) => {
       if (user) {
         await podsCollection.updateOne(
           { _id: new ObjectId(podId) },
-          { $pull: { attenders: user._id,upvotes: user._id,
-            downvotes: user._id } }
+          {
+            $pull: {
+              attenders: user._id, upvotes: user._id,
+              downvotes: user._id
+            }
+          }
         );
         await usersCollection.updateOne(
           { _id: new ObjectId(user._id) },
