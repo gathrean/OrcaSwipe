@@ -134,6 +134,7 @@ for (var i = 0; i < pods.length; i++) {
                     <h3>${pods[i].name}</h3>
                     <p>${pods[i].eventDescription}</p>
                     <p>Tags: ${tags.join(', ')}</p>
+                    <p>OrcaScore: ${pods[i].upvotes - pods[i].downvotes}</p>
                 </div>`;
     $('#stack').append(card); // Appending the card to the stack
 }
