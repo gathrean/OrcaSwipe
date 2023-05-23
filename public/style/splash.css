@@ -291,3 +291,31 @@ body {
     transform: translateY(0);
     opacity: 1;
 }
+
+
+/******** SCROLL BAR ****** */
+
+/* Target the scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+    border-radius: 5px;
+    /* Set the width of the scrollbar */
+}
+
+/* Track styles (the area behind the thumb) */
+::-webkit-scrollbar-track {
+    background: #134ACC;
+    opacity: 0.1;
+}
+
+/* Thumb styles (the draggable handle) */
+::-webkit-scrollbar-thumb {
+    background: #ffffff;
+    /* Set the background color of the thumb */
+}
+
+/* Hover styles for the thumb */
+::-webkit-scrollbar-thumb:hover {
+    background: #4676EE;
+    /* Set the background color of the thumb on hover */
+}
