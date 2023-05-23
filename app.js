@@ -871,7 +871,13 @@ app.post("/updateProfile", upload.single('profilePhoto'), async (req, res) => {
           res.status(401).send("User not found.<br><a href='/editProfile'>Go back to edit profile</a>");
         }
       } catch (error) {
-        res.status(500).send("Error updating profile.<br><a href='/editProfile'>Go back to edit profile</a>");
+        const user = await usersCollection.findOne({ email: req.session.email });
+        if (error.code == 11000){
+          var problemField = Object.keys(error.keyValue);
+          res.render('editProfile', {errorMessage: `${problemField} is already in use.`, user: user});
+        } else {
+          res.render('editProfile', {errorMessage: 'Error updating profile.', user: user});
+        }
       }
     }
   } else {
