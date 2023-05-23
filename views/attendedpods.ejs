@@ -72,8 +72,7 @@
                                         data-bs-toggle="modal" data-bs-target="#pod-details">See details</button>
                                     <button class="btn blue-button show-attenders" data-pod-id="<%= pod._id %>">Who's
                                         going?</button>
-                                    <button class="btn red-button leave-pod" data-pod-id="<%= pod._id %>">Leave
-                                        pod</button>
+                                        <button class="btn red-button leave" data-pod-id="<%= pod._id %>" data-bs-toggle="modal" data-bs-target="#pod-details">Leave pod</button>
                                         <button class="btn upvote <% if(pod.upvotes.includes(user._id)) { %>voted<% } %>" data-pod-id="<%= pod._id %>">Upvote (<span class="upvotes-count"><%= pod.upvotes.length %></span>)</button>
                                         <button class="btn downvote <% if(pod.downvotes.includes(user._id)) { %>voted<% } %>" data-pod-id="<%= pod._id %>">Downvote (<span class="downvotes-count"><%= pod.downvotes.length %></span>)</button>
 
@@ -111,6 +110,21 @@
                         modal.style.display = "block";
                     });
                 });
+
+                $('.leave').on('click', function () {
+    let podId = $(this).attr('data-pod-id');
+    $('.modal-title').empty().append(`<b>Are you sure to leave?<b>`);
+    $('.modal-body').empty().append(`
+        <div>Leave this pod?</div>
+        <form action='/pod/${podId}/leave' method='post'>
+        <input name="podID" type='hidden' value='${podId}'>
+        <button type="submit" id="confirm-leave" class="btn blue-button" data-pod-id="${podId}">
+            Confirm
+        </button>
+        </form>
+    `)
+});
+
 
             // When the user clicks on <span> (x), close the modal
             document.querySelector('.close').addEventListener('click', function () {

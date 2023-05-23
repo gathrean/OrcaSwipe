@@ -558,13 +558,6 @@ app.get("/createdpods", async (req, res) => {
 });
 
 app.post('/deletePod', async (req, res) => {
-  // const documents = await usersCollection.find({}).toArray();
-  // await testUsersCollection.deleteMany();
-  // await testUsersCollection.insertMany(documents);
-
-  // const podDocs = await podsCollection.find({}).toArray();
-  // await testPodsCollection.deleteMany();
-  // await testPodsCollection.insertMany(podDocs);
 
   const schema = Joi.object({
     id: Joi.string().hex().length(24)
@@ -792,6 +785,7 @@ app.post("/pod/:podId/leave", async (req, res) => {
           { _id: new ObjectId(user._id) },
           { $pull: { eventsAttended: { _id: podId } } }
         );
+        res.redirect("/attendedPods");  // Add this line
         res.status(200).send();
       } else {
         res.status(404).send('User not found');
