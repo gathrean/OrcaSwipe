@@ -49,11 +49,6 @@ const bucket = admin.storage().bucket();
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
 
-
-///// Interests defined to be shared across both client and server side /////
-const interests = ['outdoors', 'video games', 'reading', 'cooking', 'music', 'sports', 'art', 'travel', 'coding', 'photography'];
-
-
 // Environment variables
 const mongodb_user = process.env.MONGODB_USER;
 const mongodb_password = process.env.MONGODB_PASSWORD;
