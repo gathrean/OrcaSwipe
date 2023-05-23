@@ -673,7 +673,7 @@ app.post("/createpod", upload.single('image'), async (req, res) => {
     } else {
       try {
         const result = await podsCollection.insertOne(newPod);
-        res.redirect("/attendedPods");
+        res.redirect("/createdPods");
       } catch (error) {
         res.status(500).send("Error creating pod.<br><a href='/createpod'>Go back</a>");
       }
