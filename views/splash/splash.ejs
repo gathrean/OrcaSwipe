@@ -37,7 +37,7 @@
                     of a finger.</p>
                 <div class="action-container">
                     <button href="/" class="splash-button join shadow">JOIN NOW</button>
-                    <button href="/" class="splash-button login shadow">LOG BACK IN</button>
+                    <button href="/" class="splash-button login shadow">LOG IN</button>
                 </div>
             </div>
         </div>
@@ -83,8 +83,10 @@
                     <div class="feature col">
                         <div
                             class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
-                            <svg class="bi" width="1em" height="1em">
-                                <use xlink:href="#collection"></use>
+                            <svg class="sidebar__icon" xmlns="http://www.w3.org/2000/svg" width="80%" height="80%"
+                                fill="none" viewBox="0 0 24 24">
+                                <!-- Add your SVG icon code here -->
+                                <%- include("../icons/find") %>
                             </svg>
                         </div>
 
@@ -138,8 +140,10 @@
                     <div class="feature col">
                         <div
                             class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
-                            <svg class="bi" width="1em" height="1em">
-                                <use xlink:href="#people-circle"></use>
+                            <svg class="sidebar__icon" xmlns="http://www.w3.org/2000/svg" width="80%" height="80%"
+                                fill="none" viewBox="0 0 24 24">
+                                <!-- Add your SVG icon code here -->
+                                <%- include("../icons/host") %>
                             </svg>
                         </div>
                         <h3 class="fs-2">Host Pods</h3>
@@ -195,8 +199,10 @@
                     <div class="feature col">
                         <div
                             class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
-                            <svg class="bi" width="1em" height="1em">
-                                <use xlink:href="#toggles2"></use>
+                            <svg class="sidebar__icon" xmlns="http://www.w3.org/2000/svg" width="80%" height="80%"
+                                fill="none" viewBox="0 0 24 24">
+                                <!-- Add your SVG icon code here -->
+                                <%- include("../icons/love") %>
                             </svg>
                         </div>
                         <h3 class="fs-2">Saved Pods</h3>
@@ -221,8 +227,8 @@
 
                     <!-- Chat -->
                     <div class="col d-flex align-items-start">
-                        <svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em">
-                            <use xlink:href="#cpu-fill"></use>
+                        <svg class="bi text-body-secondary flex-shrink-0 me-3"  width="3em" height="3em">
+                            <%- include("../icons/pods") %>
                         </svg>
                         <div>
                             <h3 class="fw-bold mb-0 fs-4">Communication</h3>
@@ -232,8 +238,8 @@
 
                     <!-- OrcaScore -->
                     <div class="col d-flex align-items-start">
-                        <svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em">
-                            <use xlink:href="#home"></use>
+                        <svg class="bi text-body-secondary flex-shrink-0 me-3"  width="3em" height="3em">
+                            <%- include("../icons/tree") %>
                         </svg>
                         <div>
                             <h3 class="fw-bold mb-0 fs-4">OrcaScore</h3>
@@ -243,8 +249,8 @@
 
                     <!-- Personalization -->
                     <div class="col d-flex align-items-start">
-                        <svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em">
-                            <use xlink:href="#bootstrap"></use>
+                        <svg class="bi text-body-secondary flex-shrink-0 me-3"  width="3em" height="3em">
+                            <%- include("../icons/profile") %>
                         </svg>
                         <div>
                             <h3 class="fw-bold mb-0 fs-4">Personalization</h3>
@@ -254,8 +260,8 @@
 
                     <!-- Reporting -->
                     <div class="col d-flex align-items-start">
-                        <svg class="bi text-body-secondary flex-shrink-0 me-3" width="1.75em" height="1.75em">
-                            <use xlink:href="#calendar3"></use>
+                        <svg class="bi text-body-secondary flex-shrink-0 me-3"  width="3em" height="3em">
+                            <%- include("../icons/report") %>
                         </svg>
                         <div>
                             <h3 class="fw-bold mb-0 fs-4">Reporting</h3>
@@ -280,3 +286,40 @@
 
 
         <%- include("footer-splash") %>
+
+            <style>
+                .feature-icon {
+                    width: 4rem;
+                    height: 4rem;
+                    border-radius: .75rem;
+                }
+
+                .icon-square {
+                    width: 3rem;
+                    height: 3rem;
+                    border-radius: .75rem;
+                }
+
+                .text-shadow-1 {
+                    text-shadow: 0 .125rem .25rem rgba(0, 0, 0, .25);
+                }
+
+                .text-shadow-2 {
+                    text-shadow: 0 .25rem .5rem rgba(0, 0, 0, .25);
+                }
+
+                .text-shadow-3 {
+                    text-shadow: 0 .5rem 1.5rem rgba(0, 0, 0, .25);
+                }
+
+                .card-cover {
+                    background-repeat: no-repeat;
+                    background-position: center center;
+                    background-size: cover;
+                }
+
+                .feature-icon-small {
+                    width: 3rem;
+                    height: 3rem;
+                }
+            </style>
