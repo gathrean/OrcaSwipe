@@ -139,6 +139,7 @@
         .h3 {
             font-weight: bolder;
         }
+
         /* Adjustments for smaller screens */
         @media (max-width: 768px) {
             .splash-container {
@@ -228,6 +229,12 @@
             animation: swipe-right-and-fade-in 0.5s ease 3s forwards;
         }
 
+        .animate-pod4 {
+            opacity: 0;
+            transform: translateX(-50px);
+            animation: swipe-left-and-fade-in 0.5s ease 4s forwards;
+        }
+
         @keyframes swipe-right-and-fade-in {
             from {
                 opacity: 0;
@@ -300,7 +307,7 @@
     </nav>
 
     <!-- HEADER -->
-    <div class="splash-container">
+    <div class="splash-container c">
         <!-- Orca! -->
         <div class="animate-orca">
             <img onclick="redirectToFlappyOrca()"
@@ -314,17 +321,16 @@
             <p class="splash-caption">Uncover hidden gems in your city and grow lasting communities with the swipe
                 of a finger.</p>
             <div class="action-container">
-                <button href="/" class="splash-button join">JOIN NOW</button>
-                <button href="/" class="splash-button login">LOG BACK IN</button>
+                <button href="/" class="splash-button join shadow">JOIN NOW</button>
+                <button href="/" class="splash-button login shadow">LOG BACK IN</button>
             </div>
         </div>
     </div>
 
     <div class="features-container container px-4 py-2" id="custom-cards">
-        <!-- <h2 class="pb-2 border-bottom">Our Core Features</h2> -->
-
         <!-- Finding Pods -->
-        <div class="row row-cols-1 row-cols-lg-2 align-items-stretch g-4 py-5 animate-pod1" style="padding: 20px;">
+        <div class="row row-cols-1 row-cols-lg-2 align-items-stretch g-4 py-5 animate-pod1 shadow p-3 mb-5 bg-body-tertiary"
+            style="background-color: #f6f6f6; border-radius: 50px; padding: 20px;">
             <!-- IMAGE CARD -->
             <div class="col">
                 <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg my-card" style="background-image: url('https://images.unsplash.com/photo-1444210971048-6130cf0c46cf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1473&q=80');
@@ -366,7 +372,7 @@
 
                 <h3 class="fs-2">Find Pods</h3>
                 <h4>
-                    Explore an Array of New Pods Tailored to Your Interests
+                    Explore New Pods that match your Interests
                 </h4>
                 <p>
                     Swipe right on the Discover page to join Pods that
@@ -378,7 +384,7 @@
         </div>
 
         <!-- HOST PODS -->
-        <div class="backwards-row row row-cols-1 row-cols-lg-2 align-items-stretch g-4 py-5 animate-pod2"
+        <div class="backwards-row row row-cols-1 row-cols-lg-2 align-items-stretch g-4 py-5 animate-pod2 shadow p-3 mb-5 bg-body-tertiary"
             style="background-color: #f6f6f6; border-radius: 50px; padding: 20px;">
             <!-- IMAGE CARD -->
             <div class="col">
@@ -420,7 +426,7 @@
                 </div>
                 <h3 class="fs-2">Host Pods</h3>
                 <h4>
-                    Connect with the Ideal Audience for Your Event
+                    Connect with the Ideal Audience
                 </h4>
                 <p>
                     Attract the perfect audience to your event by adding relevant tags to your Pod. OrcaSwipe will
@@ -432,7 +438,8 @@
         </div>
 
         <!-- Saving Pods -->
-        <div class="row row-cols-1 row-cols-lg-2 align-items-stretch g-4 py-5 animate-pod3" style="padding: 20px;">
+        <div class="row row-cols-1 row-cols-lg-2 align-items-stretch g-4 py-5 animate-pod3 shadow p-3 mb-5 bg-body-tertiary"
+            style="background-color: #f6f6f6; border-radius: 50px; padding: 20px;">
             <!-- IMAGE CARD -->
             <div class="col">
                 <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg" style="background-image: url('https://images.unsplash.com/photo-1506452601243-1add60811bfd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'); 
@@ -487,7 +494,7 @@
     </div>
 
     <!-- OTHER FEATURES -->
-    <div class="container px-4 py-5" id="icon-grid" style="background-color: #f6f6f6; border-radius: 50px;">
+    <div class="container px-4 py-5 shadow p-3 mb-5 bg-body-tertiary animate-pod4" id="icon-grid" style="background-color: #f6f6f6; border-radius: 50px;">
         <!-- <h2 class="pb-2 border-bottom">We also have</h2> -->
 
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 py-5">
@@ -538,12 +545,14 @@
         </div>
     </div> <br><br>
 
+    <!-- REVIEWS -->
+
     <!-- CALL TO ACTION -->
     <div class="splash-container">
         <div class="splash-text">
             <h1 class="splash-heading">Ready to start your journey?</h1>
             <div class="action-container">
-                <button href="/" class="splash-button join">JOIN NOW</button>
+                <button href="/" class="splash-button join shadow">JOIN NOW</button>
             </div>
         </div> <br><br>
 
