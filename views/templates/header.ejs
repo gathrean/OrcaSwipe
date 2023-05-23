@@ -84,6 +84,13 @@
       /* Additional styling for the sidebar */
     }
   </style>
+    <script>
+      var errorMessage = <%- (typeof errorMessage != 'undefined') ? JSON.stringify(errorMessage) : undefined %>
+      this.addEventListener('load', () => {
+        if (errorMessage){
+          setTimeout(() => {window.alert(errorMessage);}, 500)
+        }});
+    </script>
 </head>
 
 <body>
