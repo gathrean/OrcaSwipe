@@ -35,10 +35,13 @@
                 <h1 class="splash-heading">Discover, Host, and Link Up</h1>
                 <p class="splash-caption">Uncover hidden gems in your city and grow lasting communities with the swipe
                     of a finger.</p>
-                <div class="action-container">
-                    <button href="/" class="splash-button join shadow">JOIN NOW</button>
-                    <button href="/" class="splash-button login shadow">LOG IN</button>
-                </div>
+                <form method="POST" action="/splash">
+                    <div class="action-container">
+                        <button href="/" class="splash-button join shadow" name="action" value="signup">JOIN
+                            NOW</button>
+                        <button href="/" class="splash-button login shadow" name="action" value="login">LOG IN</button>
+                    </div>
+                </form>
             </div>
         </div>
 
@@ -99,7 +102,7 @@
                             align
                             with your passions and captivate your curiosity.
                         </p>
-                        <a href="#" class="icon-link">Join now</a>
+                        <a href="/signup" class="icon-link">Join now</a>
                     </div>
                 </div>
 
@@ -157,7 +160,7 @@
                             right
                             people.
                         </p>
-                        <a href="#" class="icon-link">Join now</a>
+                        <a href="/signup" class="icon-link">Join now</a>
                     </div>
                 </div>
 
@@ -218,7 +221,7 @@
                             Pod
                             members, ensuring you stay connected and well-informed.
                         </p>
-                        <a href="#" class="icon-link">Join now</a>
+                        <a href="/signup" class="icon-link">Join now</a>
                     </div>
                 </div>
 
@@ -227,7 +230,7 @@
 
                     <!-- Chat -->
                     <div class="col d-flex align-items-start">
-                        <svg class="bi text-body-secondary flex-shrink-0 me-3"  width="3em" height="3em">
+                        <svg class="bi text-body-secondary flex-shrink-0 me-3" width="3em" height="3em">
                             <%- include("../icons/pods") %>
                         </svg>
                         <div>
@@ -238,7 +241,7 @@
 
                     <!-- OrcaScore -->
                     <div class="col d-flex align-items-start">
-                        <svg class="bi text-body-secondary flex-shrink-0 me-3"  width="3em" height="3em">
+                        <svg class="bi text-body-secondary flex-shrink-0 me-3" width="3em" height="3em">
                             <%- include("../icons/tree") %>
                         </svg>
                         <div>
@@ -249,7 +252,7 @@
 
                     <!-- Personalization -->
                     <div class="col d-flex align-items-start">
-                        <svg class="bi text-body-secondary flex-shrink-0 me-3"  width="3em" height="3em">
+                        <svg class="bi text-body-secondary flex-shrink-0 me-3" width="3em" height="3em">
                             <%- include("../icons/profile") %>
                         </svg>
                         <div>
@@ -260,7 +263,7 @@
 
                     <!-- Reporting -->
                     <div class="col d-flex align-items-start">
-                        <svg class="bi text-body-secondary flex-shrink-0 me-3"  width="3em" height="3em">
+                        <svg class="bi text-body-secondary flex-shrink-0 me-3" width="3em" height="3em">
                             <%- include("../icons/report") %>
                         </svg>
                         <div>
@@ -278,9 +281,14 @@
         <div class="call-to-action-container">
             <div class="splash-text">
                 <h1 class="splash-heading">Ready to dive in?</h1>
-                <div class="action-container">
-                    <button href="/" class="splash-button join shadow">JOIN NOW</button>
-                </div>
+
+                <form method="POST" action="/splash">
+                    <div class="action-container">
+                        <button href="/signup" class="splash-button join shadow" name="action" value="signup">JOIN
+                            NOW</button>
+                    </div>
+                </form>
+                
             </div>
         </div>
 
