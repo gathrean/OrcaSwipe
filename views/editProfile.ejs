@@ -62,7 +62,7 @@
     <br>
     <label>Your Pod Tags </label>
     <select id="interests-select" multiple="multiple" name="interests">
-      <% const interests = ['outdoors', 'video games', 'reading', 'cooking', 'music', 'sports', 'art', 'travel', 'coding', 'photography']; %>
+      <% const interests = ['Ocean Clean-up', 'Volunteer', 'Charity', 'Black Lives Matter', 'Clothing drive', 'Blood drive', 'Art', 'Cancer Walk', 'Travel', 'Photography']; %>
       <% interests.forEach((interest, index) => { %>
       <option value="<%= interest %>" <%= user.interests && user.interests.includes(interest) ? 'selected' : '' %>><%= interest %></option>
       <% }) %>

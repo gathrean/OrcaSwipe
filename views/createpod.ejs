@@ -22,27 +22,25 @@
 <form class="form" action="/createpod" method="post" enctype="multipart/form-data">
     <h4>Enter pod information:</h4>
     <input type="text" name="name" placeholder="Name of the pod"><br>
+   
+    <% const interests = ['Ocean Clean-up', 'Volunteer', 'Charity', 'Black Lives Matter', 'Clothing drive', 'Blood drive', 'Art', 'Cancer Walk', 'Travel', 'Photography']; %>
+    
     <label>Pod Tags </label>
     <div id="interests">
         <select id="interests-select" multiple="multiple" name="interests">
-            <% const interests = ['outdoors', 'video games', 'reading', 'cooking', 'music', 'sports', 'art', 'travel', 'coding', 'photography']; %>
             <% interests.forEach((interest, index) => { %>
             <option value="<%= interest %>" <%= user.interests && user.interests.includes(interest) ? 'selected' : '' %>><%= interest %></option>
             <% }) %>
-          </select>
-
-          <script>
-            $(document).ready(function() {
-                $('#interests-select').select2({
-                    placeholder: "Select interests",
-                    allowClear: true,
-                    closeOnSelect : false,
-                    tags: true
-                });
-            });
-            </script>
-            
+        </select>
     </div>
+
+    <label class="form-label">You must join at least one recommended Orca-Approved pod. You can edit this later.</label>
+    <div id="interests-buttons">
+        <% interests.forEach((interest, index) => { %>
+            <button type="button" class="interest-button <%= user.interests && user.interests.includes(interest) ? 'selected' : '' %>" data-interest="<%= interest %>"><%= interest %></button>
+        <% }) %>
+    </div>
+    <br>
     <textarea name="eventDescription" placeholder="Enter event description"></textarea><br>
     <input id="lat" name="lat" type="hidden">
     <input id="lng" name="lng" type="hidden">
@@ -52,5 +50,50 @@
 
     <input type="file" name="image" accept="image/*"><br>
     <input class="btn blue-button" type="submit" value="Create!">
+
 </form>
+
+<style>
+    .interest-label {
+        display: inline-block;
+    }
+
+    .interest-button {
+        background-color: #1f49c8; /* Turquoise Blue */
+        color: white;
+        padding: 10px 20px;
+        margin: 5px;
+        border: none;
+        cursor: pointer;
+        border-radius: 20px; /* Rounded corners */
+    }
+
+    .interest-button.selected {
+        background-color: #00CED1; /* Brighter Turquoise Blue */
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        $('#interests-select').select2({
+            placeholder: "Select interests",
+            allowClear: true,
+            closeOnSelect : false,
+            tags: true
+        });
+
+        $('.interest-button').click(function () {
+            $(this).toggleClass('selected');
+            const interest = $(this).data('interest');
+            if ($(this).hasClass('selected')) {
+                // Add the selected interest to the multi-select
+                const option = new Option(interest, interest, true, true);
+                $('#interests-select').append(option).trigger('change');
+            } else {
+                // Remove the selected interest from the multi-select
+                $('#interests-select').find(`option[value="${interest}"]`).remove().trigger('change');
+            }
+        });
+    });
+</script>
 <%- include("templates/footer") %>

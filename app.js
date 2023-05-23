@@ -604,7 +604,7 @@ app.post("/createpod", upload.single('image'), async (req, res) => {
    // Adjust the Joi validation schema.
    const schema = Joi.object({
      name: Joi.string().required(),
-     tags: Joi.array().items(Joi.string()), // Now tags should be an array of strings.
+     tags: Joi.array().items(Joi.string()), 
      eventDescription: Joi.string().required(),
      attenders: Joi.array(),
      creator: Joi.string(),
