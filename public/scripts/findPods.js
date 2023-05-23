@@ -62,6 +62,7 @@ const xhrUser = new XMLHttpRequest();
 xhrUser.open("GET", "/getUserInterests");  // Replace with your route that fetches user's interests
 xhrUser.onload = () => {
     userTags = JSON.parse(xhrUser.responseText);
+    console.log('User tags:', userTags);
     // Once userTags is loaded, then fetch pods
     loadPods();
 };
@@ -120,23 +121,23 @@ function loadPods() {
 // Function to populate the stack with pods
 function populateStack() {
 
-    // Shows the stack
-    for (var i = 0; i < pods.length; i++) {
-        var tags = [];
-        for (var tag in pods[i].tags) {
-            if (pods[i].tags.hasOwnProperty(tag) && pods[i].tags[tag]) {
-                tags.push(tag);
-            }
-        }
-        // Creating HTML for each card using pod data
-        var card = `<div class="tinder--card">
-                        <img src="${pods[i].image}">
-                        <h3>${pods[i].name}</h3>
-                        <p>${pods[i].eventDescription}</p>
-                        <p>Tags: ${tags.join(', ')}</p>
-                    </div>`;
-        $('#stack').append(card); // Appending the card to the stack
-    }
+    // Define tag map
+const tagMap = window.interests || [];
+
+// Shows the stack
+for (var i = 0; i < pods.length; i++) {
+    var tags = pods[i].tags;  // Now tags are an array of strings
+
+    // Creating HTML for each card using pod data
+    var card = `<div class="tinder--card">
+                    <img src="${pods[i].image}">
+                    <h3>${pods[i].name}</h3>
+                    <p>${pods[i].eventDescription}</p>
+                    <p>Tags: ${tags.join(', ')}</p>
+                </div>`;
+    $('#stack').append(card); // Appending the card to the stack
+}
+
 
     // Updating the allCards variable with the newly added cards
     allCards = document.querySelectorAll('.tinder--card');

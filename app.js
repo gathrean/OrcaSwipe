@@ -50,6 +50,10 @@ const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
 
 
+///// Interests defined to be shared across both client and server side /////
+const interests = ['outdoors', 'video games', 'reading', 'cooking', 'music', 'sports', 'art', 'travel', 'coding', 'photography'];
+
+
 // Environment variables
 const mongodb_user = process.env.MONGODB_USER;
 const mongodb_password = process.env.MONGODB_PASSWORD;
@@ -565,7 +569,6 @@ app.get("/createpod", async (req, res) => {
 app.post("/createpod", upload.single('image'), async (req, res) => {
   console.log(req.body);
 
-  const interests = ['outdoors', 'video games', 'reading', 'cooking', 'music', 'sports', 'art', 'travel', 'coding', 'photography'];
   if (req.session.loggedIn) {
     let { name, eventDescription } = req.body;
     var location = { lat: req.body.lat, lng: req.body.lng };
