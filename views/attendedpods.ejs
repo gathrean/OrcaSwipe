@@ -95,21 +95,33 @@
 
         <script>
                 document.querySelectorAll('.show-attenders').forEach(button => {
-                    button.addEventListener('click', async function () {
-                        const podId = this.getAttribute('data-pod-id');
-                        const response = await fetch(`/pod/${podId}/attenders`);
-                        const attenders = await response.json();
+    button.addEventListener('click', async function () {
+        const podId = this.getAttribute('data-pod-id');
+        const response = await fetch(`/pod/${podId}/attenders`);
+        const attenders = await response.json();
 
-                        // Here you could update your page with the attenders information.
-                        // This is just an example, you will need to adjust this according to your page structure and design.
-                        const modalText = document.getElementById('modal-text');
-                        modalText.textContent = attenders.join(', ');
+        const modalText = document.getElementById('modal-text');
+        // Clear previous modal content
+        modalText.textContent = '';
 
-                        // Display the modal
-                        const modal = document.getElementById('modal');
-                        modal.style.display = "block";
-                    });
-                });
+        // Create elements for each attender
+        for (let attender of attenders) {
+            const div = document.createElement('div');
+            const img = document.createElement('img');
+            img.src = attender.profileImage;
+            img.alt = attender.username;
+            div.appendChild(img);
+            const span = document.createElement('span');
+            span.textContent = `${attender.username} (${attender.email})`;
+            div.appendChild(span);
+            modalText.appendChild(div);
+        }
+
+        const modal = document.getElementById('modal');
+        modal.style.display = "block";
+    });
+});
+
 
                 $('.leave').on('click', function () {
     let podId = $(this).attr('data-pod-id');

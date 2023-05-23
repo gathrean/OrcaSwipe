@@ -758,14 +758,13 @@ app.get("/pod/:id/attenders", async (req, res) => {
     return res.status(404).send("Pod not found");
   }
 
-  // Fetch user data for each attender
-  const attenders = await Promise.all(
-    pod.attenders.map(async (userId) => {
-      const user = await usersCollection.findOne({ _id: userId });
-      return user.email;  // return the user's email for example
-    })
-  );
-  res.json(attenders);
+  const attenders = await usersCollection.find({ _id: { $in: pod.attenders } }).toArray();
+        const attendersInfo = attenders.map(attender => ({
+            email: attender.email,
+            username: attender.username,
+            profileImage: attender.image,
+        }));
+        res.json(attendersInfo);
 });
 
 //leaving the pod
