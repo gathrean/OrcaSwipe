@@ -3,12 +3,14 @@ const submit = document.getElementById("submit");
 const userInput = document.getElementById("user-input");
 const chatHistory = document.getElementById("chat-history");
 const loading = document.getElementById("spinner");
-const buttons = document.getElementById('interests-buttons');
 const buttonsLoading = document.getElementById("spinner2");
 const set = document.getElementById('set-interests');
 const interestDiv = document.getElementById('interests-buttons');
 
 let promptResponses = [];
+let interests = ['Ocean Clean-up', 'Volunteer', 'Charity', 'Black Lives Matter', 'Clothing drive', 'Blood drive', 'Art', 'Cancer Walk', 'Travel', 'Photography'];
+populateInterests(interests);
+interestDiv.insertAdjacentText('beforebegin', 'Here are some default suggestions where you can help your community!')
 
 
 //Our call to the API
@@ -18,7 +20,7 @@ const generateResponse = async () => {
     loading.classList.remove("visually-hidden");
     submit.classList.add("visually-hidden");
     buttonsLoading.classList.remove("visually-hidden");
-    buttons.classList.add("visually-hidden");
+    interestDiv.classList.add("visually-hidden");
     set.classList.add("visually-hidden");
     var input = userInput.value;
     // var response = await fetch('/chatgpt', {
@@ -77,7 +79,7 @@ const generateResponse = async () => {
         interestDiv.append('Sorry, I couldn\'t generate any suggestions for you. Please try again.');
     }
     buttonsLoading.classList.add("visually-hidden");
-    buttons.classList.remove("visually-hidden");
+    interestDiv.classList.remove("visually-hidden");
     set.classList.remove("visually-hidden");
 }
 
