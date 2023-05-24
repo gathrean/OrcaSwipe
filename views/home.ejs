@@ -57,13 +57,7 @@
                 </div>
             </div>
             <label>Pod Tags </label>
-            <% const interests = ['Ocean Clean-up', 'Volunteer', 'Charity', 'Black Lives Matter', 'Clothing drive', 'Blood drive', 'Art', 'Cancer Walk', 'Travel', 'Photography']; %>
-            <div id="interests-buttons">
-                <% interests.forEach((interest, index) => { %>
-                    <button type="button" class="interest-button <%= user.interests && user.interests.includes(interest) ? 'selected' : '' %>" data-interest="<%= interest %>"><%= interest %></button>
-                <% }) %>
-            </div>
-        </div>
+            <div id="interests-buttons"></div>
     </div>
 <% } else { %>
     <div class="form">

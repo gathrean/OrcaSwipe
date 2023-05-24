@@ -48,3 +48,14 @@ const generateResponse = async () => {
 
 //Assign onclick method
 submit.onclick = generateResponse;
+
+const interests = ['Ocean Clean-up', 'Volunteer', 'Charity', 'Black Lives Matter', 'Clothing drive', 'Blood drive', 'Art', 'Cancer Walk', 'Travel', 'Photography'];
+
+function populateInterests(){
+    $('#interests-buttons').empty();
+    for (var i = 0; i < interests.length; i++){
+        console.log(interests[i]);
+        $('#interests-buttons').append(`<button class="blue button" type="button" data-interest="${interests[i]}">${interests[i]}</button>`);
+    }
+}
+ populateInterests();
