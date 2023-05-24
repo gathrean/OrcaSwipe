@@ -55,7 +55,7 @@ function populateInterests(){
     $('#interests-buttons').empty();
     for (var i = 0; i < interests.length; i++){
         console.log(interests[i]);
-        $('#interests-buttons').append(`<button class="blue button" type="button" data-interest="${interests[i]}">${interests[i]}</button>`);
+        $('#interests-buttons').append(`<button class="interest-button" type="button" data-interest="${interests[i]}">${interests[i]}</button>`);
     }
 }
- populateInterests();
+populateInterests();
