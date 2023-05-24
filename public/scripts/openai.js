@@ -83,15 +83,25 @@ const generateResponse = async () => {
 
 //Assign onclick method
 submit.onclick = generateResponse;
+var selectedInterests = [];
 
 function populateInterests(interests){
     interestDiv.replaceChildren();
     for (var i = 0; i < interests.length; i++){
         var button = document.createElement('button');
         button.setAttribute('class', 'interest-button');
-        button.setAttribute('data-interest', interests[i])
+        button.setAttribute('value', interests[i])
         button.setAttribute('type', 'button');
         button.insertAdjacentText('afterbegin', interests[i]);
+        button.addEventListener('click', (e) => {
+            e.currentTarget.classList.toggle('selected');
+            if (e.currentTarget.classList.contains('selected')){
+                selectedInterests.push(e.currentTarget.value);
+            } else {
+                selectedInterests.splice(selectedInterests.indexOf(e.currentTarget.value), 1);
+            }
+            set.value = selectedInterests;
+        })
         interestDiv.append(button);
     }
 }

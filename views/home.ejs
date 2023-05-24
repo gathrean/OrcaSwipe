@@ -61,7 +61,9 @@
             <div id="spinner2" class="text-center spinner-grow text-primary visually-hidden mt-2" role="status"></div>
             <div id="interests-buttons" class="text-center">Write a description of yourself and click submit to generate some suggestions!</div>
             <br>
-            <input id="set-interests" class="btn blue-button" type="submit" value="Add These Interests!">
+            <form action="updateInterests" method="post">
+                <button id="set-interests" class="btn blue-button" type="submit">Add These Interests!</button>
+            </form>
     </div>
 <% } else { %>
     <div class="form">

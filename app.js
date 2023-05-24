@@ -1037,6 +1037,10 @@ app.post('/chatgpt', async (req, res) => {
   res.status(200).json({ result: completion.data.choices });
 });
 
+app.post('/updateInterests', async (req, res) => {
+  
+});
+
 // GET request to catch all other routes that are not defined
 app.get('*', async (req, res) => {
   let user = null;
