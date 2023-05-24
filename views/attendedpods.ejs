@@ -94,28 +94,28 @@
     <%- include("templates/footer") %>
 
         <script>
-                document.querySelectorAll('.show-attenders').forEach(button => {
-    button.addEventListener('click', async function () {
-        const podId = this.getAttribute('data-pod-id');
-        const response = await fetch(`/pod/${podId}/attenders`);
-        const attenders = await response.json();
+            document.querySelectorAll('.show-attenders').forEach(button => {
+                button.addEventListener('click', async function () {
+                const podId = this.getAttribute('data-pod-id');
+                const response = await fetch(`/pod/${podId}/attenders`);
+                const attenders = await response.json();
 
-        const modalText = document.getElementById('modal-text');
-        // Clear previous modal content
-        modalText.textContent = '';
+                const modalText = document.getElementById('modal-text');
+                // Clear previous modal content
+                modalText.textContent = '';
 
-        // Create elements for each attender
-        for (let attender of attenders) {
-            const div = document.createElement('div');
-            const img = document.createElement('img');
-            img.src = attender.profileImage;
-            img.alt = attender.username;
-            div.appendChild(img);
-            const span = document.createElement('span');
-            span.textContent = `${attender.username} (${attender.email})`;
-            div.appendChild(span);
-            modalText.appendChild(div);
-        }
+                // Create elements for each attender
+                for (let attender of attenders) {
+                    const div = document.createElement('div');
+                    const img = document.createElement('img');
+                    img.src = attender.profileImage;
+                    img.alt = attender.username;
+                    div.appendChild(img);
+                    const span = document.createElement('span');
+                    span.textContent = `${attender.username} (${attender.email})`;
+                    div.appendChild(span);
+                    modalText.appendChild(div);
+                }
 
         const modal = document.getElementById('modal');
         modal.style.display = "block";

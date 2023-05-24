@@ -107,10 +107,20 @@
                         const response = await fetch(`/pod/${podId}/attenders`);
                         const attenders = await response.json();
 
-                        // Here you could update your page with the attenders information.
-                        // This is just an example, you will need to adjust this according to your page structure and design.
                         const modalText = document.getElementById('modal-text');
-                        modalText.textContent = attenders.join(', ');
+                        modalText.textContent = '';
+
+                        for (let attender of attenders) {
+                        const div = document.createElement('div');
+                        const img = document.createElement('img');
+                        img.src = attender.profileImage;
+                        img.alt = attender.username;
+                        div.appendChild(img);
+                        const span = document.createElement('span');
+                        span.textContent = `${attender.username} (${attender.email})`;
+                        div.appendChild(span);
+                        modalText.appendChild(div);
+                    }
 
                         // Display the modal
                         const modal = document.getElementById('modal');
