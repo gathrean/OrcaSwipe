@@ -1,6 +1,6 @@
 <%- include("templates/header") %>
 
-    <div class="" style="display: flex; flex-direction: column; align-items: center;">
+    <div>
 
         <!-- Title on top -->
         <div style="display: flex;align-items: center;justify-content: center;">
@@ -18,14 +18,19 @@
             </p>
         </div>
 
+        <!-- Button for hosting a new pod -->
+        <a href="/createpod"><button class="btn white-button">
+                Go back to Hosted Pods
+            </button></a>
         <hr>
+
 
         <!-- POD EDIT DETAILS FORM -->
         <form class="form hosting-form" action="/createpod" method="post" enctype="multipart/form-data">
 
             <!-- Pod Name -->
             <label>Pod Name</label>
-            <input class="form-control" type="text" name="name" placeholder="Name of the pod" required>
+            <input class="form-control" type="text" name="name" placeholder="Name of the Pod" required>
             <br>
 
             <!-- Image -->
@@ -35,7 +40,7 @@
 
             <!-- Pod Description -->
             <label>Pod Description</label>
-            <textarea class="form-control" name="eventDescription" placeholder="Enter event description"></textarea>
+            <textarea class="form-control" name="eventDescription" placeholder="Enter Pod description"></textarea>
             <br>
 
             <!-- Longtitude and Latitude -->
@@ -67,24 +72,29 @@
             <% const interests=['Ocean Clean-up', 'Volunteer' , 'Charity' , 'Black Lives Matter' , 'Clothing drive'
                 , 'Blood drive' , 'Art' , 'Cancer Walk' , 'Travel' , 'Photography' ]; %>
                 <div id="interests">
-                    <select class="form-control" id="interests-select" multiple="multiple" name="interests">
+                    <select id="interests-select" multiple="multiple"
+                        name="interests" style="width: 100%;" required>
                         <% interests.forEach((interest, index)=> { %>
                             <option value="<%= interest %>" <%=user.interests && user.interests.includes(interest)
                                 ? 'selected' : '' %>><%= interest %>
                             </option>
                             <% }) %>
                     </select>
+                    <br><br>
+
+                    <label>Suggested Tags</label>
+                    <div class="suggested-tags">
+                        <% interests.forEach((interest, index)=> { %>
+                            <button type="button"
+                                class="interest-button <%= user.interests && user.interests.includes(interest) ? 'selected' : '' %>"
+                                data-interest="<%= interest %>">
+                                <%= interest %>
+                            </button>
+                            <% }) %>
+                    </div>
                 </div>
-                <br>
-                <div class="form-control" id="interests-buttons">
-                    <% interests.forEach((interest, index)=> { %>
-                        <button type="button"
-                            class="interest-button <%= user.interests && user.interests.includes(interest) ? 'selected' : '' %>"
-                            data-interest="<%= interest %>">
-                            <%= interest %>
-                        </button>
-                        <% }) %>
-                </div>
+
+
                 <br>
 
                 <!-- Map -->
@@ -95,13 +105,16 @@
                 <hr>
 
                 <!-- Create Pod button -->
-                <input class="btn blue-button" type="submit" value="Create!">
+                <input class="btn blue-button" type="submit" value="Create Pod">
 
         </form>
 
     </div>
 
     <%- include("templates/footer") %>
+
+        <!-- CSS -->
+        <link rel="stylesheet" href="/style/chat.css">
 
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
             integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
@@ -135,7 +148,6 @@
                 })
             })()
         </script>
-
         <style>
             .form-group.required .control-label:after {
                 content: "*";
@@ -155,10 +167,8 @@
             }
 
             #map {
-                width: 80vw;
-                max-width: 100%;
+                width: 100%;
                 height: 40vh;
-                margin: 0 auto;
                 border-radius: 20px;
             }
 
@@ -170,8 +180,7 @@
                 border-radius: 20px;
                 text-align: left;
                 position: relative;
-                width: auto;
-                max-width: 90%;
+                max-width: 80vw;
             }
 
             .interest-label {
@@ -179,8 +188,7 @@
             }
 
             .interest-button {
-                background-color: #1f49c8;
-                /* Turquoise Blue */
+                background-color: #134ACC;
                 color: white;
                 padding: 10px 20px;
                 margin: 5px;
@@ -191,8 +199,52 @@
             }
 
             .interest-button.selected {
-                background-color: #00CED1;
-                /* Brighter Turquoise Blue */
+                background-color: #4676EE;
+            }
+
+            /* Each tag button */
+            /* Selection Choice */
+            .select2-container--default .select2-selection--multiple .select2-selection__choice {
+                background-color: #134ACC;
+                border: 0px;
+                border-radius: 20px;
+                display: inline-block;
+                margin-left: 5px;
+                margin-top: 5px;
+                padding: 10px 20px;
+            }
+
+            /* The x inside of each tag button */
+            .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+                /* background-color: transparent; */
+                border: none;
+                /* border-right: 1px solid #aaa; */
+                border-top-left-radius: 4px;
+                border-bottom-left-radius: 4px;
+                color: #ffffff;
+                cursor: pointer;
+                font-size: 1em;
+                font-weight: bold;
+                padding: 0 4px;
+            }
+
+            .select2-container--default .select2-results__option[aria-selected="true"] {
+                background-color: #4676EE;
+                color: white;
+            }
+
+            .select2-selection__choice {
+                background-color: #134ACC;
+                color: white;
+                padding: 5px 10px;
+                margin-right: 5px;
+                border-radius: 20px;
+            }
+
+            .select2-selection__choice__remove {
+                color: white;
+                margin-left: 5px;
+                cursor: pointer;
             }
         </style>
 
