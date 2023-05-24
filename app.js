@@ -141,7 +141,6 @@ app.get("/", (req, res) => {
 app.get("/home", async (req, res) => {
   var email = req.session.email;
   var user = await usersCollection.findOne({ email: email });
-  console.log(user)
   res.render("home", { loggedIn: req.session.loggedIn, name: req.session.name, currentPage: 'home', user: user });
 });
 
