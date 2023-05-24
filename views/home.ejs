@@ -56,8 +56,12 @@
                     </div>
                 </div>
             </div>
-            <label>Pod Tags </label>
-            <div id="interests-buttons"></div>
+            <div class="text-center"><b>Add Interests to your Profile by Picking any of the Tags Suggested Below</b></div>
+            <br>
+            <div id="spinner2" class="text-center spinner-grow text-primary visually-hidden mt-2" role="status"></div>
+            <div id="interests-buttons" class="text-center">Write a description of yourself and click submit to generate some suggestions!</div>
+            <br>
+            <input id="set-interests" class="btn blue-button" type="submit" value="Add These Interests!">
     </div>
 <% } else { %>
     <div class="form">
@@ -93,6 +97,15 @@
 
     .interest-button.selected {
         background-color: #00CED1; /* Brighter Turquoise Blue */
+    }
+
+    #set-interests {
+        border-color: black;
+        border-width: 4px;
+    }
+
+    #spinner2 {
+        margin: 0 auto;
     }
 </style>
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
