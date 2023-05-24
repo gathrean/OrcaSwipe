@@ -1022,6 +1022,19 @@ app.get("/chat", async (req, res) => {
   }
 });
 
+app.post('/chatgpt', async (req, res) => {
+  const messages = req.body.messages;
+  const model = req.body.model;
+  const temp = req.body.temp;
+
+  const completion = await openaiapi.createChatCompletion({
+      model: model,
+      messages: messages,
+      temperature: temp,
+  });
+  res.status(200).json({ result: completion.data.choices });
+});
+
 // GET request to catch all other routes that are not defined
 app.get('*', async (req, res) => {
   let user = null;

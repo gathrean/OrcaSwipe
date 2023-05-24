@@ -14,7 +14,7 @@ const generateResponse = async () => {
     loading.classList.remove("visually-hidden");
     submit.classList.add("visually-hidden");
     const input = userInput.value;
-    const response = await fetch('/chat', {
+    const response = await fetch('/chatgpt', {
         method: 'POST',
         body: JSON.stringify({
             model: "gpt-3.5-turbo",
