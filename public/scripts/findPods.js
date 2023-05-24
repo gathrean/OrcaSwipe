@@ -55,7 +55,7 @@ function initCards(card, index) {
 }
 
 
-let userTags;  
+let userTags;
 
 // Fetch user's interests before fetching pods
 const xhrUser = new XMLHttpRequest();
@@ -124,22 +124,22 @@ function loadPods() {
 function populateStack() {
 
     // Define tag map
-const tagMap = window.interests || [];
+    const tagMap = window.interests || [];
 
-// Shows the stack
-for (var i = 0; i < pods.length; i++) {
-    var tags = pods[i].tags;  // Now tags are an array of strings
+    // Shows the stack
+    for (var i = 0; i < pods.length; i++) {
+        var tags = pods[i].tags;  // Now tags are an array of strings
 
-    // Creating HTML for each card using pod data
-    var card = `<div class="tinder--card">
+        // Creating HTML for each card using pod data
+        var card = `<div class="tinder--card">
                     <img src="${pods[i].image}">
                     <h3>${pods[i].name}</h3>
                     <p>${pods[i].eventDescription}</p>
                     <p>Tags: ${tags.join(', ')}</p>
                     <p>OrcaScore: ${pods[i].upvotes.length - pods[i].downvotes.length}</p>
                 </div>`;
-    $('#stack').append(card); // Appending the card to the stack
-}
+        $('#stack').append(card); // Appending the card to the stack
+    }
 
 
     // Updating the allCards variable with the newly added cards
@@ -224,10 +224,10 @@ function makeSwipable() {
                 pods.shift()
             } else if (!keep && event.deltaX < 0) { // <-- Add this else if to handle "Nope" swipes
                 console.log('Swiped left on:', pods[0]);
-        
+
                 // Handling the nope swipe action on the pod
                 handleNopeSwipe(pods[0]);
-        
+
                 // Removing the swiped pod from the "pods" array
                 pods.shift();
             }
@@ -327,4 +327,16 @@ window.onclick = function (event) {
     if (event.target == modal) {
         modal.style.display = "none";
     }
+}
+
+// Function to show the loading screen
+function showLoadingScreen() {
+    var loadingCircle = document.getElementById('loading-circle');
+    loadingCircle.style.display = 'block';
+}
+
+// Function to hide the loading screen
+function hideLoadingScreen() {
+    var loadingCircle = document.getElementById('loading-circle');
+    loadingCircle.style.display = 'none';
 }
