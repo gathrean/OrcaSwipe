@@ -741,7 +741,10 @@ app.post("/createpod", upload.single('image'), async (req, res) => {
     let attenders = [];
     let upvotes = []; // Empty array for upvotes
     let downvotes = []; // Empty array for downvotes
-    const newPod = { name, tags, eventDescription, attenders, creator, location, image, upvotes, downvotes };
+    const eventDate = new Date(`${req.body.date}T${req.body.time}`);
+    const date = new Date(`${req.body.date}`);
+    const time = `${req.body.time}`;
+    const newPod = { name, tags, eventDescription, attenders, creator, location, image, upvotes, downvotes, date, time };
 
     // Adjust the Joi validation schema.
     const schema = Joi.object({
@@ -756,7 +759,9 @@ app.post("/createpod", upload.single('image'), async (req, res) => {
       }),
       image: Joi.string().uri(),  // validates image as a URL
       upvotes: Joi.array(), // Validates upvotes as an array
-      downvotes: Joi.array() // Validates downvotes as an array
+      downvotes: Joi.array(), // Validates downvotes as an array
+      date: Joi.date().required(),
+      time: Joi.string().required()
     });
 
 

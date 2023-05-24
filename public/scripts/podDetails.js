@@ -39,6 +39,12 @@ const setup = () => {
             <div><b>Description</b></div>
             <div>${pod.eventDescription}</div>
             <br>
+            <div><b>Date</b></div>
+            <div>${pod.date}</div>
+            <br>
+            <div><b>Time</b></div>
+            <div>${pod.time}</div>
+            <br>
             <div><b>Tags</b></div>
             <ul>
                 ${pod.tags.map((tag) => { return `<li>${tag}</li>` }).join('')}
