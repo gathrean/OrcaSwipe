@@ -137,6 +137,7 @@ function populateStack() {
                     <p>${pods[i].eventDescription}</p>
                     <p>Tags: ${tags.join(', ')}</p>
                     <p>OrcaScore: ${pods[i].upvotes.length - pods[i].downvotes.length}</p>
+                    <p>Date: ${pods[i].formattedDate} Time: ${pods[i].time}</p>
                 </div>`;
         $('#stack').append(card); // Appending the card to the stack
     }

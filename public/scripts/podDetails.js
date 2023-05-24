@@ -40,7 +40,7 @@ const setup = () => {
             <div>${pod.eventDescription}</div>
             <br>
             <div><b>Date</b></div>
-            <div>${pod.date}</div>
+            <div>${pod.formattedDate}</div>
             <br>
             <div><b>Time</b></div>
             <div>${pod.time}</div>
