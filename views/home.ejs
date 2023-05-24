@@ -1,51 +1,81 @@
 <%- include("templates/header") %>
 
-    <% if (loggedIn) { %>
+<% if (loggedIn) { %>
 
-        <div>
-            <!-- Title on top -->
-            <div style="display: flex;align-items: center;justify-content: center;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50"
-                    style="color: white; margin-right: 10px;">
-                    <!-- Add your SVG icon code here -->
-                    <%- include("./icons/home") %>
-                </svg>
-                <h1 style="text-align: left; color: white; font-size: 3rem; line-height: 50px; margin: 0;">Home</h1>
-            </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
+</script>
+<script src="/scripts/openai.js"></script>
 
-            <!-- Caption for title -->
-            <div style="display: flex;align-items: center;justify-content: center;">
-                <p style="text-align: left; color: white">
-                    This is your home page.
-                </p>
-            </div>
-            <hr>
-            <div class="form">
-                <h3>
-                    Welcome back, <b>
-                        <%= name %>
-                    </b>!
-                </h3>
-                <p>
-                    [placeholder for Laurie's AI]
-                </p>
+    <div>
+        <!-- Title on top -->
+        <div style="display: flex;align-items: center;justify-content: center;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50"
+                style="color: white; margin-right: 10px;">
+                <!-- Add your SVG icon code here -->
+                <%- include("./icons/home") %>
+            </svg>
+            <h1 style="text-align: left; color: white; font-size: 3rem; line-height: 50px; margin: 0;">Home</h1>
+        </div>
+
+        <!-- Caption for title -->
+        <div style="display: flex;align-items: center;justify-content: center;">
+            <p style="text-align: left; color: white">
+                This is your home page.
+            </p>
+        </div>
+        <hr>
+        <div class="form">
+            <h3>
+                Welcome back, <b>
+                    <%= name %>
+                </b>!
+            </h3>
+            <div class="container mt-5 w-50">
+                <h1 class="text-center">My Chatbot</h1>
+                <div class="card">
+                    <div class="card-header">
+                        Chat History
+                    </div>
+                    <ul id="chat-history" class="list-group list-group-flush">
+                    </ul>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                            fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                            <path fill-rule="evenodd"
+                                d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
+                        </svg>&nbspYou
+                    </span>
+                    <textarea id="user-input" class="form-control" aria-label="With textarea"></textarea>
+                </div>
+                <div class="text-center">
+                    <button id="submit" type="button" class="btn btn-primary mt-2" >Submit Prompt</button>
+                    <div id="response"></div>
+
+                    <div id="spinner" class="spinner-grow text-primary visually-hidden mt-2" role="status">
+                    </div>
+                </div>
             </div>
         </div>
-        <% } else { %>
-            <div class="form">
-                <a href='/signup'><button class="btn blue-button">Sign up</button></a> <br>
-                <a href='/login'><button class="btn blue-button">Log in</button></a>
-            </div>
-            <% } %>
-                <%- include("templates/footer") %>
+    </div>
+<% } else { %>
+    <div class="form">
+        <a href='/signup'><button class="btn blue-button">Sign up</button></a> <br>
+        <a href='/login'><button class="btn blue-button">Log in</button></a>
+    </div>
+<% } %>
+<%- include("templates/footer") %>
 
 
-                    <style>
-                        .profile-actions {
-                            display: flex;
-                        }
+<style>
+    .profile-actions {
+        display: flex;
+    }
 
-                        .action-button {
-                            margin-right: 10px;
-                        }
-                    </style>
+    .action-button {
+        margin-right: 10px;
+    }
+</style>

@@ -25,6 +25,16 @@ const mailer = nodemailer.createTransport({
 });
 
 const app = express();
+const openai = require('openai');
+
+//// Open AI API ////
+const configuration = new openai.Configuration({
+  organization: process.env.OPENAI_ORG,
+  apiKey: process.env.OPENAI_API_KEY,
+});
+const openaiapi = new openai.OpenAIApi(configuration);
+
+
 
 // MongoDB collections
 let usersCollection;
@@ -129,8 +139,24 @@ app.get("/", (req, res) => {
 
 // GET request for the "/home" URL
 app.get("/home", async (req, res) => {
-  const user = await fetchUserData(req);
-  res.render("home", { loggedIn: req.session.loggedIn, name: req.session.name, currentPage: 'home', user });
+  var email = req.session.email;
+  var user = await usersCollection.findOne({ email: email });
+  console.log(user)
+  res.render("home", { loggedIn: req.session.loggedIn, name: req.session.name, currentPage: 'home', user: user });
+});
+
+// POST request for the "/home" URL
+app.post("/home", async (req, res) => {
+  const messages = req.body.messages;
+  const model = req.body.model;
+  const temp = req.body.temp;
+
+  const completion = await openaiapi.createChatCompletion({
+      model: model,
+      messages: messages,
+      temperature: temp,
+  });
+  res.status(200).json({ result: completion.data.choices });
 });
 
 // Fetch the user data
