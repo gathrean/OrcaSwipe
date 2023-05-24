@@ -69,6 +69,9 @@ const mongodb_session_secret = process.env.MONGODB_SESSION_SECRET;
 const hashedPassword = process.env.HASHED_PASSWORD;
 // End of environment variables
 
+// Interest tags
+const interests = ['Ocean Clean-up', 'Volunteer', 'Charity', 'Black Lives Matter', 'Clothing drive', 'Blood drive', 'Art', 'Cancer Walk', 'Travel', 'Photography']
+
 // Set up the port
 const PORT = process.env.PORT || 3000;
 

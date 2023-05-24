@@ -31,6 +31,11 @@
                 </b>!
             </h3>
             <div class="container mt-5 w-50">
+                <div class="card-header">
+                    Chat History
+                </div>
+                <ul id="chat-history" class="list-group list-group-flush">
+                </ul>
                 <h1 class="text-center">My Chatbot</h1>
                 <div class="input-group">
                     <span class="input-group-text">
@@ -51,6 +56,13 @@
                     </div>
                 </div>
             </div>
+            <label>Pod Tags </label>
+            <% const interests = ['Ocean Clean-up', 'Volunteer', 'Charity', 'Black Lives Matter', 'Clothing drive', 'Blood drive', 'Art', 'Cancer Walk', 'Travel', 'Photography']; %>
+            <div id="interests-buttons">
+                <% interests.forEach((interest, index) => { %>
+                    <button type="button" class="interest-button <%= user.interests && user.interests.includes(interest) ? 'selected' : '' %>" data-interest="<%= interest %>"><%= interest %></button>
+                <% }) %>
+            </div>
         </div>
     </div>
 <% } else { %>
@@ -70,4 +82,47 @@
     .action-button {
         margin-right: 10px;
     }
+    
+    .interest-label {
+        display: inline-block;
+    }
+
+    .interest-button {
+        background-color: #1f49c8; /* Turquoise Blue */
+        color: white;
+        padding: 10px 20px;
+        margin: 5px;
+        border: none;
+        cursor: pointer;
+        border-radius: 20px; /* Rounded corners */
+    }
+
+    .interest-button.selected {
+        background-color: #00CED1; /* Brighter Turquoise Blue */
+    }
 </style>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#interests-select').select2({
+            placeholder: "Select interests or type to add your own",
+            allowClear: true,
+            closeOnSelect : false,
+            tags: true
+        });
+
+        $('.interest-button').click(function () {
+            $(this).toggleClass('selected');
+            const interest = $(this).data('interest');
+            if ($(this).hasClass('selected')) {
+                // Add the selected interest to the multi-select
+                const option = new Option(interest, interest, true, true);
+                $('#interests-select').append(option).trigger('change');
+            } else {
+                // Remove the selected interest from the multi-select
+                $('#interests-select').find(`option[value="${interest}"]`).remove().trigger('change');
+            }
+        });
+    });
+</script>
