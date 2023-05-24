@@ -8,9 +8,7 @@ const set = document.getElementById('set-interests');
 const interestDiv = document.getElementById('interests-buttons');
 
 let promptResponses = [];
-let interests = ['Ocean Clean-up', 'Volunteer', 'Charity', 'Black Lives Matter', 'Clothing drive', 'Blood drive', 'Art', 'Cancer Walk', 'Travel', 'Photography'];
-populateInterests(interests);
-interestDiv.insertAdjacentText('beforebegin', 'Here are some default suggestions where you can help your community!')
+
 
 
 //Our call to the API
@@ -86,6 +84,10 @@ const generateResponse = async () => {
 //Assign onclick method
 submit.onclick = generateResponse;
 var selectedInterests = [];
+var interests = ['Ocean Clean-up', 'Volunteer', 'Charity', 'Black Lives Matter', 'Clothing drive', 'Blood drive', 'Art', 'Cancer Walk', 'Travel', 'Photography'];
+populateInterests(interests);
+interestDiv.insertAdjacentHTML('afterbegin', '<div>Here are some default suggestions where you can help your community!</div>');
+
 
 function populateInterests(interests){
     interestDiv.replaceChildren();
