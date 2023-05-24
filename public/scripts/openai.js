@@ -5,6 +5,7 @@ const chatHistory = document.getElementById("chat-history");
 const loading = document.getElementById("spinner");
 const buttonsLoading = document.getElementById("spinner2");
 const set = document.getElementById('set-interests');
+const holder = document.getElementById('holder');
 const interestDiv = document.getElementById('interests-buttons');
 
 let promptResponses = [];
@@ -104,7 +105,7 @@ function populateInterests(interests){
             } else {
                 selectedInterests.splice(selectedInterests.indexOf(e.currentTarget.value), 1);
             }
-            set.value = selectedInterests;
+            holder.value = selectedInterests;
         })
         interestDiv.append(button);
     }

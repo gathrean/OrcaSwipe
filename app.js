@@ -1038,7 +1038,15 @@ app.post('/chatgpt', async (req, res) => {
 });
 
 app.post('/updateInterests', async (req, res) => {
-  
+  //TODO: Validate inputs.
+
+  if (req.body.holder != []){
+    await usersCollection.updateOne(
+      { email: req.session.email },
+      { $addToSet: { interests: { $each: req.body.holder.split(',') } } }
+    )
+  } 
+  res.redirect('profile');
 });
 
 // GET request to catch all other routes that are not defined
