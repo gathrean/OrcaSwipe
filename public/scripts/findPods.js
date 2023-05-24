@@ -54,7 +54,6 @@ function initCards(card, index) {
     tinderContainer.classList.add('loaded'); // Adding the "loaded" class to the Tinder container
 }
 
-
 let userTags;
 
 // Fetch user's interests before fetching pods
@@ -68,19 +67,13 @@ xhrUser.onload = () => {
 };
 xhrUser.send();
 
-
-
-
-
 // Function to load pods from the server
 function loadPods() {
     const xhttp = new XMLHttpRequest();
     // Show the loading circle
     var loadingCircle = document.getElementById('loading-circle');
     loadingCircle.style.display = 'block';
-
-
-
+    
     // Handling the response from the server
     xhttp.onload = () => {
         // Parsing the fetched pods from the response
@@ -120,6 +113,34 @@ function loadPods() {
     xhttp.send();
 }
 
+// Helps display the city name in the pod card
+// Function to perform reverse geocoding
+function reverseGeocode(location, index) {
+    if (location && typeof location.lat === 'string' && typeof location.lng === 'string') {
+        const latitude = parseFloat(location.lat);
+        const longitude = parseFloat(location.lng);
+
+        if (!isNaN(latitude) && !isNaN(longitude)) {
+            // Send a GET request to the Nominatim API
+            axios.get(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`)
+                .then(response => {
+                    const city = response.data.address.city || response.data.address.town || response.data.address.village || response.data.address.hamlet;
+                    const locationElement = document.getElementById(`location-${index}`);
+                    if (locationElement) {
+                        locationElement.textContent = `City: ${city}`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        } else {
+            console.error('Invalid latitude or longitude:', location);
+        }
+    } else {
+        console.error('Invalid location object:', location);
+    }
+}
+
 // Function to populate the stack with pods
 function populateStack() {
 
@@ -131,23 +152,27 @@ function populateStack() {
         var tags = pods[i].tags;  // Now tags are an array of strings
 
         // Creating HTML for each card using pod data
-        var card = `<div class="tinder--card">
-                    <img src="${pods[i].image}">
-                    <h3>${pods[i].name}</h3>
-                    <p>${pods[i].eventDescription}</p>
-                    <p>Tags: ${tags.join(', ')}</p>
-                    <p>OrcaScore: ${pods[i].upvotes.length - pods[i].downvotes.length}</p>
-                </div>`;
+        var card = `
+        <div class="tinder--card">
+          <img src="${pods[i].image}">
+          <h3>${pods[i].name}</h3>
+          <p id="location-${i}"></p>
+          <p>${pods[i].eventDescription}</p>
+          <p>Tags: ${tags.join(', ')}</p>
+          <p>OrcaScore: ${pods[i].upvotes.length - pods[i].downvotes.length}</p>
+        </div>
+      `;
         $('#stack').append(card); // Appending the card to the stack
-    }
 
+        // Perform reverse geocoding request
+        reverseGeocode(pods[i].location, i);
+    }
 
     // Updating the allCards variable with the newly added cards
     allCards = document.querySelectorAll('.tinder--card');
     initCards();
     makeSwipable();
 }
-
 
 // Function to handle the love swipe action
 function handleLoveSwipe(pod) {
