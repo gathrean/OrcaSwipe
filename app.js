@@ -916,71 +916,74 @@ app.get("/viewProfile", async (req, res) => {
 // POST request for the "/updateProfile" URL
 app.post("/updateProfile", upload.single('profilePhoto'), async (req, res) => {
   if (req.session.loggedIn) {
-    let imagePath;
-    if (req.file) {
-      imagePath = 'uploads/' + req.file.filename;
-    }
+    try {
+      const user = await usersCollection.findOne({ email: req.session.email });
 
-    const schema = Joi.object({
-      name: Joi.string().max(50).optional(),
-      username: Joi.string().max(50).optional(),
-      email: Joi.string().email().optional(),
-      birthday: Joi.date().optional(),
-      pronouns: Joi.string().max(50).optional(),
-      interests: Joi.array().items(Joi.string()).max(10).optional(),
-      image: Joi.string().optional()
-    });
-
-    if (!Array.isArray(req.body.interests)) {
-      if (typeof req.body.interests != 'undefined') {
-        req.body.interests = [req.body.interests];
-      } else {
-        req.body.interests = [];
+      if (!user) {
+        res.status(401).send("User not found.<br><a href='/editProfile'>Go back to edit profile</a>");
+        return;
       }
-    }
 
-    if (imagePath) {
+      // If the user does not upload a new image, keep the old one.
+      let imagePath;
+      if (req.file) {
+        imagePath = 'uploads/' + req.file.filename;
+      } else {
+        imagePath = user.image;
+      }
+
+      const schema = Joi.object({
+        name: Joi.string().max(50).optional(),
+        username: Joi.string().max(50).optional(),
+        email: Joi.string().email().optional(),
+        birthday: Joi.date().allow("").optional(),
+        pronouns: Joi.string().max(50).allow('').optional(),
+        interests: Joi.array().items(Joi.string()).max(10).optional(),
+        image: Joi.string().allow(null).optional()
+      });
+
+      if (!Array.isArray(req.body.interests)) {
+        if (typeof req.body.interests != 'undefined') {
+          req.body.interests = [req.body.interests];
+        } else {
+          req.body.interests = user.interests;
+        }
+      }
+
       req.body.image = imagePath;
-    }
 
-    const validationResult = schema.validate(req.body);
+      const validationResult = schema.validate(req.body);
 
-    if (validationResult.error) {
-      res.status(400).send(validationResult.error.details[0].message + "<br><a href='/editProfile'>Go back to edit profile</a>");
-    } else {
-      try {
-        const user = await usersCollection.findOne({ email: req.session.email });
-        if (user) {
-          const updatedUser = {
-            name: req.body.name,
-            username: req.body.username,
-            email: req.body.email,
-            birthday: new Date(req.body.birthday),
-            pronouns: req.body.pronouns,
-            interests: req.body.interests,
-            image: req.body.image,
-          };
-          await usersCollection.updateOne({ email: req.session.email }, { $set: updatedUser });
-          req.session.name = updatedUser.name;
-          req.session.email = updatedUser.email;
-          res.redirect("/profile");
-        } else {
-          res.status(401).send("User not found.<br><a href='/editProfile'>Go back to edit profile</a>");
-        }
-      } catch (error) {
-        const user = await usersCollection.findOne({ email: req.session.email });
-        if (error.code == 11000){
-          var problemField = Object.keys(error.keyValue);
-          res.render('editProfile', {errorMessage: `${problemField} is already in use.`, user: user});
-        } else {
-          res.render('editProfile', {errorMessage: 'Error updating profile.', user: user});
-        }
+      if (validationResult.error) {
+        res.status(400).send(validationResult.error.details[0].message + "<br><a href='/editProfile'>Go back to edit profile</a>");
+      } else {
+        const updatedUser = {
+          name: req.body.name || user.name,
+          username: req.body.username || user.username,
+          email: req.body.email || user.email,
+          birthday: req.body.birthday ? new Date(req.body.birthday) : user.birthday,
+          pronouns: req.body.pronouns || user.pronouns,
+          interests: req.body.interests || user.interests,
+          image: req.body.image || user.image,
+        };
+        await usersCollection.updateOne({ email: req.session.email }, { $set: updatedUser });
+        req.session.name = updatedUser.name;
+        req.session.email = updatedUser.email;
+        res.redirect("/profile");
+      }
+    } catch (error) {
+      if (error.code == 11000){
+        var problemField = Object.keys(error.keyValue);
+        res.render('editProfile', {errorMessage: `${problemField} is already in use.`, user: user});
+      } else {
+        res.render('editProfile', {errorMessage: 'Error updating profile.', user: user});
       }
     }
   } else {
     res.status(403).send("You must be logged in to update your profile.<br><a href='/'>Go back to home page</a>");
   }
 });
+
 
 // GET request for the "/chat" URL
 app.get("/chat", async (req, res) => {
