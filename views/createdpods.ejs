@@ -1,14 +1,5 @@
 <%- include("templates/header") %>
 
-    <script defer src="scripts/podDetails.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
-        integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
-    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
-        integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
-
-    <link rel="stylesheet" href="/style/findPods.css">
-    <link rel="stylesheet" href="/style/pods.css">
-    
     <div class="">
         <!-- Title on top -->
         <div style="display: flex;align-items: center;justify-content: center;">
@@ -99,6 +90,15 @@
     </div>
 
     <%- include("templates/footer") %>
+
+        <script defer src="scripts/podDetails.js"></script>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+            integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+        <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+            integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+
+        <link rel="stylesheet" href="/style/findPods.css">
+        <link rel="stylesheet" href="/style/pods.css">
 
         <script>
                 document.querySelectorAll('.show-attenders').forEach(button => {
