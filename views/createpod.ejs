@@ -69,8 +69,7 @@
 
             <!-- Pod Tags -->
             <label>Pod Tags </label>
-            <% const interests=['Ocean Clean-up', 'Volunteer' , 'Charity' , 'Black Lives Matter' , 'Clothing drive'
-                , 'Blood drive' , 'Art' , 'Cancer Walk' , 'Travel' , 'Photography' ]; %>
+            <% var interests=user.interests; %>    
                 <div id="interests">
                     <select id="interests-select" multiple="multiple"
                         name="interests" style="width: 100%;" required>
@@ -82,6 +81,8 @@
                     </select>
                     <br><br>
 
+            <% interests=['Ocean Clean-up', 'Volunteer' , 'Charity' , 'Black Lives Matter' , 'Clothing drive'
+                , 'Blood drive' , 'Art' , 'Cancer Walk' , 'Travel' , 'Photography' ]; %>
                     <label>Suggested Tags</label>
                     <div class="suggested-tags">
                         <% interests.forEach((interest, index)=> { %>
