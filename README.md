@@ -2,7 +2,32 @@
 
 - OrcaSwipe
 - Team BBY-38 for COMP 2800
-- [Hosted URL](https://arylivqtuh.eu09.qoddiapp.com/)
+- Qoddi Link: [URL](https://arylivqtuh.eu09.qoddiapp.com/)
+
+- Table of Contents
+  - [👏 Members](#-members)
+    - [Gathrean Dela Cruz](#gathrean-dela-cruz)
+    - [Alex Sichitiu](#alex-sichitiu)
+    - [Ozan Yurtisigi](#ozan-yurtisigi)
+    - [Laurie Solkoski](#laurie-solkoski)
+  - [📖 Project Description](#-project-description)
+  - [💻 Technologies Used](#-technologies-used)
+    - [Frontend](#frontend)
+    - [Backend](#backend)
+    - [Database](#database)
+    - [AI](#ai)
+  - [📁 Listing of File Contents of folder](#-listing-of-file-contents-of-folder)
+  - [💾 How to install or run the project](#-how-to-install-or-run-the-project)
+  - [📲 How to use the product (Features)](#-how-to-use-the-product-features)
+    - [`/` (Splash Page)](#-splash-page)
+    - [`/login` and `/signup`](#login-and-signup)
+    - [`/home` (Filtering Pods)](#home-filtering-pods)
+    - [`/findPods` (Discover Pods)](#findpods-discover-pods)
+    - [`createPods` (Host Pods)](#createpods-host-pods)
+    - [`/profile` (Your Profile)](#profile-your-profile)
+  - [🤝 Credits, References, and Licenses](#-credits-references-and-licenses)
+  - [🤖 How did you use AI?](#-how-did-you-use-ai)
+  - [🫡 Thank you](#-thank-you)
 
 ## 👏 Members
 
@@ -146,3 +171,5 @@ For example, if a user tells the bot "I love the outdoors and hiking," the bot w
 ## 🫡 Thank you
 
 Thank you for reading our README! Please contact us if you have further questions or concerns regarding OrcaSwipe.
+
+![OrcaSwipe](https://github.com/gathrean/2800-202310-BBY38/assets/77172769/342627a2-d3ce-48b9-af8b-f39e5a742f9b)
