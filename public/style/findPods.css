@@ -127,12 +127,24 @@
   padding-right: 10px;
 }
 
+.tinder--card p .time {
+  font-size: 12px;
+  font-weight: bold;
+  color: #575757;
+  display: flex;
+  flex-direction: row;
+}
+
 .tinder--card .orcascore {
   color: #02c78f;
+  font-size: 14px;
+  padding: 0px 16px;
 }
 
 .tinder--card .tags {
   color: #4676EE;
+  font-size: 14px;
+  padding: 0px 16px;
 }
 
 .tags-form {
