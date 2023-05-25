@@ -43,7 +43,7 @@ const generateResponse = async () => {
     userInput.value = "";
 
     var historyElement = document.createElement('div');
-    historyElement.innerHTML = `<li class="list-group-item"><b>You:</b> ${input}</li>`;
+    historyElement.innerHTML = `<li class="list-group-item"><b>You Said:</b> ${input}</li>`;
     chatHistory.replaceChildren(historyElement);
 
     //Stop loading spinner
