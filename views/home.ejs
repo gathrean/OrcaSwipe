@@ -28,10 +28,12 @@
             <h3>
                 Hi, <b><%= name %></b>! Here You Can Get Suggestions For Activities.
             </h3>
-            <div class="container ">
+            <div class="container" id="gpt">
                 <ul id="chat-history" class="list-group list-group-flush">
                 </ul>
-                <h2>Describe Yourself Here</h2>
+                <br>
+                <p>Describe Yourself Below</p>
+                <br>
                 <div class="input-group">
                     <span class="input-group-text">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
@@ -43,14 +45,16 @@
                     </span>
                     <textarea id="user-input" class="form-control" aria-label="With textarea"></textarea>
                 </div>
+                <br>
                 <div class="text-center">
+                    <br>
                     <button id="submit" type="button" class="btn btn-primary mt-2 blue-button" >Submit Prompt</button>
                     <div id="response"></div>
-
                     <div id="spinner" class="spinner-grow text-primary visually-hidden mt-2" role="status">
                     </div>
                 </div>
             </div>
+            <br>
             <div class="text-center"><b>Add Interests to your Profile by Picking any of the Tags Suggested Below</b></div>
             <br>
             <div id="spinner2" class="text-center spinner-grow text-primary visually-hidden mt-2" role="status"></div>
@@ -71,6 +75,20 @@
 
 
 <style>
+    #gpt {
+        margin: 0 auto;
+        display: block;
+    }
+
+    .input-group {
+        margin: 0 auto;
+        width: 70%;
+    }
+    
+    #submit {
+        width: 50%;
+    }
+
     .profile-actions {
         display: flex;
     }
