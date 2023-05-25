@@ -26,6 +26,16 @@ const mailer = nodemailer.createTransport({
 });
 
 const app = express();
+const openai = require('openai');
+
+//// Open AI API ////
+const configuration = new openai.Configuration({
+  organization: process.env.OPENAI_ORG,
+  apiKey: process.env.OPENAI_API_KEY,
+});
+const openaiapi = new openai.OpenAIApi(configuration);
+
+
 
 // MongoDB collections
 let usersCollection;
@@ -59,6 +69,9 @@ const node_session_secret = process.env.NODE_SESSION_SECRET;
 const mongodb_session_secret = process.env.MONGODB_SESSION_SECRET;
 const hashedPassword = process.env.HASHED_PASSWORD;
 // End of environment variables
+
+// Interest tags
+const interests = ['Ocean Clean-up', 'Volunteer', 'Charity', 'Black Lives Matter', 'Clothing drive', 'Blood drive', 'Art', 'Cancer Walk', 'Travel', 'Photography']
 
 // Set up the port
 const PORT = process.env.PORT || 3000;
@@ -130,8 +143,23 @@ app.get("/", (req, res) => {
 
 // GET request for the "/home" URL
 app.get("/home", async (req, res) => {
-  const user = await fetchUserData(req);
-  res.render("home", { loggedIn: req.session.loggedIn, name: req.session.name, currentPage: 'home', user });
+  var email = req.session.email;
+  var user = await usersCollection.findOne({ email: email });
+  res.render("home", { loggedIn: req.session.loggedIn, name: req.session.name, currentPage: 'home', user: user });
+});
+
+// POST request for the "/home" URL
+app.post("/home", async (req, res) => {
+  const messages = req.body.messages;
+  const model = req.body.model;
+  const temp = req.body.temp;
+
+  const completion = await openaiapi.createChatCompletion({
+      model: model,
+      messages: messages,
+      temperature: temp,
+  });
+  res.status(200).json({ result: completion.data.choices });
 });
 
 // Fetch the user data
@@ -1002,6 +1030,43 @@ app.get("/chat", async (req, res) => {
     }
   } else {
     res.status(403).send("You must be logged in to access this page.<br><a href='/'>Go back to home page</a>");
+  }
+});
+
+app.post('/chatgpt', async (req, res) => {
+  const messages = req.body.messages;
+  const model = req.body.model;
+  const temp = req.body.temp;
+
+  const completion = await openaiapi.createChatCompletion({
+      model: model,
+      messages: messages,
+      temperature: temp,
+  });
+  res.status(200).json({ result: completion.data.choices });
+});
+
+app.post('/updateInterests', async (req, res) => {
+  var newInterests = {interests: req.body.holder.split(',')};
+  const schema = Joi.object({
+    interests: Joi.array().items(Joi.string().required()).max(20).optional(),
+  });
+  var validationResult = schema.validate(newInterests);
+
+  if (validationResult.error){
+    var user = await usersCollection.findOne({ email: req.session.email });
+    res.render("home", { loggedIn: req.session.loggedIn, name: req.session.name, currentPage: 'home', user: user, errorMessage: validationResult.error.message});
+  } else if (req.body.holder != []){
+    try {
+      await usersCollection.updateOne(
+        { email: req.session.email },
+        { $addToSet: { interests: { $each: req.body.holder.split(',') } } })
+      res.redirect('profile');
+    } catch (error) {
+      res.render("home", { loggedIn: req.session.loggedIn, name: req.session.name, currentPage: 'home', user: user, errorMessage: 'Could not update. Please try again later.'});
+    }
+  } else {
+    res.render("home", { loggedIn: req.session.loggedIn, name: req.session.name, currentPage: 'home', user: user, errorMessage: 'Could not update. Please try again later.'});
   }
 });
 
