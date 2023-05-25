@@ -104,6 +104,7 @@ function loadPods() {
             navigator.geolocation.getCurrentPosition(function getLocation(position) {
                 userLocation = { lat: position.coords.latitude, lng: position.coords.longitude };
                 pods = pods.filter((p) => {
+                    // console.log(p.name + map.distance(p.location, userLocation)); 
                     return map.distance(p.location, userLocation) <= maxDist;
                 })
                 $('#map').empty();
