@@ -46,8 +46,8 @@ function initCards(card, index) {
 
     newCards.forEach(function (card, index) {
         card.style.zIndex = allCards.length - index;
-        card.style.transform = 'scale(' + (20 - index) / 20 + ') translateY(-' + 30 * index + 'px) rotate(' + -3 * index + 'deg)';
-        card.style.opacity = (10 - index) / 10;
+        card.style.transform = 'scale(' + (20 - index) / 20 + ') translateY(-' + 40 * index + 'px) rotate(' + -3 * index + 'deg)';
+        // card.style.opacity = (10 - index) / 10;
     });
 
     tinderContainer.classList.add('loaded'); // Adding the "loaded" class to the Tinder container
@@ -143,11 +143,7 @@ function reverseGeocode(location, index) {
 
 // Function to format the distance
 function formatDistance(distance) {
-    if (distance < 1000) {
-        return Math.round(distance) + "m away";
-    } else {
-        return "(" + (distance / 1000).toFixed(1) + "km away)";
-    }
+    return "(" + (distance / 1000).toFixed(1) + " km away)";
 }
 
 // Function to format the date and time
@@ -155,27 +151,27 @@ function formatDateTime(dateString, timeString) {
     const date = new Date(dateString);
     const month = date.toLocaleString('en-US', { month: 'short' });
     const day = date.getDate();
-  
+
     let formattedTime = '';
-  
+
     if (timeString) {
-      let hours = parseInt(timeString.split(':')[0]);
-      const minutes = timeString.split(':')[1];
-      let ampm = 'am';
-  
-      if (hours >= 12) {
-        ampm = 'pm';
-        if (hours > 12) {
-          hours -= 12;
+        let hours = parseInt(timeString.split(':')[0]);
+        const minutes = timeString.split(':')[1];
+        let ampm = 'am';
+
+        if (hours >= 12) {
+            ampm = 'pm';
+            if (hours > 12) {
+                hours -= 12;
+            }
         }
-      }
-  
-      formattedTime = `${hours}:${minutes}${ampm}`;
+
+        formattedTime = `${hours}:${minutes}${ampm}`;
     }
-  
+
     return `${month} ${day} @ ${formattedTime}`;
-  }
-  
+}
+
 // Function to populate the stack with pods
 function populateStack() {
     // Define tag map
