@@ -102,3 +102,5 @@ In your local .env, make sure you have the following fields filled in with your 
 - 
 
 # 🫡 Thank you!
+
+Thank you for reading our README! Please contact us if you have further questions or concerns regarding OrcaSwipe.
