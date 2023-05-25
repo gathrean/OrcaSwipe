@@ -44,7 +44,7 @@ const generateResponse = async () => {
 
     var historyElement = document.createElement('div');
     historyElement.innerHTML = `<li class="list-group-item"><b>You:</b> ${input}</li>`;
-    chatHistory.append(historyElement);
+    chatHistory.replaceChildren(historyElement);
 
     //Stop loading spinner
     loading.classList.add("visually-hidden");
