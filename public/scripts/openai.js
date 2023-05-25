@@ -70,11 +70,9 @@ const generateResponse = async () => {
         });
         var responseData = await response.json();
         var message = responseData.result[0].message.content;
-        console.log(message);
         interests = JSON.parse(message);
         populateInterests(interests);
     } catch (error) {
-        console.log(error)
         interestDiv.append('Sorry, I couldn\'t generate any suggestions for you. Please try again.');
     }
     buttonsLoading.classList.add("visually-hidden");
