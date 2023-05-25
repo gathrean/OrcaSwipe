@@ -7,15 +7,20 @@
 ## 👏 Members
 
 ### Gathrean Dela Cruz
+- Scrum Master
 - Frontend UI / UX Design
+- Graphic Designer
 
 ### Alex Sichitiu
+- Scrum Master
 - Full-stack Developer
 
 ### Ozan Yurtisigi
+- Scrum Master
 - Database Engineer
 
 ### Laurie Solkoski
+- Scrum Master
 - Datasets Developer
 
 ## 📖 Project Description
