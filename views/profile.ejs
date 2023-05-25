@@ -1,61 +1,88 @@
 <%- include("templates/header") %>
 
+  <div>
 
+    <div class="user-profile profile-form">
 
+      <!-- PROFILE PICTURE -->
+      <div class="profile-photo">
+        <% if(user.image) { %>
+          <img src="<%= user.image %>" alt="Profile Photo">
+          <% } else { %>
+            <img src="https://cdn.discordapp.com/attachments/828116217285836825/1106489564949925948/orca_pfp.jpg"
+              alt="Profile Photo">
+            <% } %>
+      </div>
 
-  <div class="user-profile form">
-    <div class="profile-photo">
-      <% if(user.image) { %>
-        <img src="<%= user.image %>" alt="Profile Photo">
-        <% } else { %>
-          <img src="https://cdn.discordapp.com/attachments/828116217285836825/1106489564949925948/orca_pfp.jpg"
-            alt="Profile Photo">
-          <% } %>
-    </div>
+      <div class="profile-details">
 
-    <div class="profile-details">
-      <h1 class="profile-name">
-        <%= user.name %>
-      </h1>
-      <h4 class="pronouns">
-        (<%= user.pronouns %>)
+        <!-- User's Name -->
+        <h1 class="profile-name">
+          <%= user.name %>
+        </h1>
+
+        <!-- User's Pronouns -->
+        <h4 class="pronouns">
+          (<%= user.pronouns %>)
+        </h4>
+      </div>
+
+      <!-- User's Username -->
+      <h4 class="username">
+        @<%= user.username %>
       </h4>
+
+      <!-- BUTTONS -->
+      <div class="profile-actions">
+        <div class="action-button">
+          <button class="btn blue-button" onclick="window.location.href='/viewProfile'">View Details</button>
+        </div>
+        <div class="action-button">
+          <button class="btn blue-button" onclick="window.location.href='/editProfile'">Edit Details</button>
+        </div>
+      </div>
+
+      <!-- OTHER DETAILS -->
+      <form class="form" action="/updateProfile" method="post">
+        <label for="email">Email</label>
+        <input class="form-control" id="disabledInput" type="text" placeholder="<%= user.email %>" disabled>
+        <br>
+        <label for="birthday">Birthday</label>
+        <input class="form-control" id="disabledInput" type="text"
+          placeholder="<%= user.birthday instanceof Date ? user.birthday.toISOString().substring(0, 10) : '' %>"
+          disabled>
+        <br>
+        <label for="interests"> Tags </label>
+        <div id="interests">
+          <% user.interests.forEach((interest)=> { %>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="<%= interest %>" disabled>
+              <label class="form-check-label">
+                <%= interest %>
+              </label>
+            </div>
+            <% }) %>
+        </div>
+      </form>
     </div>
-    <h4 class="username">@<%= user.username %>
-    </h4>
-    <div class="profile-actions">
-      <div class="action-button">
-        <button class="btn blue-button" onclick="window.location.href='/viewProfile'">View Details</button>
-      </div>
-      <div class="action-button">
-        <button class="btn blue-button" onclick="window.location.href='/editProfile'">Edit Details</button>
-      </div>
-    </div>
-    <form class="form" action="/updateProfile" method="post">
-      <label for="email">Email</label>
-      <input class="form-control" id="disabledInput" type="text" placeholder="<%= user.email %>" disabled>
-      <br>
-      <label for="birthday">Birthday</label>
-      <input class="form-control" id="disabledInput" type="text"
-        placeholder="<%= user.birthday instanceof Date ? user.birthday.toISOString().substring(0, 10) : '' %>" disabled>
-      <br>
-      <label for="interests"> Tags </label>
-      <div id="interests">
-        <% user.interests.forEach((interest)=> { %>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="<%= interest %>" disabled>
-            <label class="form-check-label">
-              <%= interest %>
-            </label>
-          </div>
-          <% }) %>
-      </div>
-    </form>
+
   </div>
+
 
   <%- include("templates/footer") %>
 
     <style>
+      .profile-form {
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 20px;
+        text-align: left;
+        position: relative;
+        max-width: 80vw;
+      }
+
       .profile-actions {
         display: flex;
       }
