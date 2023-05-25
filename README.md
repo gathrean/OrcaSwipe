@@ -9,6 +9,7 @@
 ### Gathrean Dela Cruz
 - Scrum Master
 - Frontend UI / UX Design
+- Backend Assistance
 - Graphic Designer
 
 ### Alex Sichitiu
