@@ -85,7 +85,7 @@ submit.onclick = generateResponse;
 var selectedInterests = [];
 var interests = ['Ocean Clean-up', 'Volunteer', 'Charity', 'Black Lives Matter', 'Clothing drive', 'Blood drive', 'Art', 'Cancer Walk', 'Travel', 'Photography'];
 populateInterests(interests);
-interestDiv.insertAdjacentHTML('afterbegin', '<div>Here are some default suggestions where you can help your community!</div>');
+interestDiv.insertAdjacentHTML('afterbegin', '<div>Below are some Orca-approved recommended pod tags</div>');
 
 
 function populateInterests(interests){
