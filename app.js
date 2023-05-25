@@ -424,7 +424,7 @@ app.post("/updateSettings", async (req, res) => {
         };
         await usersCollection.updateOne({ email: req.session.email }, { $set: updatedUser });
         req.session.name = updatedUser.name;
-        res.redirect("/settings");
+        res.redirect("/findPods");
       } catch (error) {
         res.status(500).send("Error updating user settings.<br><a href='/settings'>Go back to settings</a>");
       }
@@ -1073,7 +1073,7 @@ app.post('/updateInterests', async (req, res) => {
       await usersCollection.updateOne(
         { email: req.session.email },
         { $addToSet: { interests: { $each: req.body.holder.split(',') } } })
-      res.redirect('profile');
+      res.redirect('findPods');
     } catch (error) {
       res.render("home", { loggedIn: req.session.loggedIn, name: req.session.name, currentPage: 'home', user: user, errorMessage: 'Could not update. Please try again later.'});
     }
