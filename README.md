@@ -50,27 +50,34 @@
 ## 💾 How to install or run the project
 
 Before you run anything, make sure you have installed the following:
-- `npm install firebase-admin`
-- `npm install openai -- save`
-- `npm i luxon`
+```terminal
+npm install firebase-admin
+npm install openai -- save
+npm i luxon
+```
 
 
 In your local .env, make sure you have the following fields filled in with your own keys:
-```
-- PORT
-- MONGODB_USER
-- MONGODB_PASSWORD
-- MONGODB_CLUSTER
-- MONGODB_DATABASE
-- MONGODB_SESSION_SECRET
-- NODE_SESSION_SECRET
-- HASHED_PASSWORD
-- IMAGE_FIREBASE_JSON
-- OPENAI_API_KEY
-- OPENAI_ORG
-- EMAIL
-- EMAIL_APP_PASSWORD
-- HOST_URL
+```json
+PORT
+
+MONGODB_USER
+MONGODB_PASSWORD
+MONGODB_CLUSTER
+MONGODB_DATABASE
+MONGODB_SESSION_SECRET
+NODE_SESSION_SECRET
+HASHED_PASSWORD
+
+EMAIL
+EMAIL_APP_PASSWORD
+
+HOST_URL
+
+IMAGE_FIREBASE_JSON
+
+OPENAI_API_KEY
+OPENAI_ORG
 ```
 
 ## 📲 How to use the product (Features)
