@@ -128,7 +128,7 @@ function reverseGeocode(location, index) {
                     const city = response.data.address.city || response.data.address.town || response.data.address.village || response.data.address.hamlet;
                     const locationElement = document.getElementById(`location-${index}`);
                     if (locationElement) {
-                        locationElement.textContent = `City: ${city}`;
+                        locationElement.textContent = `${city}`;
                     }
                 })
                 .catch(error => {
@@ -145,9 +145,9 @@ function reverseGeocode(location, index) {
 // Function to format the distance
 function formatDistance(distance) {
     if (distance < 1000) {
-        return Math.round(distance) + "m";
+        return Math.round(distance) + "m away";
     } else {
-        return (distance / 1000).toFixed(1) + "km";
+        return "(" + (distance / 1000).toFixed(1) + "km away)";
     }
 }
 
@@ -164,21 +164,23 @@ function populateStack() {
 
         // Creating HTML for each card using pod data
         var card = `
+
         <div class="tinder--card">
 
-          <img src="${pods[i].image}">
+            <img src="${pods[i].image}">
 
-          <h3>${pods[i].name}</h3>
+            <h3>${pods[i].name}</h3>
 
-          <p id="distance-${i}">${formatDistance(distance)} away</p>
+            <p class="location">
+                <span class="location" id="location-${i}"></span>
+                <span class="location" id="distance-${i}">${formatDistance(distance)} away</span>
+            </p>
 
-          <p>${pods[i].eventDescription}</p>
+            <p>${pods[i].eventDescription}</p>
 
-          <p>Tags: ${tags.join(', ')}</p>
-          <p>Location: <span id="location-${i}"></span></p>
-
-          <p>OrcaScore: ${pods[i].upvotes.length - pods[i].downvotes.length}</p>
-
+            <p class="orcascore">OrcaScore: ${pods[i].upvotes.length - pods[i].downvotes.length}</p>
+            <p class="tags">${tags.join(', ')}</p>
+            
         </div>
       `;
         $('#stack').append(card); // Appending the card to the stack
