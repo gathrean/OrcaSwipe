@@ -32,6 +32,12 @@ function initCards(card, index) {
         adjustTagsButton.href = "/editProfile";
         buttonContainer.appendChild(adjustTagsButton);
 
+        var adjustTagsButton = document.createElement('a');
+        adjustTagsButton.textContent = "Adjust Pod Proximity";
+        adjustTagsButton.classList.add('btn', 'white-button');
+        adjustTagsButton.href = "/settings";
+        buttonContainer.appendChild(adjustTagsButton);
+
         var hostPodButton = document.createElement('a');
         hostPodButton.textContent = "Host a pod";
         hostPodButton.classList.add('btn', 'white-button');

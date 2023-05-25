@@ -1,274 +1,379 @@
 <%- include("templates/header") %>
-
-    <div>
-
-        <!-- Title on top -->
-        <div style="display: flex;align-items: center;justify-content: center;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" style="fill: white; margin-right: 10px;">
-                <!-- Add your SVG icon code here -->
-                <%- include("./icons/host-2") %>
-            </svg>
-            <h1 style="text-align: left; color: white; font-size: 3rem; line-height: 50px; margin: 0;">Hosting</h1>
-        </div>
-
-        <!-- Caption for title -->
-        <div style="display: flex;align-items: center;justify-content: center;">
-            <p style="text-align: left; color: white">
-                Fill up this form to create a pod.
-            </p>
-        </div>
-
-        <!-- Button for hosting a new pod -->
-        <a href="/createpod"><button class="btn white-button">
-                Go back to Hosted Pods
-            </button></a>
-        <hr>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
 
 
-        <!-- POD EDIT DETAILS FORM -->
-        <form class="form hosting-form" action="/createpod" method="post" enctype="multipart/form-data">
+<!-- CSS -->
+<link rel="stylesheet" href="/style/chat.css">
 
-            <!-- Pod Name -->
-            <label>Pod Name</label>
-            <input class="form-control" type="text" name="name" placeholder="Name of the Pod (max. 30 characters)" maxlength="30" required>
-            <br>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+    integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+    integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
 
-            <!-- Image -->
-            <label>Pod Image</label>
-            <input class="form-control" type="file" name="image" accept="image/*" required>
-            <br>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 
-            <!-- Pod Description -->
-            <label>Pod Description</label>
-            <textarea class="form-control" name="eventDescription" placeholder="Enter Pod description"></textarea>
-            <br>
 
-            <!-- Longtitude and Latitude -->
-            <input class="form-control" id="lat" name="lat" type="hidden">
-            <input class="form-control" id="lng" name="lng" type="hidden">
+<script defer src="scripts/map.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-            <!-- Date and Time -->
-            <div class="row-container">
-                <div
-                    style="display: flex; flex-direction: column; flex-wrap: nowrap; align-items: start; width: 100%; margin-right: 10px;">
-                    <!-- Date -->
-                    <label>Pod Date</label>
-                    <input class="form-control" type="date" name="date" required>
-                    <br>
-                </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 
-                <div
-                    style="display: flex; flex-direction: column; flex-wrap: nowrap; align-items: start; width: 100%; margin-left: 10px;">
-                    <!-- Time -->
-                    <label>Pod Time</label>
-                    <input class="form-control" type="time" name="time" required>
-                    <br>
-                </div>
 
+
+<div>
+
+    <!-- Title on top -->
+    <div style="display: flex;align-items: center;justify-content: center;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" style="fill: white; margin-right: 10px;">
+            <!-- Add your SVG icon code here -->
+            <%- include("./icons/host-2") %>
+        </svg>
+        <h1 style="text-align: left; color: white; font-size: 3rem; line-height: 50px; margin: 0;">Hosting</h1>
+    </div>
+
+    <!-- Caption for title -->
+    <div style="display: flex;align-items: center;justify-content: center;">
+        <p style="text-align: left; color: white">
+            Fill up this form to create a pod.
+        </p>
+    </div>
+
+    <!-- Button for hosting a new pod -->
+    <a href="/createpod"><button class="btn white-button">
+            Go back to Hosted Pods
+        </button></a>
+    <hr>
+
+
+    <!-- POD EDIT DETAILS FORM -->
+    <form class="form hosting-form needs-validation" action="/createpod" method="post" enctype="multipart/form-data">
+
+        <!-- Pod Name -->
+        <label>Pod Name  <i class="fas fa-asterisk mandatory-field"></i></label>
+        <input class="form-control" type="text" name="name" placeholder="Name of the Pod (max. 30 characters)"
+            maxlength="30" required>
+        <br>
+
+        <!-- Image -->
+        <label>Pod Image  <i class="fas fa-asterisk mandatory-field"></i></label>
+        <input class="form-control" type="file" name="image" accept="image/*" required>
+        <br>
+
+        <!-- Pod Description -->
+        <label>Pod Description  <i class="fas fa-asterisk mandatory-field"></i></label>
+        <textarea class="form-control" name="eventDescription" placeholder="Enter Pod description"></textarea>
+        <br>
+
+        <!-- Longtitude and Latitude -->
+        <input class="form-control" id="lat" name="lat" type="hidden">
+        <input class="form-control" id="lng" name="lng" type="hidden">
+
+        <!-- Date and Time -->
+        <div class="row-container">
+            <div
+                style="display: flex; flex-direction: column; flex-wrap: nowrap; align-items: start; width: 100%; margin-right: 10px;">
+                <!-- Date -->
+                <label>Pod Date  <i class="fas fa-asterisk mandatory-field"></i></label>
+                <input class="form-control" type="date" name="date" required>
+                <br>
             </div>
 
-            <!-- Pod Tags -->
-            <label>Pod Tags </label>
-            <% var interests=user.interests; %>    
-                <div id="interests">
-                    <select id="interests-select" multiple="multiple"
-                        name="interests" style="width: 100%;" required>
-                        <% interests.forEach((interest, index)=> { %>
-                            <option value="<%= interest %>" <%=user.interests && user.interests.includes(interest)
+            <div
+                style="display: flex; flex-direction: column; flex-wrap: nowrap; align-items: start; width: 100%; margin-left: 10px;">
+                <!-- Time -->
+                <label>Pod Time  <i class="fas fa-asterisk mandatory-field"></i></label>
+                <input class="form-control" type="time" name="time" required>
+                <br>
+            </div>
+
+        </div>
+
+        <!-- Pod Tags -->
+        <label>Pod Tags <i class="fas fa-question-circle" id="podTagsInfo"></i> <i class="fas fa-asterisk mandatory-field"></i></label>
+        <div id="podModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <p>Pods are your acitivities or events that you'd like to share and invite individuals with similar interests as you.</p>
+            </div>
+        </div>
+
+        <% var interests=user.interests; %>
+        <div id="interests">
+            <select id="interests-select" multiple="multiple" name="interests" style="width: 100%;" required>
+                <% interests.forEach((interest, index)=> { %>
+                <option value="<%= interest %>" <%=user.interests && user.interests.includes(interest)
                                 ? 'selected' : '' %>><%= interest %>
-                            </option>
-                            <% }) %>
-                    </select>
-                    <br><br>
+                </option>
+                <% }) %>
+            </select>
+            <br><br>
 
             <% interests=['Ocean Clean-up', 'Volunteer' , 'Charity' , 'Black Lives Matter' , 'Clothing drive'
                 , 'Blood drive' , 'Art' , 'Cancer Walk' , 'Travel' , 'Photography' ]; %>
-                    <label>Suggested Tags</label>
-                    <div class="suggested-tags">
-                        <% interests.forEach((interest, index)=> { %>
-                            <button type="button"
-                                class="interest-button <%= user.interests && user.interests.includes(interest) ? 'selected' : '' %>"
-                                data-interest="<%= interest %>">
-                                <%= interest %>
-                            </button>
-                            <% }) %>
-                    </div>
+            <label>Suggested Tags <i class="fas fa-question-circle" id="suggestedTagsInfo"></i> </label>
+            <div id="suggestedModal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <p>At OrcaSwipe, we beleive in pods that contribute to the community. Join us in our mission
+                        by creating pods that are meaningful and impactful. Below are some of our Orca- approved pods.
+                    </p>
                 </div>
+            </div>
+            <div class="suggested-tags">
+                <% interests.forEach((interest, index)=> { %>
+                <button type="button"
+                    class="interest-button <%= user.interests && user.interests.includes(interest) ? 'selected' : '' %>"
+                    data-interest="<%= interest %>">
+                    <%= interest %>
+                </button>
+                <% }) %>
+            </div>
+        </div>
 
 
-                <br>
+        <br>
 
-                <!-- Map -->
-                <label>Pod Location</label>
-                <div id="map"></div>
-                <br>
+        <!-- Map -->
+        <label>Pod Location  <i class="fas fa-asterisk mandatory-field"></i></label>
+        <p> Click on the map to drop a pin of where your pod will be located</p>
+        <div id="map"></div>
+        <br>
 
-                <hr>
+        <hr>
 
-                <!-- Create Pod button -->
-                <input class="btn blue-button" type="submit" value="Create Pod">
+        <!-- Create Pod button -->
+        <input class="btn blue-button" type="submit" value="Create Pod">
 
-        </form>
+    </form>
 
-    </div>
+</div>
 
-    <%- include("templates/footer") %>
-
-        <!-- CSS -->
-        <link rel="stylesheet" href="/style/chat.css">
-
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
-            integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
-        <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
-            integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
-
-        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
-        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+<%- include("templates/footer") %>
 
 
-        <script defer src="scripts/map.js"></script>
 
-        <script>
-            // Example starter JavaScript for disabling form submissions if there are invalid fields
-            (() => {
-                'use strict'
+<script>
+    (() => {
+        'use strict'
 
-                // Fetch all the forms we want to apply custom Bootstrap validation styles to
-                const forms = document.querySelectorAll('.needs-validation')
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.querySelectorAll('.needs-validation')
 
-                // Loop over them and prevent submission
-                Array.from(forms).forEach(form => {
-                    form.addEventListener('submit', event => {
-                        if (!form.checkValidity()) {
-                            event.preventDefault()
-                            event.stopPropagation()
-                        }
+        // Loop over them and prevent submission
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
 
-                        form.classList.add('was-validated')
-                    }, false)
-                })
-            })()
-        </script>
-        <style>
-            .form-group.required .control-label:after {
-                content: "*";
-                color: red;
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+</script>
+
+<script>
+    $(document).ready(function(){
+        $("#podTagsInfo").click(function(){
+            $("#podModal").show();
+        });
+
+        $("#suggestedTagsInfo").click(function(){
+            $("#suggestedModal").show();
+        });
+    
+        $(".close").click(function(){
+            $("#podModal").hide();
+        });
+
+        $(".close").click(function(){
+            $("#suggestedModal").hide();
+        });
+    });
+    
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('podModal')) {
+            $("#podModal").hide();
+        }
+    }
+    </script>
+    
+    
+
+<style>
+    .form-group.required .control-label:after {
+        content: "*";
+        color: red;
+    }
+
+    .row-container {
+        display: flex;
+        align-items: center;
+        /* Align items vertically in the middle */
+    }
+
+    .row-container label,
+    .row-container input {
+        margin-right: 10px;
+        /* Add spacing between label and input */
+    }
+
+    #map {
+        width: 100%;
+        height: 40vh;
+        border-radius: 20px;
+    }
+
+    .hosting-form {
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 20px;
+        text-align: left;
+        position: relative;
+        max-width: 80vw;
+    }
+
+    .interest-label {
+        display: inline-block;
+    }
+
+    .interest-button {
+        background-color: #134ACC;
+        color: white;
+        padding: 10px 20px;
+        margin: 5px;
+        border: none;
+        cursor: pointer;
+        border-radius: 20px;
+        /* Rounded corners */
+    }
+
+    .interest-button.selected {
+        background-color: #4676EE;
+    }
+
+    /* Each tag button */
+    /* Selection Choice */
+    .select2-container--default .select2-selection--multiple .select2-selection__choice {
+        background-color: #134ACC;
+        border: 0px;
+        border-radius: 20px;
+        display: inline-block;
+        margin-left: 5px;
+        margin-top: 5px;
+        padding: 10px 20px;
+    }
+
+    /* The x inside of each tag button */
+    .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+        /* background-color: transparent; */
+        border: none;
+        /* border-right: 1px solid #aaa; */
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+        color: #ffffff;
+        cursor: pointer;
+        font-size: 1em;
+        font-weight: bold;
+        padding: 0 4px;
+    }
+
+    .select2-container--default .select2-results__option[aria-selected="true"] {
+        background-color: #4676EE;
+        color: white;
+    }
+
+    .select2-selection__choice {
+        background-color: #134ACC;
+        color: white;
+        padding: 5px 10px;
+        margin-right: 5px;
+        border-radius: 20px;
+    }
+
+    .select2-selection__choice__remove {
+        color: white;
+        margin-left: 5px;
+        cursor: pointer;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 50%;
+        height: 100%;
+        overflow: auto;
+    }
+
+    /* Modal Content */
+    .modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
+    /* The Close Button */
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .mandatory-field {
+    color: red;
+    font-size: 0.6em;
+    vertical-align: top;
+    margin-left: 5px;
+
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        $('#interests-select').select2({
+            placeholder: "Select interests or type to add your own",
+            allowClear: true,
+            closeOnSelect: false,
+            tags: true
+        });
+
+        $('.interest-button').click(function () {
+            $(this).toggleClass('selected');
+            const interest = $(this).data('interest');
+            if ($(this).hasClass('selected')) {
+                // Add the selected interest to the multi-select
+                const option = new Option(interest, interest, true, true);
+                $('#interests-select').append(option).trigger('change');
+            } else {
+                // Remove the selected interest from the multi-select
+                $('#interests-select').find(`option[value="${interest}"]`).remove().trigger('change');
             }
+        });
+    });
+</script>
 
-            .row-container {
-                display: flex;
-                align-items: center;
-                /* Align items vertically in the middle */
-            }
-
-            .row-container label,
-            .row-container input {
-                margin-right: 10px;
-                /* Add spacing between label and input */
-            }
-
-            #map {
-                width: 100%;
-                height: 40vh;
-                border-radius: 20px;
-            }
-
-            .hosting-form {
-                display: flex;
-                flex-direction: column;
-                padding: 20px;
-                background-color: #f8f9fa;
-                border-radius: 20px;
-                text-align: left;
-                position: relative;
-                max-width: 80vw;
-            }
-
-            .interest-label {
-                display: inline-block;
-            }
-
-            .interest-button {
-                background-color: #134ACC;
-                color: white;
-                padding: 10px 20px;
-                margin: 5px;
-                border: none;
-                cursor: pointer;
-                border-radius: 20px;
-                /* Rounded corners */
-            }
-
-            .interest-button.selected {
-                background-color: #4676EE;
-            }
-
-            /* Each tag button */
-            /* Selection Choice */
-            .select2-container--default .select2-selection--multiple .select2-selection__choice {
-                background-color: #134ACC;
-                border: 0px;
-                border-radius: 20px;
-                display: inline-block;
-                margin-left: 5px;
-                margin-top: 5px;
-                padding: 10px 20px;
-            }
-
-            /* The x inside of each tag button */
-            .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
-                /* background-color: transparent; */
-                border: none;
-                /* border-right: 1px solid #aaa; */
-                border-top-left-radius: 4px;
-                border-bottom-left-radius: 4px;
-                color: #ffffff;
-                cursor: pointer;
-                font-size: 1em;
-                font-weight: bold;
-                padding: 0 4px;
-            }
-
-            .select2-container--default .select2-results__option[aria-selected="true"] {
-                background-color: #4676EE;
-                color: white;
-            }
-
-            .select2-selection__choice {
-                background-color: #134ACC;
-                color: white;
-                padding: 5px 10px;
-                margin-right: 5px;
-                border-radius: 20px;
-            }
-
-            .select2-selection__choice__remove {
-                color: white;
-                margin-left: 5px;
-                cursor: pointer;
-            }
-        </style>
-
-        <script>
-            $(document).ready(function () {
-                $('#interests-select').select2({
-                    placeholder: "Select interests or type to add your own",
-                    allowClear: true,
-                    closeOnSelect: false,
-                    tags: true
-                });
-
-                $('.interest-button').click(function () {
-                    $(this).toggleClass('selected');
-                    const interest = $(this).data('interest');
-                    if ($(this).hasClass('selected')) {
-                        // Add the selected interest to the multi-select
-                        const option = new Option(interest, interest, true, true);
-                        $('#interests-select').append(option).trigger('change');
-                    } else {
-                        // Remove the selected interest from the multi-select
-                        $('#interests-select').find(`option[value="${interest}"]`).remove().trigger('change');
-                    }
-                });
-            });
-        </script>
