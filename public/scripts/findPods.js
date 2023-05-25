@@ -176,11 +176,12 @@ function populateStack() {
                 <span class="location" id="distance-${i}">${formatDistance(distance)} away</span>
             </p>
 
+            <p>Date: ${pods[i].formattedDate} Time: ${pods[i].time}</p>
+
             <p>${pods[i].eventDescription}</p>
 
-            <p class="orcascore">OrcaScore: ${pods[i].upvotes.length - pods[i].downvotes.length}</p>
-                    <p>Date: ${pods[i].formattedDate} Time: ${pods[i].time}</p>
             <p class="tags">${tags.join(', ')}</p>
+            <p class="orcascore">OrcaScore: ${pods[i].upvotes.length - pods[i].downvotes.length}</p>
             
         </div>
       `;
