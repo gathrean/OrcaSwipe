@@ -1038,15 +1038,27 @@ app.post('/chatgpt', async (req, res) => {
 });
 
 app.post('/updateInterests', async (req, res) => {
-  //TODO: Validate inputs.
+  var newInterests = {interests: req.body.holder.split(',')};
+  const schema = Joi.object({
+    interests: Joi.array().items(Joi.string().required()).max(20).optional(),
+  });
+  var validationResult = schema.validate(newInterests);
 
-  if (req.body.holder != []){
-    await usersCollection.updateOne(
-      { email: req.session.email },
-      { $addToSet: { interests: { $each: req.body.holder.split(',') } } }
-    )
-  } 
-  res.redirect('profile');
+  if (validationResult.error){
+    var user = await usersCollection.findOne({ email: req.session.email });
+    res.render("home", { loggedIn: req.session.loggedIn, name: req.session.name, currentPage: 'home', user: user, errorMessage: validationResult.error.message});
+  } else if (req.body.holder != []){
+    try {
+      await usersCollection.updateOne(
+        { email: req.session.email },
+        { $addToSet: { interests: { $each: req.body.holder.split(',') } } })
+      res.redirect('profile');
+    } catch (error) {
+      res.render("home", { loggedIn: req.session.loggedIn, name: req.session.name, currentPage: 'home', user: user, errorMessage: 'Could not update. Please try again later.'});
+    }
+  } else {
+    res.render("home", { loggedIn: req.session.loggedIn, name: req.session.name, currentPage: 'home', user: user, errorMessage: 'Could not update. Please try again later.'});
+  }
 });
 
 // GET request to catch all other routes that are not defined
