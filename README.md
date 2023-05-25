@@ -88,17 +88,49 @@ OPENAI_ORG
 
 ## 📲 How to use the product (Features)
 
-- placeholder
+In this section, we'll guide you on what each core page does.
 
-## 🤝 Include Credits, References, and Licenses
+### `/` (Splash Page)
+
+- 
+
+### `/login` and `/signup`
+- 
+
+### `/home` (Filtering Pods)
+
+- 
+
+### `/findPods` (Discover Pods)
+
+- 
+
+### `createPods` (Host Pods)
+
+- 
+
+### `/profile` (Your Profile)
+
+- 
+
+
+## 🤝 Credits, References, and Licenses
 
 - Code for the tinder-like swipable cards that are used for finding new pods is based on this code from Rob Vermeer (https://codepen.io/RobVermeer/pen/japZpY).
+- Bootstrap 5.3 (https://getbootstrap.com/).
+- Map API, Leaflet (https://leafletjs.com/).
 
 ## 🤖 How did you use AI?
 
 > Tell us exactly what AI services and products you used and how you used them. Be very specific.
+ 
+When it comes to complex programming help, it was very helpful to consult GPT for some assistance. It felt like another team member.
 
-- placeholder
+- This is our ChatGPT Prompt Log for example (https://docs.google.com/document/d/15sE_T1InzGLhURfZ1sbZYpDkJBfUg0VNvyCVzmJe6Ik/edit?usp=sharing)
+
+We also used OpenAI's API to implement a filter suggestion feature. We used a list of hobbies dataset from Kaggle (https://www.kaggle.com/datasets/mrhell/list-of-hobbies) for the chatbot to learn from. The bot would then suggest related hobby tags for the users to add to their profile.
+
+For example, if a user tells the bot "I love the outdoors and hiking," the bot would analyze what they said, parse it, and suggests similar tags such as `fishing`, `camping`, `biking`, etc.
 
 ## 📬 Contact Information
 
