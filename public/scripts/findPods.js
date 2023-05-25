@@ -150,6 +150,32 @@ function formatDistance(distance) {
     }
 }
 
+// Function to format the date and time
+function formatDateTime(dateString, timeString) {
+    const date = new Date(dateString);
+    const month = date.toLocaleString('en-US', { month: 'short' });
+    const day = date.getDate();
+  
+    let formattedTime = '';
+  
+    if (timeString) {
+      let hours = parseInt(timeString.split(':')[0]);
+      const minutes = timeString.split(':')[1];
+      let ampm = 'am';
+  
+      if (hours >= 12) {
+        ampm = 'pm';
+        if (hours > 12) {
+          hours -= 12;
+        }
+      }
+  
+      formattedTime = `${hours}:${minutes}${ampm}`;
+    }
+  
+    return `${month} ${day} @ ${formattedTime}`;
+  }
+  
 // Function to populate the stack with pods
 function populateStack() {
     // Define tag map
@@ -175,15 +201,19 @@ function populateStack() {
                 <span class="location" id="distance-${i}">${formatDistance(distance)} away</span>
             </p>
 
-            <p>Date: ${pods[i].formattedDate} Time: ${pods[i].time}</p>
+            <p class="time">
+                <span class="time">
+                    ${formatDateTime(pods[i].formattedDate, pods[i].time)}
+                </span>
+            </p>
 
             <p>${pods[i].eventDescription}</p>
 
             <p class="tags">${tags.join(', ')}</p>
-            <p class="orcascore">OrcaScore: ${pods[i].upvotes.length - pods[i].downvotes.length}</p>
+            <!-- <p class="orcascore">OrcaScore: ${pods[i].upvotes.length - pods[i].downvotes.length}</p> -->
             
         </div>
-      `;
+        `;
         $('#stack').append(card); // Appending the card to the stack
 
         // Perform reverse geocoding request
