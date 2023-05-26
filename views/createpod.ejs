@@ -52,18 +52,18 @@
     <form class="form hosting-form needs-validation" action="/createpod" method="post" enctype="multipart/form-data">
 
         <!-- Pod Name -->
-        <label>Pod Name  <i class="fas fa-asterisk mandatory-field"></i></label>
+        <label>Pod Name <i class="fas fa-asterisk mandatory-field"></i></label>
         <input class="form-control" type="text" name="name" placeholder="Name of the Pod (max. 30 characters)"
             maxlength="30" required>
         <br>
 
         <!-- Image -->
-        <label>Pod Image  <i class="fas fa-asterisk mandatory-field"></i></label>
+        <label>Pod Image <i class="fas fa-asterisk mandatory-field"></i></label>
         <input class="form-control" type="file" name="image" accept="image/*" required>
         <br>
 
         <!-- Pod Description -->
-        <label>Pod Description  <i class="fas fa-asterisk mandatory-field"></i></label>
+        <label>Pod Description <i class="fas fa-asterisk mandatory-field"></i></label>
         <textarea class="form-control" name="eventDescription" placeholder="Enter Pod description"></textarea>
         <br>
 
@@ -76,7 +76,7 @@
             <div
                 style="display: flex; flex-direction: column; flex-wrap: nowrap; align-items: start; width: 100%; margin-right: 10px;">
                 <!-- Date -->
-                <label>Pod Date  <i class="fas fa-asterisk mandatory-field"></i></label>
+                <label>Pod Date <i class="fas fa-asterisk mandatory-field"></i></label>
                 <input class="form-control" type="date" name="date" required>
                 <br>
             </div>
@@ -84,7 +84,7 @@
             <div
                 style="display: flex; flex-direction: column; flex-wrap: nowrap; align-items: start; width: 100%; margin-left: 10px;">
                 <!-- Time -->
-                <label>Pod Time  <i class="fas fa-asterisk mandatory-field"></i></label>
+                <label>Pod Time <i class="fas fa-asterisk mandatory-field"></i></label>
                 <input class="form-control" type="time" name="time" required>
                 <br>
             </div>
@@ -92,11 +92,13 @@
         </div>
 
         <!-- Pod Tags -->
-        <label>Pod Tags <i class="fas fa-question-circle" id="podTagsInfo"></i> <i class="fas fa-asterisk mandatory-field"></i></label>
+        <label>Pod Tags <i class="fas fa-question-circle" id="podTagsInfo"></i> <i
+                class="fas fa-asterisk mandatory-field"></i></label>
         <div id="podModal" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>
-                <p>Pods are your acitivities or events that you'd like to share and invite individuals with similar interests as you.</p>
+                <p>Pods are your acitivities or events that you'd like to share and invite individuals with similar
+                    interests as you.</p>
             </div>
         </div>
 
@@ -137,7 +139,7 @@
         <br>
 
         <!-- Map -->
-        <label>Pod Location  <i class="fas fa-asterisk mandatory-field"></i></label>
+        <label>Pod Location <i class="fas fa-asterisk mandatory-field"></i></label>
         <p> Click on the map to drop a pin of where your pod will be located</p>
         <div id="map"></div>
         <br>
@@ -177,33 +179,34 @@
 </script>
 
 <script>
-    $(document).ready(function(){
-        $("#podTagsInfo").click(function(){
+    // for pop up modals located on the form
+    $(document).ready(function () {
+        $("#podTagsInfo").click(function () {
             $("#podModal").show();
         });
 
-        $("#suggestedTagsInfo").click(function(){
+        $("#suggestedTagsInfo").click(function () {
             $("#suggestedModal").show();
         });
-    
-        $(".close").click(function(){
+
+        $(".close").click(function () {
             $("#podModal").hide();
         });
 
-        $(".close").click(function(){
+        $(".close").click(function () {
             $("#suggestedModal").hide();
         });
     });
-    
+
     // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
+    window.onclick = function (event) {
         if (event.target == document.getElementById('podModal')) {
             $("#podModal").hide();
         }
     }
-    </script>
-    
-    
+</script>
+
+
 
 <style>
     .form-group.required .control-label:after {
@@ -317,16 +320,16 @@
 
     /* Modal Content */
     .modal-content {
-    position: relative;
-    background-color: #fefefe;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 50%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
+        position: relative;
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 50%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
 
 
     /* The Close Button */
@@ -345,15 +348,17 @@
     }
 
     .mandatory-field {
-    color: red;
-    font-size: 0.6em;
-    vertical-align: top;
-    margin-left: 5px;
+        color: red;
+        font-size: 0.6em;
+        vertical-align: top;
+        margin-left: 5px;
 
     }
 </style>
 
 <script>
+    // initializes a select2 dropdown for selecting interests and allows the user to add or 
+    // remove interests by clicking on buttons with the class "interest-button.
     $(document).ready(function () {
         $('#interests-select').select2({
             placeholder: "Select interests or type to add your own",
@@ -376,4 +381,3 @@
         });
     });
 </script>
-
