@@ -29,7 +29,7 @@ function initCards(card, index) {
         var adjustTagsButton = document.createElement('a');
         adjustTagsButton.textContent = "Adjust my tags";
         adjustTagsButton.classList.add('btn', 'white-button');
-        adjustTagsButton.href = "/editProfile";
+        adjustTagsButton.href = "/home";
         buttonContainer.appendChild(adjustTagsButton);
 
         var adjustTagsButton = document.createElement('a');
