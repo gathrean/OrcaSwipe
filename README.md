@@ -87,6 +87,7 @@
 
 ## 📁 Nested listing of File Contents of folder
 -- Note: we have excluded the contents of node_modules due to thousands of file lines
+```
 
 ├── Procfile
 ├── README.md
@@ -194,6 +195,8 @@
     │   ├── navbar-top.ejs
     │   └── sidebar.ejs
     └── viewProfile.ejs
+
+```
 
 ## 💾 How to install or run the project
 
