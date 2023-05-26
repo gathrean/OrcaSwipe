@@ -1,3 +1,5 @@
+// Built using https://danielkhv.com/blog/createyourownchatbot
+
 //Get reference to our submit button and chatbot field
 const submit = document.getElementById("submit");
 const userInput = document.getElementById("user-input");

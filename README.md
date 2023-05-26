@@ -153,6 +153,7 @@ In this section, we'll guide you on what each core page does.
 ## 🤝 Credits, References, and Licenses
 
 - Swiping Cards Stack effect: [Tinder-like swipable cards Rob Vermeer](https://codepen.io/RobVermeer/pen/japZpY).
+- ChatGPT integration (https://danielkhv.com/blog/createyourownchatbot)
 - CSS Framework: [Bootstrap 5.3](https://getbootstrap.com/).
 - Map API: [Leaflet](https://leafletjs.com/).
 
