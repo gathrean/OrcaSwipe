@@ -48,6 +48,7 @@
 
 - Scrum Master
 - Database Engineer
+- [LinkedIn](https://www.linkedin.com/in/ozan-yurtisigi/)
 
 ### Laurie Solkoski
 
@@ -60,6 +61,12 @@
 - OrcaSwipe: Discover, join, and host tailored communities and events with a swipe, connecting you with like-minded individuals and enabling easy filtering, finding, and hosting of Pods.
 
 ## 💻 Technologies Used
+
+- Node.js
+- Express.js
+- Leaflet.js
+- MongoDB
+- Firestore
 
 ### Frontend
 
