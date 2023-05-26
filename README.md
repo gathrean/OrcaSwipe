@@ -48,6 +48,7 @@
 
 - Scrum Master
 - Database Engineer
+- [LinkedIn](https://www.linkedin.com/in/ozan-yurtisigi/)
 
 ### Laurie Solkoski
 
