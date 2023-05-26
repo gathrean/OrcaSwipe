@@ -17,12 +17,13 @@
   <h3 class="bubble-header">Your Tags: </h3>
   <div id="interests" style="display: flex; flex-wrap: wrap; justify-content: center;">
     <% user.interests.forEach((interest)=> { %>
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="<%= interest %>" disabled>
-        <label class="form-check-label interest-button" style="color: white; background-color: hsl(<%= Math.floor(Math.random()*360) %>, 100%, 20%); border: 1px solid black;">
-          <%= interest %>
-        </label>
-      </div>
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="<%= interest %>" disabled>
+      <label class="form-check-label interest-button"
+        style="color: white; background-color: hsl(<%= Math.floor(Math.random()*360) %>, 100%, 20%); border: 1px solid black;">
+        <%= interest %>
+      </label>
+    </div>
     <% }) %>
   </div>
 </div>
@@ -72,7 +73,7 @@
 
   .interest-button {
     background-color: #1f49c8;
-    color: white;
+    color: rgb(0, 0, 0);
     padding: 10px 20px;
     margin: 5px;
     border: none;
@@ -93,19 +94,19 @@
   * {
     font-family: 'Helvetica Neue', Arial, sans-serif;
     box-sizing: border-box;
-}
+  }
 
-body {
-  background: linear-gradient(360deg, #4676EE, #134ACC);
+  body {
+    background: linear-gradient(360deg, #4676EE, #134ACC);
     font-size: 14px;
     line-height: 18px;
     color: #262626;
     padding-top: 20px;
     max-width: 935px;
     margin: 0 auto;
-}
+  }
 
-.user-profile-details {
+  .user-profile-details {
     display: flex;
     flex-direction: column;
     padding: 30px;
@@ -114,48 +115,48 @@ body {
     border-radius: 3px;
     margin-bottom: 10px;
     text-align: center;
-}
+  }
 
-.user-profile-details h1,
-.user-profile-details h2,
-.user-profile-details h3 {
+  .user-profile-details h1,
+  .user-profile-details h2,
+  .user-profile-details h3 {
     margin: 15px 0;
-}
+  }
 
-.user-profile-details h1 {
+  .user-profile-details h1 {
     font-size: 28px;
     line-height: 32px;
     color: #000000;
-}
+  }
 
-.user-profile-details h2 {
+  .user-profile-details h2 {
     font-size: 16px;
     line-height: 18px;
     font-weight: 600;
     color: #000000;
-}
+  }
 
-.user-profile-details h3 {
+  .user-profile-details h3 {
     font-size: 14px;
     line-height: 18px;
     color: #000000;
-}
+  }
 
-.form-control {
+  .form-control {
     background-color: #fafafa;
-    border: none; /* this will remove the box around the input field */
-    outline: none; /* this will remove the outline around the input field when it is focused */
+    border: none;
+    /* this will remove the box around the input field */
+    outline: none;
+    /* this will remove the outline around the input field when it is focused */
     padding: 7px 0px;
     font-size: 14px;
     line-height: 18px;
     color: #262626;
-}
+  }
 
-.form-control:disabled {
+  .form-control:disabled {
     background-color: #fafafa;
-}
-
-
+  }
 </style>
 
 <%- include("templates/footer") %>

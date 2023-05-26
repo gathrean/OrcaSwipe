@@ -1,142 +1,142 @@
 <%- include("templates/header") %>
 
-    <div class="">
-        <!-- Title on top -->
-        <div style="display: flex;align-items: center;justify-content: center;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" style="fill: white; margin-right: 10px;">
-                <!-- Add your SVG icon code here -->
-                <%- include("./icons/host-2") %>
-            </svg>
-            <h1 style="text-align: left; color: white; font-size: 3rem; line-height: 50px; margin: 0;">Host</h1>
-        </div>
-
-        <!-- Caption for title -->
-        <div style="display: flex;align-items: center;justify-content: center;">
-            <p style="text-align: left; color: white">
-                List of all the Pods you are hosting
-            </p>
-        </div>
-
-        <script>
-            // Storing the createdPods data as a JavaScript variable
-            // NOTE: VSCode may suggest that the line below has error, but DO NOT adjust this line.
-            var pods = <%- JSON.stringify(createdPods) %>
-        </script>
-
-
-        <!-- Button for hosting a new pod -->
-        <a href="/createpod"><button class="btn white-button">
-                Host a new pod
-            </button></a>
-        <hr>
-
-        <!-- Card container -->
-        <div class="card-container">
-            <!-- Card for each hosted pod -->
-            <% createdPods.forEach(function(pod) { %>
-                <div class="card" style="text-align: left;">
-
-                    <!-- Include image here -->
-                    <% if(pod.image) { %>
-                        <div class="card-image">
-                            <img src="<%= pod.image %>" alt="<%= pod.name %>">
-                        </div>
-                        <% } %>
-
-                            <div class="card-content">
-                                <h1>
-                                    <%= pod.name %>
-                                </h1>
-                                <!-- <h3 class="description">
-                                    <%= pod.location %>
-                                </h3> -->
-                                <div style="background-color: white; color: black; padding: 10px;">
-                                    <p><strong>Host:</strong>
-                                        <%= pod.host %>
-                                    </p>
-                                    <p><strong>Attenders:</strong> <span class="attenders">
-                                            <%= pod.attenders.length %>
-                                        </span></p>
-                                    <p><strong>Description:</strong> <span class="description">
-                                            <%= pod.eventDescription %>
-                                        </span></p>
-                                </div>
-                                <hr>
-                                <div class="pods-actions">
-                                    <button id="<%= pod.name %>" type="button" class="btn blue-button see-details"
-                                        data-bs-toggle="modal" data-bs-target="#pod-details">See details</button>
-                                    <button class="btn blue-button show-attenders" data-pod-id="<%= pod._id %>">
-                                        Who's going?
-                                    </button>
-                                    <button class="btn red-button delete" data-pod-id="<%= pod._id %>"
-                                        data-bs-toggle="modal" data-bs-target="#pod-details">
-                                        Delete Pod
-                                    </button>
-                                </div>
-                            </div>
-                </div>
-
-                <% }); %>
-
-                    <!-- Modal -->
-                    <div id="modal" class="modal">
-                        <div class="modal-content">
-                            <span class="close">&times;</span>
-                            <p id="modal-text"></p>
-                        </div>
-                    </div>
-
-        </div>
+<div class="">
+    <!-- Title on top -->
+    <div style="display: flex;align-items: center;justify-content: center;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" style="fill: white; margin-right: 10px;">
+            <!-- Add your SVG icon code here -->
+            <%- include("./icons/host-2") %>
+        </svg>
+        <h1 style="text-align: left; color: white; font-size: 3rem; line-height: 50px; margin: 0;">Host</h1>
     </div>
 
-    <%- include("templates/footer") %>
+    <!-- Caption for title -->
+    <div style="display: flex;align-items: center;justify-content: center;">
+        <p style="text-align: left; color: white">
+            List of all the Pods you are hosting
+        </p>
+    </div>
 
-        <script defer src="scripts/podDetails.js"></script>
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
-            integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
-        <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
-            integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+    <script>
+        // Storing the createdPods data as a JavaScript variable
+        // NOTE: VSCode may suggest that the line below has error, but DO NOT adjust this line.
+        var pods = < % -JSON.stringify(createdPods) % >
+    </script>
 
-        <link rel="stylesheet" href="/style/findPods.css">
-        <link rel="stylesheet" href="/style/pods.css">
 
-        <script>
-                document.querySelectorAll('.show-attenders').forEach(button => {
-                    button.addEventListener('click', async function () {
-                        const podId = this.getAttribute('data-pod-id');
-                        const response = await fetch(`/pod/${podId}/attenders`);
-                        const attenders = await response.json();
+    <!-- Button for hosting a new pod -->
+    <a href="/createpod"><button class="btn white-button">
+            Host a new pod
+        </button></a>
+    <hr>
 
-                        const modalText = document.getElementById('modal-text');
-                        modalText.textContent = '';
+    <!-- Card container -->
+    <div class="card-container">
+        <!-- Card for each hosted pod -->
+        <% createdPods.forEach(function(pod) { %>
+        <div class="card" style="text-align: left;">
 
-                        for (let attender of attenders) {
-                        const div = document.createElement('div');
-                        const img = document.createElement('img');
-                        img.src = attender.profileImage;
-                        img.alt = attender.username;
-                        div.appendChild(img);
-                        const span = document.createElement('span');
-                        span.textContent = `${attender.username} (${attender.email})`;
-                        div.appendChild(span);
-                        modalText.appendChild(div);
-                    }
+            <!-- Include image here -->
+            <% if(pod.image) { %>
+            <div class="card-image">
+                <img src="<%= pod.image %>" alt="<%= pod.name %>">
+            </div>
+            <% } %>
 
-                        // Display the modal
-                        const modal = document.getElementById('modal');
-                        modal.style.display = "block";
-                    });
-                });
+            <div class="card-content">
+                <h1>
+                    <%= pod.name %>
+                </h1>
+                <!-- <h3 class="description">
+                                    <%= pod.location %>
+                                </h3> -->
+                <div style="background-color: white; color: black; padding: 10px;">
+                    <p><strong>Host:</strong>
+                        <%= pod.host %>
+                    </p>
+                    <p><strong>Attenders:</strong> <span class="attenders">
+                            <%= pod.attenders.length %>
+                        </span></p>
+                    <p><strong>Description:</strong> <span class="description">
+                            <%= pod.eventDescription %>
+                        </span></p>
+                </div>
+                <hr>
+                <div class="pods-actions">
+                    <button id="<%= pod.name %>" type="button" class="btn blue-button see-details"
+                        data-bs-toggle="modal" data-bs-target="#pod-details">See details</button>
+                    <button class="btn blue-button show-attenders" data-pod-id="<%= pod._id %>">
+                        Who's going?
+                    </button>
+                    <button class="btn red-button delete" data-pod-id="<%= pod._id %>" data-bs-toggle="modal"
+                        data-bs-target="#pod-details">
+                        Delete Pod
+                    </button>
+                </div>
+            </div>
+        </div>
 
-            // When the user clicks on <span> (x), close the modal
-            document.querySelector('.close').addEventListener('click', function () {
-                const modal = document.getElementById('modal');
-                modal.style.display = "none";
-            });
+        <% }); %>
 
-            $('.delete').on('click', function () {
-                $('.modal-title').empty().append(`<b>Confirm Deletion<b>`);
-                $('.modal-body').empty().append(`
+        <!-- Modal -->
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <p id="modal-text"></p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<%- include("templates/footer") %>
+
+<script defer src="scripts/podDetails.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+    integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+    integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+
+<link rel="stylesheet" href="/style/findPods.css">
+<link rel="stylesheet" href="/style/pods.css">
+
+<script>
+    document.querySelectorAll('.show-attenders').forEach(button => {
+        button.addEventListener('click', async function () {
+            const podId = this.getAttribute('data-pod-id');
+            const response = await fetch(`/pod/${podId}/attenders`);
+            const attenders = await response.json();
+
+            const modalText = document.getElementById('modal-text');
+            modalText.textContent = '';
+
+            for (let attender of attenders) {
+                const div = document.createElement('div');
+                const img = document.createElement('img');
+                img.src = attender.profileImage;
+                img.alt = attender.username;
+                div.appendChild(img);
+                const span = document.createElement('span');
+                span.textContent = `${attender.username} (${attender.email})`;
+                div.appendChild(span);
+                modalText.appendChild(div);
+            }
+
+            // Display the modal
+            const modal = document.getElementById('modal');
+            modal.style.display = "block";
+        });
+    });
+
+    // When the user clicks on <span> (x), close the modal
+    document.querySelector('.close').addEventListener('click', function () {
+        const modal = document.getElementById('modal');
+        modal.style.display = "none";
+    });
+
+    $('.delete').on('click', function () {
+        $('.modal-title').empty().append(`<b>Confirm Deletion<b>`);
+        $('.modal-body').empty().append(`
                     <div>Delete this pod?</div>
                     <form action='deletePod' method='post'>
                     <input name="podID" type='hidden' value='${$(this).attr('data-pod-id')}'>
@@ -145,6 +145,5 @@
                     </button>
                     </form>
                 `)
-            });
-
-        </script>
+    });
+</script>
