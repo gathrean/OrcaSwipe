@@ -55,6 +55,20 @@
 
         <ul class="nav nav-pills container-fluid justify-content-center align-items-center">
 
+                <!-- OrcaAI -->
+                <li class="nav-item">
+                        <a href="/home"
+                                class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'home') ? 'active' : '' %>"
+                                aria-current="page">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none"
+                                        viewBox="0 0 24 24">
+                                        <!-- Add your SVG icon code here -->
+                                        <%- include("../icons/home") %>
+                                </svg>
+                                <span class="icon-label">OrcaAI</span>
+                        </a>
+                </li>
+
                 <!-- FIND PODS -->
                 <li class="nav-item">
                         <a href="/findPods"
@@ -94,20 +108,6 @@
                                         <%- include("../icons/love") %>
                                 </svg>
                                 <span class="icon-label">Saved</span>
-                        </a>
-                </li>
-
-                <!-- CHAT -->
-                <li class="nav-item">
-                        <a href="/chat"
-                                class="nav-link <%= (typeof currentPage !== 'undefined' && currentPage === 'chat') ? 'active' : '' %>"
-                                aria-current="page">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none"
-                                        viewBox="0 0 24 24">
-                                        <!-- Add your SVG icon code here -->
-                                        <%- include("../icons/pods") %>
-                                </svg>
-                                <span class="icon-label">Chat</span>
                         </a>
                 </li>
 
