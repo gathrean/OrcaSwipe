@@ -39,17 +39,21 @@
       <input class="form-control" id="disabledInput" type="text"
         placeholder="<%= user.birthday instanceof Date ? user.birthday.toISOString().substring(0, 10) : '' %>" disabled>
       <br>
-      <label for="interests"> Tags </label>
-      <div id="interests">
+      <label for="interests"> Your Tags </label>
+      <div id="interests" style="display: flex; flex-wrap: wrap; justify-content: center;">
         <% user.interests.forEach((interest)=> { %>
           <div class="form-check">
             <input class="form-check-input" type="checkbox" value="<%= interest %>" disabled>
-            <label class="form-check-label">
+            <label class="form-check-label interest-button" style="color: white; background-color: hsl(<%= Math.floor(Math.random()*360) %>, 100%, 20%); border: 1px solid black;">
               <%= interest %>
             </label>
           </div>
-          <% }) %>
+        <% }) %>
+        
+        
+        
       </div>
+      
     </form>
   </div>
 
@@ -63,4 +67,59 @@
       .action-button {
         margin-right: 10px;
       }
+
+      .form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #fafafa;
+    border-radius: 3px;
+    width: 100%;
+    max-width: 500px; /* Adjust this to control the width of the form */
+    margin: 0 auto; /* Center the form horizontally */
+}
+
+.form label {
+    font-size: 16px;
+    line-height: 24px;
+    color: #000000;
+    margin-bottom: 5px;
+}
+
+.form-control {
+    width: 100%;
+    background-color: #fafafa;
+    border: none;
+    outline: none;
+    padding: 7px 0px;
+    font-size: 16px;
+    color: #262626;
+    text-align: center;
+}
+
+.form-control:disabled {
+    background-color: #fafafa;
+}
+
+.interest-button {
+    background-color: #1f49c8; /* Turquoise Blue */
+    color: white;
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    cursor: pointer;
+    border-radius: 20px; /* Rounded corners */
+    text-align: center;
+}
+
+.form-check {
+    display: inline-block;
+}
+
+.form-check-input {
+    display: none;
+}
+
+
     </style>
