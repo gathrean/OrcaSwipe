@@ -465,7 +465,7 @@ app.post("/signup", async (req, res) => {
       req.session.loggedIn = true;
       req.session.name = newUser.name;
       req.session.email = newUser.email;
-      res.redirect("/editProfile");
+      res.redirect("/home");
     } catch (error) {
       if (error.code == 11000) {
         var problemField = Object.keys(error.keyValue);
