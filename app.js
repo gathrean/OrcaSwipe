@@ -459,7 +459,7 @@ app.post("/signup", async (req, res) => {
         admin: false,
         eventsAttended: [],
         interests: [],
-        podProximity: 10000
+        podProximity: 30000
       };
       const result = await usersCollection.insertOne(newUser);
       req.session.loggedIn = true;
@@ -857,7 +857,7 @@ app.get("/findPods", async (req, res) => {
   var email = req.session.email;
   var user = await usersCollection.findOne({ email: email });
   console.log(user)
-  res.render('findPods', { currentPage: 'findPods', maxDist: user.podProximity != null ? user.podProximity : 10000, user: user });
+  res.render('findPods', { currentPage: 'findPods', maxDist: user.podProximity != null ? user.podProximity : 30000, user: user });
 })
 
 
