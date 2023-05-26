@@ -532,7 +532,7 @@ app.post("/login", async (req, res) => {
         req.session.email = user.email;
         res.redirect("/findPods");
       } else {
-        res.status(401).send("Incorrect username and password.<br><a href='/login'>Go back to log in</a>");
+        res.status(401).render('errors/incorrect', { error: "Incorrect username and password.", link: "/login" });    
       }
     } catch (error) {
       res.status(500).send("Error logging in.<br><a href='/login'>Go back to log in</a>");
