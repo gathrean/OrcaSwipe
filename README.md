@@ -53,6 +53,7 @@
 
 - Scrum Master
 - Datasets Developer
+- Full Stack Developer
 
 ## 📖 Project Description
 
@@ -84,22 +85,132 @@
 - ChatGPT 3.5
 - GPT-4
 
-## 📁 Listing of File Contents of folder
+## 📁 Nested listing of File Contents of folder
+-- Note: we have excluded the contents of node_modules due to thousands of file lines
+```
 
-- placeholder
+├── Procfile
+├── README.md
+├── app.js
+├── hobbies.csv
+├── hobbies2.csv
+├── node_modules
+├── package-lock.json
+├── package.json
+├── public
+│   ├── flappy-orca
+│   │   ├── flappy-orca.css
+│   │   ├── flappy-orca.html
+│   │   ├── flappy-orca.js
+│   │   ├── flappy-soundfx
+│   │   │   ├── rizz-sounds.mp3
+│   │   │   └── vine-boom.mp3
+│   │   ├── orca-2.png
+│   │   └── orca.png
+│   ├── images
+│   │   ├── OrcaSwipe_Logo.png
+│   │   ├── arrow-right-from-bracket.svg
+│   │   ├── circle-user.svg
+│   │   ├── compass.svg
+│   │   ├── heart.svg
+│   │   ├── house-chimney-floor.svg
+│   │   ├── layer-group.svg
+│   │   ├── location-plus.svg
+│   │   ├── menu.svg
+│   │   ├── message-circle-chat.svg
+│   │   ├── orca_pfp.jpg
+│   │   ├── settings.svg
+│   │   ├── shield-exclamation.svg
+│   │   ├── tree-decorated-alt-1.svg
+│   │   └── xmark.svg
+│   ├── scripts
+│   │   ├── chat.js
+│   │   ├── findPods.js
+│   │   ├── loading-circle.js
+│   │   ├── map.js
+│   │   ├── openai.js
+│   │   └── podDetails.js
+│   └── style
+│       ├── chat.css
+│       ├── findPods.css
+│       ├── loading-circle.css
+│       ├── pods.css
+│       ├── splash-style.css
+│       ├── splash.css
+│       └── style.css
+├── styles.css
+├── uploads
+└── views
+    ├── admin
+    │   └── admin.ejs
+    ├── attendedpods.ejs
+    ├── chat.ejs
+    ├── createdpods.ejs
+    ├── createpod.ejs
+    ├── editProfile.ejs
+    ├── errors
+    │   ├── 403.ejs
+    │   ├── 404.ejs
+    │   ├── error.ejs
+    │   └── incorrect.ejs
+    ├── findPods.ejs
+    ├── home.ejs
+    ├── icons
+    │   ├── chat-2.ejs
+    │   ├── find-2.ejs
+    │   ├── find.ejs
+    │   ├── hamburger.ejs
+    │   ├── home.ejs
+    │   ├── host-2.ejs
+    │   ├── host.ejs
+    │   ├── logout.ejs
+    │   ├── love.ejs
+    │   ├── nope.ejs
+    │   ├── pods-2.ejs
+    │   ├── pods.ejs
+    │   ├── profile.ejs
+    │   ├── report.ejs
+    │   ├── settings-2.ejs
+    │   ├── settings.ejs
+    │   └── tree.ejs
+        ├── profile.ejs
+    ├── resetting-passwords
+    │   ├── resetEmailSent.ejs
+    │   ├── resetPassword.ejs
+    │   └── updatePassword.ejs
+    ├── settings.ejs
+    ├── splash
+    │   ├── footer-splash.ejs
+    │   ├── header-splash-login.ejs
+    │   ├── header-splash.ejs
+    │   ├── login.ejs
+    │   ├── signup.ejs
+    │   └── splash.ejs
+    ├── templates
+    │   ├── footer.ejs
+    │   ├── header.ejs
+    │   ├── navbar-bottom.ejs
+    │   ├── navbar-top.ejs
+    │   └── sidebar.ejs
+    └── viewProfile.ejs
+
+```
 
 ## 💾 How to install or run the project
 
 Before you run anything, make sure you have installed the following:
 
 ```terminal
+    npm install bcrypt
     npm install firebase-admin
     npm install openai -- save
     npm i luxon
+    npm install dotenv
+
 ```
 
 In your local .env, make sure you have the following fields filled in with your own keys:
-
+Note: OrcaSwipe is set to port 3000
 ```json
     PORT
 
@@ -120,7 +231,27 @@ In your local .env, make sure you have the following fields filled in with your 
 
     OPENAI_API_KEY
     OPENAI_ORG
+    
+    // for firebase configuration
+    TYPE
+    PROJECT_ID
+    PRIVATE_KEY_ID
+    PRIVATE_KEY
+    CLIENT_EMAIL
+    CLIENT_ID
+    AUTH_URI
+    TOKEN_URI
+    AUTH_PROVIDER_X509_CERT_URL
+    CLIENT_X509_CERT_URL
+    UNIVERSE_DOMAIN
+
 ```
+
+For Firebase storage, do the following: 
+Go to Project Overview -> Project Settings -> Service Accounts -> Firebase Admin SDK -> choose Node.js
+-> Generate new private key
+This will generate a .json file with the keys that you need to add to in the firebase fields in your .env
+This does NOT go into you public repo.
 
 ## 📲 How to use the product (Features)
 
@@ -128,34 +259,51 @@ In this section, we'll guide you on what each core page does.
 
 ### `/` (Splash Page)
 
-- placeholder
+- Double tap on the Orca icon at the top-most part of the page for a surprise!
 
 ### `/login` and `/signup`
 
-- placeholder
+- Sign up with your credentials and proceed to log in.
 
 ### `/home` (Filtering Pods)
 
-- placeholder
+- In the promt box, describe the types of acitivities you like or activities you'd like to try.
+- There are also some suggested tags that align with OrcaSwipe's vision of community involvement
+- For example, "I like going to the beach", then click "Find Pod Tags"
+- The bot will generate some suggested tags based on your prompt. 
+- Click on "Add these interests!". This will be added to your user profile tags.
 
 ### `/findPods` (Discover Pods)
 
-- placeholder
+- This is the main page where users can browse cards of pods that appear in a stack.
+- If your page is empty, it means no users have created pods that align or match with your interests, or you're too far away from any created pods.
+- You have the option to adjust your tags, adjust your location proximity, or create your own pod.
+- The pod cards that are being rendered show the pod's title, location, distance from your current location, the date and time, a brief description, and the tags that relate to it.
 
 ### `createPods` (Host Pods)
 
-- placeholder
+- This page shows all the pods you have created, and a path to creating a another pod.
+- You can create a pod by clicking on "Host a new pod"
+- All the fields when creating a pod are required, as indicated by the red asterisk at the top of the fields.
+- You would need to input the following: Pod Name, upload a pod image from your local device, pod description, pod date, pod time, pod tags, and pod location.
+- In alignment with OrcaSwipe's vision of promoting pod types that are beneficial to the community, there are suggested tags for the user to choose from.
+- If you don't wish to choose those tags, you can deselect them. 
+- If you need more info on what pods are or what the suggest tags are, you can click on the "question mark" icon beside those fields.
+- After you're satisfied with your pod details, click on "Create Pod". 
+- If you want to view the pod you just created, click back on the "Host" icon in the sidebar tab.
 
 ### `/profile` (Your Profile)
 
-- placeholder
+- In either the bottom-left of the sidebar or top right of the header is your profile photo, along with your username. If you click on that it will take you to your profile page.
+- In your profile page your can either Edit details or view your current profile details.
+- The fields are not required.
 
 ## 🤝 Credits, References, and Licenses
 
 - Swiping Cards Stack effect: [Tinder-like swipable cards Rob Vermeer](https://codepen.io/RobVermeer/pen/japZpY).
-- ChatGPT integration (https://danielkhv.com/blog/createyourownchatbot)
 - CSS Framework: [Bootstrap 5.3](https://getbootstrap.com/).
 - Map API: [Leaflet](https://leafletjs.com/).
+- Open AI and Chat gpt integration for OrcaAI: https://danielkhv.com/blog/createyourownchatbot 
 
 ## 🤖 How did you use AI?
 
@@ -174,3 +322,6 @@ For example, if a user tells the bot "I love the outdoors and hiking," the bot w
 Thank you for reading our README! Please contact us if you have further questions or concerns regarding OrcaSwipe.
 
 ![OrcaSwipe](https://github.com/gathrean/2800-202310-BBY38/assets/77172769/342627a2-d3ce-48b9-af8b-f39e5a742f9b)
+
+Attributions:
+- Code for the tinder-like swipable cards that are used for finding new pods is based on this code from Rob Vermeer (https://codepen.io/RobVermeer/pen/japZpY).
