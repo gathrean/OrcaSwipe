@@ -1,74 +1,72 @@
 <%- include("templates/header") %>
 
-
-
-
-  <div class="user-profile form">
-    <div class="profile-photo">
-      <% if(user.image) { %>
-        <img src="<%= user.image %>" alt="Profile Photo">
-        <% } else { %>
-          <img src="https://cdn.discordapp.com/attachments/828116217285836825/1106489564949925948/orca_pfp.jpg"
-            alt="Profile Photo">
-          <% } %>
-    </div>
-
-    <div class="profile-details">
-      <h1 class="profile-name">
-        <%= user.name %>
-      </h1>
-      <h4 class="pronouns">
-        (<%= user.pronouns %>)
-      </h4>
-    </div>
-    <h4 class="username">@<%= user.username %>
-    </h4>
-    <div class="profile-actions">
-      <div class="action-button">
-        <button class="btn blue-button" onclick="window.location.href='/viewProfile'">View Details</button>
-      </div>
-      <div class="action-button">
-        <button class="btn blue-button" onclick="window.location.href='/editProfile'">Edit Details</button>
-      </div>
-    </div>
-    <form class="form" action="/updateProfile" method="post">
-      <label for="email">Email</label>
-      <input class="form-control" id="disabledInput" type="text" placeholder="<%= user.email %>" disabled>
-      <br>
-      <label for="birthday">Birthday</label>
-      <input class="form-control" id="disabledInput" type="text"
-        placeholder="<%= user.birthday instanceof Date ? user.birthday.toISOString().substring(0, 10) : '' %>" disabled>
-      <br>
-      <label for="interests"> Your Tags </label>
-      <div id="interests" style="display: flex; flex-wrap: wrap; justify-content: center;">
-        <% user.interests.forEach((interest)=> { %>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="<%= interest %>" disabled>
-            <label class="form-check-label interest-button" style="color: white;  background-color: hsl(<%= Math.floor(Math.random()*360) %>, 100%, 20%); border: 1px solid black;">
-              <%= interest %>
-            </label>
-          </div>
-        <% }) %>
-        
-        
-        
-      </div>
-      
-    </form>
+<div class="user-profile form">
+  <div class="profile-photo">
+    <% if(user.image) { %>
+    <img src="<%= user.image %>" alt="Profile Photo">
+    <% } else { %>
+    <img src="https://cdn.discordapp.com/attachments/828116217285836825/1106489564949925948/orca_pfp.jpg"
+      alt="Profile Photo">
+    <% } %>
   </div>
 
-  <%- include("templates/footer") %>
+  <div class="profile-details">
+    <h1 class="profile-name">
+      <%= user.name %>
+    </h1>
+    <h4 class="pronouns">
+      (<%= user.pronouns %>)
+    </h4>
+  </div>
+  <h4 class="username">@<%= user.username %>
+  </h4>
+  <div class="profile-actions">
+    <div class="action-button">
+      <button class="btn blue-button" onclick="window.location.href='/viewProfile'">View Details</button>
+    </div>
+    <div class="action-button">
+      <button class="btn blue-button" onclick="window.location.href='/editProfile'">Edit Details</button>
+    </div>
+  </div>
+  <form class="form" action="/updateProfile" method="post">
+    <label for="email">Email</label>
+    <input class="form-control" id="disabledInput" type="text" placeholder="<%= user.email %>" disabled>
+    <br>
+    <label for="birthday">Birthday</label>
+    <input class="form-control" id="disabledInput" type="text"
+      placeholder="<%= user.birthday instanceof Date ? user.birthday.toISOString().substring(0, 10) : '' %>" disabled>
+    <br>
+    <label for="interests"> Your Tags </label>
+    <div id="interests" style="display: flex; flex-wrap: wrap; justify-content: center;">
+      <% user.interests.forEach((interest)=> { %>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="<%= interest %>" disabled>
+        <label class="form-check-label interest-button"
+          style="color: white;  background-color: hsl(<%= Math.floor(Math.random()*360) %>, 100%, 20%); border: 1px solid black;">
+          <%= interest %>
+        </label>
+      </div>
+      <% }) %>
 
-    <style>
-      .profile-actions {
-        display: flex;
-      }
 
-      .action-button {
-        margin-right: 10px;
-      }
 
-      .form {
+    </div>
+
+  </form>
+</div>
+
+<%- include("templates/footer") %>
+
+<style>
+  .profile-actions {
+    display: flex;
+  }
+
+  .action-button {
+    margin-right: 10px;
+  }
+
+  .form {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -76,18 +74,18 @@
     background-color: #fafafa;
     border-radius: 3px;
     width: 100%;
-    max-width: 500px; /* Adjust this to control the width of the form */
-    margin: 0 auto; /* Center the form horizontally */
-}
+    max-width: 500px;
+    margin: 0 auto;
+  }
 
-.form label {
+  .form label {
     font-size: 16px;
     line-height: 24px;
     color: #000000;
     margin-bottom: 5px;
-}
+  }
 
-.form-control {
+  .form-control {
     width: 100%;
     background-color: #fafafa;
     border: none;
@@ -96,30 +94,28 @@
     font-size: 16px;
     color: #262626;
     text-align: center;
-}
+  }
 
-.form-control:disabled {
+  .form-control:disabled {
     background-color: #fafafa;
-}
+  }
 
-.interest-button {
-    background-color: #1f49c8; /* Turquoise Blue */
+  .interest-button {
+    background-color: #1f49c8;
     color: white;
     padding: 10px 20px;
     margin: 5px;
     border: none;
     cursor: pointer;
-    border-radius: 20px; /* Rounded corners */
+    border-radius: 20px;
     text-align: center;
-}
+  }
 
-.form-check {
+  .form-check {
     display: inline-block;
-}
+  }
 
-.form-check-input {
+  .form-check-input {
     display: none;
-}
-
-
-    </style>
+  }
+</style>

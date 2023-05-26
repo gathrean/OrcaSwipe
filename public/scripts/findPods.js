@@ -1,10 +1,10 @@
 // Based on code from Rob Vermeer at https://codepen.io/RobVermeer/pen/japZpY
 
 // Selecting elements from the DOM
-var tinderContainer = document.querySelector('.tinder');       // Tinder container element
-var allCards = document.querySelectorAll('.tinder--card');     // All card elements
-var nope = document.getElementById('nope');                    // "Nope" button element
-var love = document.getElementById('love');                    // "Love" button element
+var tinderContainer = document.querySelector('.tinder'); // Tinder container element
+var allCards = document.querySelectorAll('.tinder--card'); // All card elements
+var nope = document.getElementById('nope'); // "Nope" button element
+var love = document.getElementById('love'); // "Love" button element
 
 var pods = []; // Array to store pods
 
@@ -63,7 +63,7 @@ let userTags;
 
 // Fetch user's interests before fetching pods
 const xhrUser = new XMLHttpRequest();
-xhrUser.open("GET", "/getUserInterests");  // Replace with your route that fetches user's interests
+xhrUser.open("GET", "/getUserInterests"); // Replace with your route that fetches user's interests
 xhrUser.onload = () => {
     userTags = JSON.parse(xhrUser.responseText);
     console.log('User tags:', userTags);
@@ -100,7 +100,10 @@ function loadPods() {
         var map = L.map('map');
         if (navigator.geolocation && typeof maxDist != undefined) {
             navigator.geolocation.getCurrentPosition(function getLocation(position) {
-                userLocation = { lat: position.coords.latitude, lng: position.coords.longitude };
+                userLocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
                 pods = pods.filter((p) => {
                     var podLatLng = L.latLng(p.location.lat, p.location.lng);
                     return podLatLng.distanceTo(userLocation) <= maxDist;
@@ -155,7 +158,9 @@ function formatDistance(distance) {
 // Function to format the date and time
 function formatDateTime(dateString, timeString) {
     const date = new Date(dateString);
-    const month = date.toLocaleString('en-US', { month: 'short' });
+    const month = date.toLocaleString('en-US', {
+        month: 'short'
+    });
     const day = date.getDate();
 
     let formattedTime = '';
@@ -187,7 +192,7 @@ function populateStack() {
 
     // Shows the stack
     for (var i = 0; i < pods.length; i++) {
-        var tags = pods[i].tags;  // Now tags are an array of strings
+        var tags = pods[i].tags; // Now tags are an array of strings
 
         // Creating HTML for each card using pod data
         var card = `
@@ -248,7 +253,9 @@ function handleLoveSwipe(pod) {
     xhttp.setRequestHeader('Content-Type', 'application/json');
 
     // Sending the pod data in the request body
-    xhttp.send(JSON.stringify({ pod: pod }));
+    xhttp.send(JSON.stringify({
+        pod: pod
+    }));
 }
 
 // Function to handle the nope swipe action
@@ -260,7 +267,9 @@ function handleNopeSwipe(pod) {
     xhttp.setRequestHeader('Content-Type', 'application/json');
 
     // Sending the pod data in the request body
-    xhttp.send(JSON.stringify({ pod: pod }));
+    xhttp.send(JSON.stringify({
+        pod: pod
+    }));
 }
 
 // Function to make the cards swipable
@@ -394,7 +403,7 @@ document.addEventListener('click', function (event) {
         const xhttp = new XMLHttpRequest();
         xhttp.onload = () => {
             var attenders = JSON.parse(xhttp.responseText);
-            var attendersText = attenders.map(attender => attender.name).join(', ');  // assuming attenders have a 'name' field
+            var attendersText = attenders.map(attender => attender.name).join(', '); // assuming attenders have a 'name' field
             document.getElementById('modal-text').innerText = `Attenders: ${attendersText}`;
 
             // Show modal
