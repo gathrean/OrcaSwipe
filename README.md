@@ -62,6 +62,12 @@
 
 ## 💻 Technologies Used
 
+- Node.js
+- Express.js
+- Leaflet.js
+- MongoDB
+- Firestore
+
 ### Frontend
 
 - HTML
