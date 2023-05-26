@@ -293,7 +293,9 @@ In this section, we'll guide you on what each core page does.
 
 ### `/profile` (Your Profile)
 
-- placeholder
+- In either the bottom-left of the sidebar or top right of the header is your profile photo, along with your username. If you click on that it will take you to your profile page.
+- In your profile page your can either Edit details or view your current profile details.
+- The fields are not required.
 
 ## 🤝 Credits, References, and Licenses
 
