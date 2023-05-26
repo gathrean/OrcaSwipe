@@ -95,8 +95,6 @@
 ├── hobbies.csv
 ├── hobbies2.csv
 ├── node_modules
-├── orcachat-896f1-firebase-adminsdk-3jnwn-91a6180898.json
-├── orcaswipe-8ae9b-firebase-adminsdk-a4otn-1e3c2ae04e.json
 ├── package-lock.json
 ├── package.json
 ├── public
