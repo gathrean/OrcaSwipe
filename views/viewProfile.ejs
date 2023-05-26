@@ -1,25 +1,161 @@
 <%- include("templates/header") %>
 
-  <div class="user-profile-details form">
-    <h1>User Profile Details</h1>
-    <br>
-    <h2>Hello, <%= user.name %></h2>
-    <br>
-    <h3>Username: <%= user.username %></h3>
-    <br>
-    <h3>Pronouns: <%= user.pronouns %></h3>
-    <br>
-    <h3>Email: <%= user.email %></h3>
-    <br>
-    <h3>Birthday: <%= user.birthday instanceof Date ? user.birthday.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : '' %></h3>
-      <input class="form-control" id="disabledInput" type="text"
-        placeholder="<%= user.birthday instanceof Date ? user.birthday.toISOString().substring(0, 10) : '' %>" disabled>
-    <br>
-    <h3> Tags: </h3>
-    <br>
-    <%= user.interests %>
+<div class="user-profile-details form">
+  <h1 class="bubble-header">User Profile Details</h1>
+  <br>
+  <h2 class="bubble-header">Hello, <%= user.name %></h2>
+  <br>
+  <h3 class="bubble-header">Username: <%= user.username %></h3>
+  <br>
+  <h3 class="bubble-header">Pronouns: <%= user.pronouns %></h3>
+  <br>
+  <h3 class="bubble-header">Email: <%= user.email %></h3>
+  <br>
+  <h3 class="bubble-header">Birthday: </h3><input class="form-control" id="disabledInput" type="text"
+    placeholder="<%= user.birthday instanceof Date ? user.birthday.toISOString().substring(0, 10) : '' %>" disabled>
+  <br>
+  <h3 class="bubble-header">Your Tags: </h3>
+  <div id="interests" style="display: flex; flex-wrap: wrap; justify-content: center;">
+    <% user.interests.forEach((interest)=> { %>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="<%= interest %>" disabled>
+        <label class="form-check-label interest-button" style="color: white; background-color: hsl(<%= Math.floor(Math.random()*360) %>, 100%, 20%); border: 1px solid black;">
+          <%= interest %>
+        </label>
       </div>
+    <% }) %>
+  </div>
+</div>
+
+<style>
+  .profile-actions {
+    display: flex;
+  }
+
+  .action-button {
+    margin-right: 10px;
+  }
+
+  .form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #fafafa;
+    border-radius: 3px;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .form label {
+    font-size: 16px;
+    line-height: 24px;
+    color: #000000;
+    margin-bottom: 5px;
+  }
+
+  .form-control {
+    width: 100%;
+    background-color: #fafafa;
+    border: none;
+    outline: none;
+    padding: 7px 0px;
+    font-size: 16px;
+    color: #262626;
+    text-align: center;
+  }
+
+  .form-control:disabled {
+    background-color: #fafafa;
+  }
+
+  .interest-button {
+    background-color: #1f49c8;
+    color: white;
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    cursor: pointer;
+    border-radius: 20px;
+    text-align: center;
+  }
+
+  .form-check {
+    display: inline-block;
+  }
+
+  .form-check-input {
+    display: none;
+  }
 
 
+  * {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    box-sizing: border-box;
+}
+
+body {
+  background: linear-gradient(360deg, #4676EE, #134ACC);
+    font-size: 14px;
+    line-height: 18px;
+    color: #262626;
+    padding-top: 20px;
+    max-width: 935px;
+    margin: 0 auto;
+}
+
+.user-profile-details {
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    background-color: white;
+    border: 1px solid #dbdbdb;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.user-profile-details h1,
+.user-profile-details h2,
+.user-profile-details h3 {
+    margin: 15px 0;
+}
+
+.user-profile-details h1 {
+    font-size: 28px;
+    line-height: 32px;
+    color: #000000;
+}
+
+.user-profile-details h2 {
+    font-size: 16px;
+    line-height: 18px;
+    font-weight: 600;
+    color: #000000;
+}
+
+.user-profile-details h3 {
+    font-size: 14px;
+    line-height: 18px;
+    color: #000000;
+}
+
+.form-control {
+    background-color: #fafafa;
+    border: none; /* this will remove the box around the input field */
+    outline: none; /* this will remove the outline around the input field when it is focused */
+    padding: 7px 0px;
+    font-size: 14px;
+    line-height: 18px;
+    color: #262626;
+}
+
+.form-control:disabled {
+    background-color: #fafafa;
+}
+
+
+</style>
 
 <%- include("templates/footer") %>
