@@ -87,6 +87,7 @@ body {
     height: 150px;
     border-radius: 50%;
     overflow: hidden;
+    object-fit: cover;
 }
 
 .profile-photo img {
@@ -98,16 +99,18 @@ body {
 
 .profile-details {
     display: flex;
-    margin-left: 20px;
     align-items: center;
 }
 
 .profile-details h1,
 .profile-details h4 {
-    margin: 0 10px;
+    margin: 0px 10px 0px 0px;
 }
 
 .username {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     color: #1449d0;
 }
 
