@@ -1,85 +1,124 @@
 <%- include("templates/header") %>
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 
-<div class="user-profile form">
-  <div class="profile-photo">
-    <% if(user.image) { %>
-      <img src="<%= user.image %>" alt="Profile Photo">
-    <% } else { %>
-      <img src="https://cdn.discordapp.com/attachments/828116217285836825/1106489564949925948/orca_pfp.jpg"
-      alt="Profile Photo">
-    <% } %>
-  </div>
+  <div style="display: flex; justify-content: center;">
 
+    <div class="user-profile profile-form">
 
-  <div class="profile-details">
-    <h1 class="profile-name">
-      <%= user.name %>
-    </h1>
-    <h4 class="pronouns">
-      (<%= user.pronouns %>)
-    </h4>
-  </div>
-  <h4 class="username">@<%= user.username %>
-  </h4>
-  <form class="form" action="/updateProfile" method="post" enctype="multipart/form-data">
-    <label for="profilePhoto">Profile Photo</label>
-  <input type="file" id="profilePhoto" name="profilePhoto" accept="image/png, image/jpeg">
-    <input class="btn blue-button" type="submit" value="Submit">
-    <hr>
-    <label for="email">Email</label>
-    <input class="form-control" type="email" id="email" name="email" value="<%= user.email %>">
-    <br>
+      <!-- PROFILE PICTURE -->
+      <div class="user-profile form">
 
-    <label for="birthday">Birthday</label>
-    <input class="form-control" type="date" id="birthday" name="birthday"
-      value="<%= user.birthday instanceof Date ? user.birthday.toISOString().split('T')[0] : '' %>">
-
-    <input class="form-control" id="disabledInput" type="text"
-      placeholder="<%= user.birthday instanceof Date ? user.birthday.toISOString().substring(0, 10) : '' %>" disabled>
-    <hr>
-
-
-
-
-    <label for="name">Your name</label>
-    <input class="form-control" type="text" id="name" name="name" value="<%= user.name %>"><br>
-
-    <label for="username">Username</label>
-    <div>
-      <div class="input-group mb-2">
-        <div class="input-group-prepend">
-          <div class="input-group-text">@</div>
+        <div class="profile-photo">
+          <% if(user.image) { %>
+            <img src="<%= user.image %>" alt="Profile Photo">
+            <% } else { %>
+              <img src="https://cdn.discordapp.com/attachments/828116217285836825/1106489564949925948/orca_pfp.jpg"
+                alt="Profile Photo">
+              <% } %>
         </div>
-        <input class="form-control" type="text" id="username" name="username" value="<%= user.username %>">
-      </div>
-    </div>
-    <br>
-    <label for="pronouns">Pronouns</label>
-    <input class="form-control" type="text" id="pronouns" name="pronouns" value="<%= user.pronouns %>">
 
-    <br>
-    <label>Your Pod Tags </label>
-    <select id="interests-select" multiple="multiple" name="interests">
-      <% const interests = ['Ocean Clean-up', 'Volunteer', 'Charity', 'Black Lives Matter', 'Clothing drive', 'Blood drive', 'Art', 'Cancer Walk', 'Travel', 'Photography']; %>
-      <% interests.forEach((interest, index) => { %>
-      <option value="<%= interest %>" <%= user.interests && user.interests.includes(interest) ? 'selected' : '' %>><%= interest %></option>
-      <% }) %>
-    </select>
-    
+
+        <div class="profile-details">
+
+          <!-- User's Name -->
+          <h1 class="profile-name">
+            <%= user.name %>
+          </h1>
+
+          <!-- User's Pronouns -->
+          <h4 class="pronouns">
+            (<%= user.pronouns %>)
+          </h4>
+        </div>
+
+        <!-- User's Username -->
+        <h4 class="username">
+          @<%= user.username %>
+        </h4>
+
+        <!-- Editing Profile Details -->
+        <form class="form" action="/updateProfile" method="post" enctype="multipart/form-data">
+
+          <!-- Upload new Profile Photo -->
+          <label for="profilePhoto">Change your profile photo</label>
+          <input class="form-control" type="file" id="profilePhoto" name="profilePhoto" accept="image/png, image/jpeg">
+
+          <hr>
+
+          <!-- Change email -->
+          <label for="email">Change email</label>
+          <input class="form-control" type="email" id="email" name="email" value="<%= user.email %>">
+          <br>
+
+          <!-- Change birthday -->
+          <label for="birthday">Change your birthday</label>
+          <input class="form-control" type="date" id="birthday" name="birthday"
+            value="<%= user.birthday instanceof Date ? user.birthday.toISOString().split('T')[0] : '' %>">
+
+          <input class="form-control" id="disabledInput" type="text"
+            placeholder="<%= user.birthday instanceof Date ? user.birthday.toISOString().substring(0, 10) : '' %>"
+            disabled>
+
+          <hr>
+
+          <!-- User's name -->
+          <label for="name">Change your name</label>
+          <input class="form-control" type="text" id="name" name="name" value="<%= user.name %>"><br>
+
+          <!-- User's username -->
+          <label for="username">Change your username</label>
+          <div>
+            <div class="input-group mb-2">
+              <div class="input-group-prepend">
+                <div class="input-group-text">@</div>
+              </div>
+              <input class="form-control" type="text" id="username" name="username" value="<%= user.username %>">
+            </div>
+          </div>
+          <br>
+
+          <!-- User's pronouns -->
+          <label for="pronouns">Change your pronouns</label>
+          <input class="form-control" type="text" id="pronouns" name="pronouns" value="<%= user.pronouns %>">
+          <br>
+
+          <!-- User's Pod tags -->
+          <label>Change your Pod Tags </label>
+          <select id="interests-select" multiple="multiple" name="interests">
+            <% const interests=['Ocean Clean-up', 'Volunteer' , 'Charity' , 'Black Lives Matter' , 'Clothing drive'
+              , 'Blood drive' , 'Art' , 'Cancer Walk' , 'Travel' , 'Photography' ]; %>
+              <% interests.forEach((interest, index)=> { %>
+                <option value="<%= interest %>" <%=user.interests && user.interests.includes(interest) ? 'selected' : ''
+                  %>>
+                  <%= interest %>
+                </option>
+                <% }) %>
+          </select>
+
+          <hr>
+
+          <!-- Save button -->
+          <input class="form-control btn blue-button" type="submit" value="Save new changes">
+        </form>
+
+
+      </div>
+      </form>
+    </div>
+  </div>
+  </div>
+  <%- include("templates/footer") %>
+
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+
     <script>
-      $(document).ready(function() {
-          $('#interests-select').select2({
-              placeholder: "Select interests",
-              allowClear: true,
-              closeOnSelect : false,
-              tags: true
-          });
+      $(document).ready(function () {
+        $('#interests-select').select2({
+          placeholder: "Select interests",
+          allowClear: true,
+          closeOnSelect: false,
+          tags: true
+        });
       });
-      </script>
-      
-</div>
-  </form>
-</div>
-<%- include("templates/footer") %>
+    </script>
