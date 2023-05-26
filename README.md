@@ -37,7 +37,8 @@
 - Frontend UI / UX Design
 - Backend Assistance
 - Graphic Designer
-- [LinkedIn](https://www.linkedin.com/in/gathrean/)
+- <b> Contact Info </b>
+  - [LinkedIn](https://www.linkedin.com/in/gathrean/)
 
 ### Alex Sichitiu
 
