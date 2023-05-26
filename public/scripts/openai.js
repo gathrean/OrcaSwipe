@@ -75,7 +75,7 @@ const generateResponse = async () => {
         interests = JSON.parse(message);
         populateInterests(interests);
     } catch (error) {
-        interestDiv.append('Sorry, I couldn\'t generate any suggestions for you. Please try again.');
+        interestDiv.append('Sorry, I couldn\'t generate any more suggestions for you. Please try again.');
     }
     buttonsLoading.classList.add("visually-hidden");
     interestDiv.classList.remove("visually-hidden");
@@ -85,10 +85,23 @@ const generateResponse = async () => {
 //Assign onclick method
 submit.onclick = generateResponse;
 var selectedInterests = [];
-var interests = ['Ocean Clean-up', 'Volunteer', 'Charity', 'Black Lives Matter', 'Clothing drive', 'Blood drive', 'Art', 'Cancer Walk', 'Travel', 'Photography'];
+var interests = ['Ocean Clean-up', 'Volunteer', 'Charity', 'Clothing drive', 'Blood drive', 'Art', 'Cancer Walk', 'Travel', 'Photography'];
 populateInterests(interests);
 interestDiv.insertAdjacentHTML('afterbegin', '<div>Below are some Orca-approved recommended pod tags</div>');
 
+function assignRandomColors() {
+    var buttons = document.querySelectorAll('.interest-button');
+    buttons.forEach(function(button) {
+      // Generate a hue that isn't within the blue range
+      var hue = (Math.random() * 180) + (Math.random() > 0.5 ? 240 : 0);
+      // Preserve existing styles while changing the background color
+      button.style.cssText += 'background-color: hsl(' + hue + ', 100%, 20%)';
+    });
+  }
+  
+  
+  
+  
 
 function populateInterests(interests){
     interestDiv.replaceChildren();
@@ -109,4 +122,6 @@ function populateInterests(interests){
         })
         interestDiv.append(button);
     }
+    // Call the function to assign random colors to the buttons after they have been added to the DOM
+    assignRandomColors();
 }

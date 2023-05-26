@@ -83,7 +83,7 @@ const hashedPassword = process.env.HASHED_PASSWORD;
 // End of environment variables
 
 // Interest tags
-const interests = ['Ocean Clean-up', 'Volunteer', 'Charity', 'Black Lives Matter', 'Clothing drive', 'Blood drive', 'Art', 'Cancer Walk', 'Travel', 'Photography']
+const interests = ['Beach Clean-up', 'Volunteer', 'Charity', 'Clothing drive', 'Blood drive', 'Art', 'Cancer Walk', 'Travel', 'Photography']
 
 // Set up the port
 const PORT = process.env.PORT || 3000;
@@ -430,7 +430,7 @@ app.post("/updateSettings", async (req, res) => {
       }
     }
   } else {
-    res.status(403).send("You must be logged in to update your settings.<br><a href='/'>Go back to home page</a>");
+    res.status(403).render("errors/403"); 
   }
 });
 
@@ -459,7 +459,7 @@ app.post("/signup", async (req, res) => {
         admin: false,
         eventsAttended: [],
         interests: [],
-        podProximity: 30000
+        podProximity: 3000000
       };
       const result = await usersCollection.insertOne(newUser);
       req.session.loggedIn = true;
@@ -563,7 +563,7 @@ app.get("/admin", async (req, res) => {
       res.status(403).send("You must be an admin to access this page.<br><a href='/'>Go back to home page</a>");
     }
   } else {
-    res.status(403).send("You must be logged in to access this page.<br><a href='/'>Go back to home page</a>");
+    res.status(403).render("errors/403");
   }
 });
 
@@ -599,7 +599,7 @@ app.get("/settings", async (req, res) => {
       res.status(500).send("Error retrieving user data.");
     }
   } else {
-    res.status(403).send("You must be logged in to access this page.<br><a href='/'>Go back to home page</a>");
+    res.status(403).render("errors/403");
   }
 });
 
@@ -608,7 +608,7 @@ app.get("/members", async (req, res) => {
     let user = await usersCollection.findOne({ email: req.session.email });
     res.render("members", { name: req.session.name, currentPage: 'members', user: user });
   } else {
-    res.status(403).send("You must be logged in to access the members area.<br><a href='/'>Go back to home page</a>");
+    res.status(403).render("errors/403");
   }
 });
 
@@ -629,13 +629,14 @@ app.get("/attendedpods", async (req, res) => {
       user: user,
     });
   } else {
-    res.status(403).send("You must be logged in to access the pods page.<br><a href='/'>Go back to home page</a>")
+    res.status(403).render("errors/403");
   }
 });
 
 app.post("/pod/:podId/upvote", async (req, res) => {
   if (!req.session.loggedIn) {
-    return res.status(403).send("You must be logged in to vote.<br><a href='/'>Go back to home page</a>")
+    return } else {
+      res.status(403).render("errors/403");
   }
 
   const user = await usersCollection.findOne({ email: req.session.email });
@@ -690,7 +691,7 @@ app.get("/createdpods", async (req, res) => {
       res.status(500).send("Error retrieving created pods.<br><a href='/'>Go back to home page</a>")
     }
   } else {
-    res.status(403).send("You must be logged in to access the create pods page.<br><a href='/'>Go back to home page</a>")
+    res.status(403).render("errors/403");
   }
 });
 
@@ -819,7 +820,7 @@ app.post("/createpod", upload.single('image'), async (req, res) => {
       }
     }
   } else {
-    res.status(403).send("You must be logged in to create a pod.<br><a href='/'>Go back to home page</a>");
+    res.status(403).render("errors/403");
   }
 });
 
@@ -834,7 +835,7 @@ app.get("/profile", async (req, res) => {
       res.status(500).send("Error retrieving user data.");
     }
   } else {
-    res.status(403).send("You must be logged in to access this page.<br><a href='/'>Go back to home page</a>");
+    res.status(403).render("errors/403");
   }
 });
 
@@ -848,7 +849,7 @@ app.get("/editProfile", async (req, res) => {
       res.status(500).send("Error retrieving user data.");
     }
   } else {
-    res.status(403).send("You must be logged in to access this page.<br><a href='/'>Go back to home page</a>");
+    res.status(403).render("errors/403");
   }
 });
 
@@ -857,7 +858,7 @@ app.get("/findPods", async (req, res) => {
   var email = req.session.email;
   var user = await usersCollection.findOne({ email: email });
   console.log(user)
-  res.render('findPods', { currentPage: 'findPods', maxDist: user.podProximity != null ? user.podProximity : 30000, user: user });
+  res.render('findPods', { currentPage: 'findPods', maxDist: user.podProximity != null ? user.podProximity : 3000000, user: user });
 })
 
 
@@ -940,7 +941,7 @@ app.post("/pod/:podId/leave", async (req, res) => {
       res.status(500).send('Error leaving pod');
     }
   } else {
-    res.status(403).send('You must be logged in to leave a pod');
+    res.status(403).render("errors/403");
   }
 });
 
@@ -955,7 +956,7 @@ app.get("/viewProfile", async (req, res) => {
       res.status(500).send("Error retrieving user data.");
     }
   } else {
-    res.status(403).send("You must be logged in to access this page.<br><a href='/'>Go back to home page</a>");
+    res.status(403).render("errors/403");
   }
 });
 
@@ -1026,7 +1027,7 @@ app.post("/updateProfile", upload.single('profilePhoto'), async (req, res) => {
       }
     }
   } else {
-    res.status(403).send("You must be logged in to update your profile.<br><a href='/'>Go back to home page</a>");
+    res.status(403).render("errors/403");
   }
 });
 
@@ -1041,7 +1042,7 @@ app.get("/chat", async (req, res) => {
       res.status(500).send("Error retrieving user data.");
     }
   } else {
-    res.status(403).send("You must be logged in to access this page.<br><a href='/'>Go back to home page</a>");
+    res.status(403).render("errors/403");
   }
 });
 
