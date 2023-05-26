@@ -38,7 +38,7 @@
 - Backend Assistance
 - Graphic Designer
 - <b> Contact Info </b>
-  - [LinkedIn](https://www.linkedin.com/in/gathrean/)
+  - [LinkedIn](https://www.linkedin.com/in/gathrean/) (https://www.linkedin.com/in/laurie-solkoski/) 
 
 ### Alex Sichitiu
 
