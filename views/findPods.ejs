@@ -1,87 +1,24 @@
+<!-- Based on code from Rob Vermeer at https://codepen.io/RobVermeer/pen/japZpY -->
+
 <%- include("templates/header") %>
-  <!-- Based on code from Rob Vermeer at https://codepen.io/RobVermeer/pen/japZpY -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-  <link rel="stylesheet" href="/style/findPods.css">
-
-  <style>
-    #loading-circle {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      border: 5px solid white;
-      border-top: 5px solid #02c78f;
-      animation: spin 1s infinite linear;
-    }
-
-    @keyframes spin {
-      0% {
-        transform: translate(-50%, -50%) rotate(0deg);
-      }
-
-      100% {
-        transform: translate(-50%, -50%) rotate(360deg);
-      }
-    }
-
-    #map {
-      width: 80vw;
-      max-width: 90%;
-      height: 40vh;
-      margin: 0 auto;
-    }
-
-    .card {
-      width: 90vw;
-      max-width: 450px;
-      /* margin-bottom: 20px; */
-      /* Set a maximum width for desktop view */
-    }
-
-    /* Media query for desktop view */
-    @media (min-width: 992px) {
-      .card-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-      }
-
-      .card {
-        flex-basis: calc(33.33% - 20px);
-        /* Adjust flex-basis value for desired spacing */
-        margin-bottom: 20px;
-        /* Add bottom margin for spacing */
-      }
-    }
-
-    .pods-actions {
-      display: flex;
-    }
-
-    .action-button {
-      margin-right: 10px;
-    }
-
-    .description {
-      font-weight: 100;
-    }
-  </style>
+  <div id="loading-circle"></div>
 
   <div class="tinder">
 
-    <div id='stack' class="tinder--cards">
-    </div>
+    <!-- The stack of Pods -->
+    <div id='stack' class="tinder--cards"></div>
 
+    <!-- Buttons for Nope and Love -->
     <div class="tinder--buttons">
+
+      <!-- Nope -->
       <button id="nope" class="button nope">
         <svg class="nope button" viewBox="0 0 24 24">
           <%- include("./icons/nope") %>
         </svg>
       </button>
+
+      <!-- Love -->
       <button id="love" class="button love">
         <svg class="love" viewBox="0 0 24 24">
           <%- include("./icons/love") %>
@@ -89,30 +26,42 @@
       </button>
     </div>
 
+
   </div>
 
-  <div id="loading-circle"></div>
 
-  <script src="https://ajax.googleapis.com/ajax/libs/hammerjs/2.0.8/hammer.min.js"></script>
-  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
-    integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
-  <script>
-    var maxDist = ("<%= maxDist %>");
-  </script>
-  <script src="/scripts/findPods.js"></script>
+
 
   <%- include("templates/footer") %>
 
-    <script>
-      // Function to show the loading screen
-      function showLoadingScreen() {
-        var loadingCircle = document.getElementById('loading-circle');
-        loadingCircle.style.display = 'block';
+
+    <!-- JS and APIs -->
+    <script src="https://ajax.googleapis.com/ajax/libs/hammerjs/2.0.8/hammer.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+      integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+    <script> var maxDist = <%= maxDist %>; </script>
+
+    <!-- OpenStreetMap Nominatim API -->
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+      integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.24.0/axios.min.js"></script>
+
+    <!-- Scripts -->
+    <script src="/scripts/findPods.js"></script>
+    <script src="/scripts/loading-circle.js"></script>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="/style/findPods.css">
+    <link rel="stylesheet" href="/style/loading-circle.css">
+    
+    <style>
+      #map {
+        display: none;
       }
 
-      // Function to hide the loading screen
-      function hideLoadingScreen() {
-        var loadingCircle = document.getElementById('loading-circle');
-        loadingCircle.style.display = 'none';
-      }
-    </script>
+      .btn:hover .fa-question-circle {
+  transform: scale(1.5);
+}
+
+    </style>

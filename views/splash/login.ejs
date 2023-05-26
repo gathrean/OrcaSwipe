@@ -1,37 +1,41 @@
-<%- include("splash-header") %>
-<%- include("splash-header2.ejs") %>
-  <div class="container animate">
-    <header class="d-flex justify-content-center py-3">
-      <form class="login-form">
-        <h1>Login</h1>
+<%- include("header-splash-login") %>
 
-        <div class="mb-3">
-          <label class="form-label">Username</label>
-          <div class="input-group mb-2">
-            <div class="input-group-prepend">
-              <div class="input-group-text">@</div>
-            </div>
-            <input type="text" class="form-control" name="username" placeholder="Username">
-          </div>
-        </div>
+    <div class="container animate" style="color: black;">
+        <header class="d-flex justify-content-center py-3">
+            <form class="login-form">
+                <h1>Login</h1>
 
-        <div class="mb-3" style="position: relative;">
-          <label class="form-label" style="text-align: left;">Password</label>
-          <input type="password" class="form-control" name="password" placeholder="Password">
+                <div class="mb-3">
+                    <label class="form-label">Username</label>
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">@</div>
+                        </div>
+                        <input type="text" class="form-control" name="username" placeholder="Username">
+                    </div>
+                </div>
 
-          <a href="/resetPassword" class="forgot-password-link"
-            style="position: absolute; right: 10px; top: 52%;">Forgot Password</a>
-          <div class="or-container">
+                <div class="mb-3" style="position: relative;">
+                    <label class="form-label" style="text-align: left;">Password</label>
+                    <input type="password" class="form-control" name="password" placeholder="Password">
 
-          </div>
-        </div>
-        <button type="submit" class="btn blue-button" value="Submit" formaction="/login" formmethod="post">Log
-          In</button>
+                    <a href="/resetPassword" class="forgot-password-link"
+                        style="position: absolute; right: 10px; top: 52%;">Forgot Password</a>
+                    <div class="or-container">
 
-        <hr>
+                    </div>
+                </div>
+                <button type="submit" class="btn blue-button" value="Submit" formaction="/login" formmethod="post">Log
+                    In</button>
 
-        <a href="/signup" class="btn white-button">I don't have an account</a>
-      </form>
-    </header>
-  </div>
-  <%- include("splash-footer") %>
+                <hr>
+
+                <a href="/signup" class="btn white-button">I don't have an account</a>
+            </form>
+        </header>
+    </div>
+    </main>
+    </div>
+    </body>
+
+    </html>

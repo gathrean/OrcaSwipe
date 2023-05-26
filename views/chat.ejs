@@ -1,0 +1,46 @@
+<%- include("templates/header") %>
+
+    <div>
+        <!-- Title on top -->
+        <div style="display: flex;align-items: center;justify-content: center;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" style="fill: white; margin-right: 10px;">
+                <!-- Add your SVG icon code here -->
+                <%- include("./icons/chat-2") %>
+            </svg>
+            <h1 style="text-align: left; color: white; font-size: 3rem; line-height: 50px; margin: 0;">Chats</h1>
+        </div>
+
+        <!-- Caption for title -->
+        <div style="display: flex;align-items: center;justify-content: center;">
+            <p style="text-align: left; color: white">
+                Chat with other users within your Pods here.<br>
+                (Future update!)
+            </p>
+        </div>
+        <hr>
+
+        <!-- Chat box -->
+        <!-- <div class="chat-form"> -->
+            <!-- <ul id="chatbox"></ul> -->
+            <!-- <div> -->
+                <!-- <input class="chat-text" type="text" id="message" placeholder="Future update"> -->
+                <!-- <button class="blue-button btn" onclick="sendMessage()">Send</button> -->
+                <!-- <button class="btn blue-button" onclick="createNode()">Create Node</button> -->
+                <!-- <button class="btn blue-button" onclick="fetchChats()">Fetch Chats</button> -->
+            <!-- </div> -->
+        <!-- </div> -->
+
+        <!-- Chat list -->
+        <div class="chat-list-container">
+            <ul id="chatList" class="chat-list"></ul>
+        </div>
+    </div>
+    <%- include("templates/footer") %>
+
+        <!-- CSS -->
+        <link rel="stylesheet" href="/style/chat.css">
+
+        <!-- JS -->
+        <script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.7.0/firebase-database.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>

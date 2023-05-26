@@ -1,0 +1,321 @@
+body {
+    font-family: 'Montserrat', sans-serif !important;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+}
+
+.navbar {
+    display: flex;
+    justify-content: center;
+    background: linear-gradient(360deg, #134ACC, #134ACC);
+    width: 100%;
+    padding: 10px 20px 10px 20px;
+}
+
+.navbar-brand img {
+    height: 30px;
+    width: auto;
+}
+
+.splash-container {
+    background: linear-gradient(360deg, #4676EE, #134ACC);
+    width: 100%;
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #fff;
+    padding: 5% 10% 20% 10%;
+}
+
+.login-container {
+    background: linear-gradient(360deg, #4676EE, #134ACC);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #fff;
+    padding: 5% 10% 20% 10%;
+    height: 100vh;
+}
+
+.call-to-action-container {
+    background: linear-gradient(180deg, #134ACC, #0f3ca5);
+    width: 100%;
+    height: min-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #fff;
+}
+
+.footer {
+    background: linear-gradient(180deg, #0f3ca5, #0e3daa);
+}
+
+.splash-heading {
+    text-align: center;
+    font-size: 48px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.splash-caption {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 40px;
+}
+
+.navbar-button {
+    padding: 10px 10px;
+    margin: 0px 10px;
+    /* font-size: 12px; */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 90px;
+    border-radius: 20px;
+}
+
+.navbar-button.join {
+    background-color: white;
+    color: #134ACC;
+}
+
+.navbar-button.join:hover {
+    background-color: #4676EE;
+    color: white;
+}
+
+.navbar-button.login {
+    background-color: #22272a;
+    color: white;
+}
+
+.navbar-button.login:hover {
+    background-color: #4676EE;
+    color: white;
+}
+
+.splash-button {
+    padding: 10px 10px;
+    margin: 20px;
+    font-size: 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 250px;
+    height: 60px;
+    border-radius: 20px;
+}
+
+.splash-button.join {
+    background-color: white;
+    color: #134ACC;
+}
+
+.splash-button.join:hover {
+    background-color: #134ACC;
+    color: white;
+}
+
+.splash-button.login {
+    background-color: #22272a;
+    color: white;
+}
+
+.splash-button.login:hover {
+    background-color: #134ACC;
+    color: white;
+}
+
+.splash-image {
+    margin-top: 20px;
+}
+
+.small-text {
+    font-size: 14px;
+    color: #ffffff;
+    margin-top: 10px;
+    padding: 10px;
+    text-align: left;
+    margin: auto;
+}
+
+.action-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.nav-link {
+    color: white !important;
+}
+
+.features {
+    padding-bottom: 20px;
+}
+
+.my-card {
+    margin: 0;
+    padding: 0;
+}
+
+.backwards-row {
+    flex-direction: row-reverse;
+}
+
+.features-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.h3 {
+    font-weight: bolder;
+}
+
+.body-container {
+    background: linear-gradient(180deg, #4676EE, #134ACC);
+    width: 100%;
+}
+
+.nav-item {
+    color: white;
+}
+
+.nav-item:hover {
+    text-decoration: underline;
+    color: white;
+}
+
+/* Adjustments for smaller screens */
+@media (max-width: 768px) {
+    .splash-container {
+        height: fit-content;
+        padding: 15% 5%;
+    }
+
+    .splash-heading {
+        font-size: 36px;
+        padding: 0px 20px 0px 20px;
+    }
+
+    .splash-caption {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+
+    .splash-button {
+        width: 200px;
+        height: 50px;
+        font-size: 16px;
+        margin: 10px;
+    }
+
+    .action-container {
+        flex-direction: column;
+    }
+
+    .login-container {
+        height: 100vh;
+        padding: 15% 5%;
+    }
+
+    .navbar-brand img {
+        height: 20px;
+        width: auto;
+    }
+
+    /* Adjustments for smaller screens in landscape mode */
+    @media (max-width: 992px) and (orientation: landscape) {
+        .splash-container {
+            height: 40vh;
+            padding: 2%;
+        }
+
+        .splash-heading {
+            font-size: 32px;
+        }
+
+        .splash-caption {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .splash-button {
+            width: 180px;
+            height: 40px;
+            font-size: 14px;
+            margin: 10px;
+        }
+
+        .login-container {
+            height: 100vh;
+            padding: 2%;
+        }
+    }
+}
+
+.animate-orca {
+    opacity: 0;
+    transform: translateX(-50px);
+    animation: swipe-right-orca 0.5s ease 0.5s forwards;
+}
+
+@keyframes swipe-right-orca {
+    from {
+        opacity: 0;
+        transform: translateX(-100px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.reveal {
+    position: relative;
+    transform: translatex(-50px);
+    opacity: 0;
+    transition: 0.5s all ease;
+}
+
+.reveal.active {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+
+/******** SCROLL BAR ****** */
+
+/* Target the scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+    border-radius: 5px;
+    /* Set the width of the scrollbar */
+}
+
+/* Track styles (the area behind the thumb) */
+::-webkit-scrollbar-track {
+    background: #134ACC;
+    opacity: 0.1;
+}
+
+/* Thumb styles (the draggable handle) */
+::-webkit-scrollbar-thumb {
+    background: #ffffff;
+    /* Set the background color of the thumb */
+}
+
+/* Hover styles for the thumb */
+::-webkit-scrollbar-thumb:hover {
+    background: #4676EE;
+    /* Set the background color of the thumb on hover */
+}

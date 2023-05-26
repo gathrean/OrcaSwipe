@@ -49,6 +49,7 @@
 
 - Scrum Master
 - Database Engineer
+- [LinkedIn](https://www.linkedin.com/in/ozan-yurtisigi/)
 
 ### Laurie Solkoski
 
@@ -61,6 +62,12 @@
 - OrcaSwipe: Discover, join, and host tailored communities and events with a swipe, connecting you with like-minded individuals and enabling easy filtering, finding, and hosting of Pods.
 
 ## 💻 Technologies Used
+
+- Node.js
+- Express.js
+- Leaflet.js
+- MongoDB
+- Firestore
 
 ### Frontend
 
@@ -256,6 +263,8 @@ This does NOT go into you public repo.
 
 ## 📲 How to use the product (Features)
 
+In summary, this app allows users to create events called pods and to browse and join pod that match their preferences. To generate their preference tags, they can provide a prompt to chatGPT and receive tags they might enjoy. 
+
 In this section, we'll guide you on what each core page does.
 
 ### `/` (Splash Page)
@@ -310,16 +319,23 @@ In this section, we'll guide you on what each core page does.
 
 > Tell us exactly what AI services and products you used and how you used them. Be very specific.
 
-When it comes to complex programming help, it was very helpful to consult GPT for some assistance. It felt like another team member.
+When it comes to complex programming help, it was very helpful to consult GPT for some assistance. It felt like another team member. ChatGPT was particularly valuable for troubleshooting and giving team members leads on how to develop novel features.
 
 - Our [ChatGPT Prompt Log](https://docs.google.com/document/d/15sE_T1InzGLhURfZ1sbZYpDkJBfUg0VNvyCVzmJe6Ik/edit?usp=sharing)
 
-We also used OpenAI's API to implement a filter suggestion feature. We used a [List of Hobbies dataset from Kaggle](https://www.kaggle.com/datasets/mrhell/list-of-hobbies) for the chatbot to learn from. The bot would then suggest related hobby tags for the users to add to their profile.
+- We also used OpenAI's API to implement a filter suggestion feature. We used a [List of Hobbies dataset from Kaggle](https://www.kaggle.com/datasets/mrhell/list-of-hobbies) for the chatbot to learn from. The bot would then suggest related hobby tags for the users to add to their profile.
 
-For example, if a user tells the bot "I love the outdoors and hiking," the bot would analyze what they said, parse it, and suggests similar tags such as `fishing`, `camping`, `biking`, etc.
+- For example, if a user tells the bot "I love the outdoors and hiking," the bot would analyze what they said, parse it, and suggests similar tags such as `fishing`, `camping`, `biking`, etc.
 
-## 🫡 Thank you
+- One limitation we encountered while using AI was that chatGPT often required additional prompting during troubleshooting in order to provide a correct response. In some cases, such as MongoDB querying, chatGPT could not generate a query that performed the correct operation and as such, we were forced to change our approach to the database interaction in that instance.
 
-Thank you for reading our README! Please contact us if you have further questions or concerns regarding OrcaSwipe.
+## 🫡 Contact Info
+
+Thank you for reading our README! Please contact us if you have further questions or concerns regarding OrcaSwipe. We can be reached at the following links:
+
+- https://www.linkedin.com/in/laurie-solkoski/
+- https://www.linkedin.com/in/gathrean/
+- https://www.linkedin.com/in/alex-s-60056491/
+- https://www.linkedin.com/in/ozan-yurtisigi/
 
 ![OrcaSwipe](https://github.com/gathrean/2800-202310-BBY38/assets/77172769/342627a2-d3ce-48b9-af8b-f39e5a742f9b)

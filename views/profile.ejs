@@ -1,65 +1,186 @@
 <%- include("templates/header") %>
 
+  <div style="display: flex; justify-content: center;">
 
+    <div class="user-profile profile-form">
 
-  <div class="user-profile form">
-    <div class="profile-photo">
-      <% if(user.image) { %>
-        <img src="<%= user.image %>" alt="Profile Photo">
-      <% } else { %>
-        <img src="https://cdn.discordapp.com/attachments/828116217285836825/1106489564949925948/orca_pfp.jpg"
-        alt="Profile Photo">
-      <% } %>
-    </div>
-    
-    <div class="profile-details">
-      <h1 class="profile-name">
-        <%= user.name %>
-      </h1>
-      <h4 class="pronouns">
-        (<%= user.pronouns %>)
-      </h4>
-    </div>
-    <h4 class="username">@<%= user.username %>
-    </h4>
-    <div class="profile-actions">
-      <div class="action-button">
-        <button class="btn blue-button" onclick="window.location.href='/viewProfile'">View Details</button>
-      </div>
-      <div class="action-button">
-        <button class="btn blue-button" onclick="window.location.href='/editProfile'">Edit Details</button>
-      </div>
-    </div>
-    <form class="form" action="/updateProfile" method="post">
-      <label for="email">Email</label>
-      <input class="form-control" id="disabledInput" type="text" placeholder="<%= user.email %>" disabled>
-      <br>
-      <label for="birthday">Birthday</label>
-      <input class="form-control" id="disabledInput" type="text"
-        placeholder="<%= user.birthday instanceof Date ? user.birthday.toISOString().substring(0, 10) : '' %>" disabled>
-    <br>
-    <label for="interests"> Tags </label>
-    <div id="interests">
-      <% user.interests.forEach((interest) => { %>
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="<%= interest %>" disabled>
-          <label class="form-check-label">
-            <%= interest %>
-          </label>
+      <!-- PROFILE PICTURE -->
+      <div class="profile-top">
+
+        <div class="profile-photo">
+          <% if(user.image) { %>
+            <img src="<%= user.image %>" alt="Profile Photo">
+            <% } else { %>
+              <img src="https://cdn.discordapp.com/attachments/828116217285836825/1106489564949925948/orca_pfp.jpg"
+                alt="Profile Photo">
+              <% } %>
         </div>
-      <% }) %>
+
+        <div class="profile-top-names">
+
+          <div class="profile-details">
+
+            <!-- User's Name -->
+            <h1 class="profile-name">
+              <%= user.name %>
+            </h1>
+
+            <!-- User's Pronouns -->
+            <h4 class="pronouns">
+              (<%= user.pronouns %>)
+            </h4>
+          </div>
+
+          <!-- User's Username -->
+          <h4 class="username">
+            @<%= user.username %>
+          </h4>
+
+        </div>
+
+      </div>
+      <br>
+
+
+      <!-- BUTTONS -->
+      <div class="profile-actions">
+        <div class="action-button">
+          <button class="btn blue-button" onclick="window.location.href='/viewProfile'">View Details</button>
+        </div>
+        <div class="action-button">
+          <button class="btn blue-button" onclick="window.location.href='/editProfile'">Edit Details</button>
+        </div>
+      </div>
+
+      <!-- OTHER DETAILS -->
+      <form class="form" action="/updateProfile" method="post" style="align-items: start;">
+
+        <!-- User's Email -->
+        <label for="email">Email</label>
+        <input class="form-control" id="disabledInput" type="text" placeholder="<%= user.email %>" disabled>
+        <br>
+
+        <!-- User's Birthday -->
+        <label for="birthday">Birthday</label>
+        <input class="form-control" id="disabledInput" type="text"
+          placeholder="<%= user.birthday instanceof Date ? user.birthday.toISOString().substring(0, 10) : '' %>"
+          disabled>
+        <br>
+
+        <!-- User's Pod Tags -->
+        <label for="interests"> Your Tags </label>
+        <div id="interests" style="display: flex; flex-wrap: wrap; justify-content: start;">
+          <% user.interests.forEach((interest)=> { %>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="<%= interest %>" disabled>
+              <label class="form-check-label interest-button"
+                style="color: white;  background-color: hsl(<%= Math.floor(Math.random()*360) %>, 100%, 20%); border: 1px solid black;">
+                <%= interest %>
+              </label>
+            </div>
+            <% }) %>
+        </div>
+      </form>
     </div>
-  </form>
-</div>
+
+  </div>
+
 
   <%- include("templates/footer") %>
 
     <style>
+      .form-check {
+        padding-left: 0px;
+        ;
+      }
+
+      .form-control {
+        text-align: left!important;
+      }
+
+      .profile-top {
+        display: flex;
+        justify-content: space-evenly;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .profile-top-names {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .profile-form {
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 20px;
+        text-align: left;
+        position: relative;
+        width: 450px;
+      }
+
       .profile-actions {
         display: flex;
+        justify-content: center;
       }
 
       .action-button {
         margin-right: 10px;
+      }
+
+      .form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        background-color: #fafafa;
+        border-radius: 3px;
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto;
+      }
+
+      .form label {
+        font-size: 16px;
+        line-height: 24px;
+        color: #000000;
+        margin-bottom: 5px;
+      }
+
+      .form-control {
+        width: 100%;
+        background-color: #fafafa;
+        border: none;
+        outline: none;
+        padding: 7px 0px;
+        font-size: 16px;
+        color: #262626;
+        text-align: center;
+      }
+
+      .form-control:disabled {
+        background-color: #fafafa;
+      }
+
+      .interest-button {
+        background-color: #1f49c8;
+        color: white;
+        padding: 10px 20px;
+        margin: 5px;
+        border: none;
+        cursor: pointer;
+        border-radius: 20px;
+        text-align: center;
+      }
+
+      .form-check {
+        display: inline-block;
+      }
+
+      .form-check-input {
+        display: none;
       }
     </style>

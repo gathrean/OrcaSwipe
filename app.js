@@ -1,14 +1,22 @@
+// Server-side  of OrcaSwipe and app's main entry point
+
 // Import required modules
 require("dotenv").config();
 
-const express = require("express");                      // Import express
-const session = require("express-session");              // Import express-session
-const MongoStore = require("connect-mongo");             // Import connect-mongo
-const Joi = require("joi");                              // Import Joi
-const bcrypt = require("bcrypt");                        // Import bcrypt
-const { MongoClient, ObjectId } = require("mongodb");    // Import Object from MongoDB
-const url = require("url");                              // Import url
-const ejs = require("ejs");                              // Import ejs
+const express = require("express"); // Import express
+const session = require("express-session"); // Import express-session
+const MongoStore = require("connect-mongo"); // Import connect-mongo
+const Joi = require("joi"); // Import Joi
+const bcrypt = require("bcrypt"); // Import bcrypt
+const {
+  MongoClient,
+  ObjectId
+} = require("mongodb"); // Import Object from MongoDB
+const url = require("url"); // Import url
+const ejs = require("ejs"); // Import ejs
+const {
+  DateTime
+} = require('luxon');
 
 // For sending emails
 const nodemailer = require('nodemailer');
@@ -25,6 +33,16 @@ const mailer = nodemailer.createTransport({
 });
 
 const app = express();
+const openai = require('openai');
+
+//// Open AI API ////
+const configuration = new openai.Configuration({
+  organization: process.env.OPENAI_ORG,
+  apiKey: process.env.OPENAI_API_KEY,
+});
+const openaiapi = new openai.OpenAIApi(configuration);
+
+
 
 // MongoDB collections
 let usersCollection;
@@ -33,21 +51,35 @@ let testUsersCollection;
 let testPodsCollection;
 
 ///// Firebase SDK /////
+require('dotenv').config();
+
 const admin = require("firebase-admin");
 
-const serviceAccount = JSON.parse(process.env.IMAGE_FIREBASE_JSON);
+const serviceAccount = {
+  type: process.env.TYPE,
+  project_id: process.env.PROJECT_ID,
+  private_key_id: process.env.PRIVATE_KEY_ID,
+  private_key: process.env.PRIVATE_KEY.replace(/\\n/g, '\n'),
+  client_email: process.env.CLIENT_EMAIL,
+  client_id: process.env.CLIENT_ID,
+  auth_uri: process.env.AUTH_URI,
+  token_uri: process.env.TOKEN_URI,
+  auth_provider_x509_cert_url: process.env.AUTH_PROVIDER_X509_CERT_URL,
+  client_x509_cert_url: process.env.CLIENT_X509_CERT_URL,
+  universe_domain: process.env.UNIVERSE_DOMAIN
+}
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  storageBucket: "orcaswipe-8ae9b.appspot.com"
+  storageBucket: `${process.env.PROJECT_ID}.appspot.com`
 });
 
 const bucket = admin.storage().bucket();
 
-
-///// Multer Middleware needed for file upload /////
 const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
+const upload = multer({
+  dest: 'uploads/'
+});
 
 
 // Environment variables
@@ -60,6 +92,9 @@ const mongodb_session_secret = process.env.MONGODB_SESSION_SECRET;
 const hashedPassword = process.env.HASHED_PASSWORD;
 // End of environment variables
 
+// Interest tags
+const interests = ['Beach Clean-up', 'Volunteer', 'Charity', 'Clothing drive', 'Blood drive', 'Art', 'Cancer Walk', 'Travel', 'Photography']
+
 // Set up the port
 const PORT = process.env.PORT || 3000;
 
@@ -70,7 +105,9 @@ app.set("view engine", "ejs");
 const uri = `mongodb+srv://${mongodb_user}:${encodeURIComponent(mongodb_password)}@${mongodb_cluster}/${mongodb_database}`;
 
 // Connect to MongoDB using the provided URI and enable unified topology
-MongoClient.connect(uri, { useUnifiedTopology: true })
+MongoClient.connect(uri, {
+    useUnifiedTopology: true
+  })
   .then((client) => {
     console.log("Connected to MongoDB");
     const db = client.db("OrcaDB");
@@ -87,7 +124,9 @@ MongoClient.connect(uri, { useUnifiedTopology: true })
 app.use(express.json());
 
 // Enable URL-encoded parsing middleware for the app
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({
+  extended: false
+}));
 
 // Serve static files from the "public" directory
 app.use(express.static("public"));
@@ -96,7 +135,7 @@ app.use(express.static("public"));
 app.use('/splash', express.static('views/splash'));
 
 // Serve static files from the "/views/chat" directory
-app.use('/chat', express.static('views/chat'));
+app.use('/chat/uploads', express.static('uploads'));
 
 // Serve static files from /uplaods directory for photo rendering
 app.use('/uploads', express.static('uploads'));
@@ -125,19 +164,49 @@ app.use(
 
 // GET request for the root URL
 app.get("/", (req, res) => {
-  res.render("splash/splash", { loggedIn: req.session.loggedIn, name: req.session.name, currentPage: 'splash' });
+  res.render("splash/splash", {
+    loggedIn: req.session.loggedIn,
+    name: req.session.name,
+    currentPage: 'splash'
+  });
 });
 
 // GET request for the "/home" URL
 app.get("/home", async (req, res) => {
-  const user = await fetchUserData(req);
-  res.render("home", { loggedIn: req.session.loggedIn, name: req.session.name, currentPage: 'home', user });
+  var email = req.session.email;
+  var user = await usersCollection.findOne({
+    email: email
+  });
+  res.render("home", {
+    loggedIn: req.session.loggedIn,
+    name: req.session.name,
+    currentPage: 'home',
+    user: user
+  });
+});
+
+// POST request for the "/home" URL
+app.post("/home", async (req, res) => {
+  const messages = req.body.messages;
+  const model = req.body.model;
+  const temp = req.body.temp;
+
+  const completion = await openaiapi.createChatCompletion({
+    model: model,
+    messages: messages,
+    temperature: temp,
+  });
+  res.status(200).json({
+    result: completion.data.choices
+  });
 });
 
 // Fetch the user data
 async function fetchUserData(req) {
   if (req.session.loggedIn) {
-    return await usersCollection.findOne({ email: req.session.email });
+    return await usersCollection.findOne({
+      email: req.session.email
+    });
   }
   return null;
 }
@@ -145,12 +214,18 @@ async function fetchUserData(req) {
 
 // GET request for the "/splash" URL
 app.get("/splash", (req, res) => {
-  res.render("splash/splash", { loggedIn: req.session.loggedIn, username: req.session.username, currentPage: 'splash' });
+  res.render("splash/splash", {
+    loggedIn: req.session.loggedIn,
+    username: req.session.username,
+    currentPage: 'splash'
+  });
 });
 
 // POST request for the "/splash" URL
 app.post("/splash", (req, res) => {
-  const { action } = req.body;
+  const {
+    action
+  } = req.body;
 
   if (action === "signup") {
     // Handle signup logic
@@ -165,16 +240,22 @@ app.post("/splash", (req, res) => {
 
 // GET request for the "/signup" URL
 app.get("/signup", (req, res) => {
-  res.render("splash/signup", { currentPage: 'signup' });
+  res.render("splash/signup", {
+    currentPage: 'signup'
+  });
 });
 
 // GET request for the "/resetPassword" URL
 app.get('/resetPassword', async (req, res) => {
   let user = null;
   if (req.session.loggedIn) {
-    user = await usersCollection.findOne({ email: req.session.email });
+    user = await usersCollection.findOne({
+      email: req.session.email
+    });
   }
-  res.render('resetting-passwords/resetPassword', { user: user });
+  res.render('resetting-passwords/resetPassword', {
+    user: user
+  });
 });
 
 
@@ -184,9 +265,15 @@ app.get('/createNewPassword', async (req, res) => {
   var code = req.params.code;
   let user = null;
   if (req.session.loggedIn) {
-    user = await usersCollection.findOne({ email: req.session.email });
+    user = await usersCollection.findOne({
+      email: req.session.email
+    });
   }
-  res.render('createNewPassword', { code: code, email: email, user: user });
+  res.render('createNewPassword', {
+    code: code,
+    email: email,
+    user: user
+  });
 })
 
 // POST request for the "/submitPassword" URL
@@ -202,24 +289,42 @@ app.post('/submitPassword', async (req, res) => {
   });
   const validationResult = schema.validate(req.body);
   if (validationResult.error) {
-    res.render('errors/error', { link: 'createNewPassword', error: validationResult.error });
+    res.render('errors/error', {
+      link: 'createNewPassword',
+      error: validationResult.error
+    });
   } else {
 
     const user = await usersCollection.findOne({
-      $and: [
-        { email: email },
-        { resetCode: code }
+      $and: [{
+          email: email
+        },
+        {
+          resetCode: code
+        }
       ]
     });
     if (user == null) {
-      res.render('errors/error', { link: "resetting-passwords/resetPassword", error: 'Reset code is invalid, please try again.' });;
+      res.render('errors/error', {
+        link: "resetting-passwords/resetPassword",
+        error: 'Reset code is invalid, please try again.'
+      });;
     }
     if (Date.now() < user.resetExpiry) {
       var newPassword = await bcrypt.hash(req.body.password, 10);
-      await usersCollection.updateOne({ email: email }, { $set: { password: newPassword } });
+      await usersCollection.updateOne({
+        email: email
+      }, {
+        $set: {
+          password: newPassword
+        }
+      });
       res.redirect('/login');
     } else {
-      res.render('errors/error', { link: "resetting-passwords/resetPassword", error: 'Reset has expired, please try again.' })
+      res.render('errors/error', {
+        link: "resetting-passwords/resetPassword",
+        error: 'Reset has expired, please try again.'
+      })
     }
   }
 
@@ -234,11 +339,19 @@ app.post('/sendResetEmail', async (req, res) => {
   const validationResult = schema.validate(req.body);
 
   if (validationResult.error) {
-    res.render('errors/error.ejs', { link: 'resetting-passwords/resetPassword', error: validationResult.error });
+    res.render('errors/error.ejs', {
+      link: 'resetting-passwords/resetPassword',
+      error: validationResult.error
+    });
   } else {
-    const user = await usersCollection.find({ email: email });
+    const user = await usersCollection.find({
+      email: email
+    });
     if (user == null) {
-      res.render('errors/error', { link: 'resetting-passwords/resetPassword', error: 'Email is not registered.' })
+      res.render('errors/error', {
+        link: 'resetting-passwords/resetPassword',
+        error: 'Email is not registered.'
+      })
     } else {
       const resetCode = Math.random().toString(36).substring(2, 8);;
       const target = `${hostURL}updatePassword?email=${email}&code=${resetCode}`;
@@ -246,15 +359,116 @@ app.post('/sendResetEmail', async (req, res) => {
         from: appEmail,
         to: email,
         subject: 'OrcaSwipe - Reset Your Password',
-        html: `<a href="${target}">Reset Your Password</a>`
+        html: `
+        <html>
+          <head>
+            <style>
+              /* Add your CSS styles here */
 
+              body {
+                background: linear-gradient(360deg, #4676EE, #134ACC);
+                font-family: 'Montserrat', sans-serif;
+                display: flex;
+                flex-direction: column;
+                height: 50vh;
+                width: 50vw;
+                font-size: 16px;
+                ;
+              }
+
+              h1 {
+                color: white;
+                font-size: 24px;
+                font-weight: bold;
+                display: flex;
+                align-items: center;
+              }
+
+              p {
+                color: white;
+                font-size: 16px;
+              }
+
+              a {
+                display: inline-block;
+                padding: 10px 20px;
+                background-color: #007bff;
+                color: #fff;
+                text-decoration: none;
+                border-radius: 4px;
+              }
+
+              .btn {
+                display: inline-block;
+                padding: 10px 20px;
+                border: 2px solid white;
+                border-radius: 50px;
+                color: white;
+                background-color: transparent;
+                font-size: 13px;
+                text-decoration: none;
+                cursor: pointer;
+                transition: background-color 0.3s ease, color 0.3s ease;
+                width: 200px;
+              }
+            
+              .btn:hover {
+                  background-color: rgba(0, 0, 0, 0.75);
+                  color: white;
+              }
+            
+              .white-button {
+                  color: #134ACC;
+                  background: white;
+                  border-color: #cfd1d3;
+                  width: min-content;
+              }
+
+              .navbar {
+                display: flex;
+                justify-content: center;
+                background: linear-gradient(360deg, #134ACC, #134ACC);
+                width: 100%;
+                padding: 10px 20px 10px 20px;
+            }
+              .navbar-brand img {
+                height: 30px;
+                width: auto;
+              } 
+            </style>
+          </head>
+          <body>
+            <div class="navbar-brand">
+                <img
+                    src="https://cdn.discordapp.com/attachments/828116217285836825/1110053979540430969/OrcaSwipe_Header_Logo.png">
+            </div>
+
+            <h1>Did you change your password?</h1>
+
+            <p>
+              We noticed the password for your OrcaSwipe account was recently changed. 
+              <br><br>
+              If you didn't make this change, you can ignore this message.
+            </p>
+            <hr>
+            <a class="btn blue-button" href="${target}">Reset Your Password</a>
+          </body>
+        </html>
+        `
       };
-      await usersCollection.updateOne(
-        { email: email },
-        { $set: { resetCode: resetCode, resetExpiry: Date.now() + resetExpiryTime } });
+      await usersCollection.updateOne({
+        email: email
+      }, {
+        $set: {
+          resetCode: resetCode,
+          resetExpiry: Date.now() + resetExpiryTime
+        }
+      });
       await mailer.sendMail(mailOptions, function (error, info) {
         var result = error ? error : 'Email sent! Check your inbox.'
-        res.render('resetting-passwords/resetEmailSent', { result: result });
+        res.render('resetting-passwords/resetEmailSent', {
+          result: result
+        });
       });
     }
   }
@@ -266,9 +480,15 @@ app.get('/updatePassword', async (req, res) => {
   const email = req.query.email;
   let user = null;
   if (req.session.loggedIn) {
-    user = await usersCollection.findOne({ email: req.session.email });
+    user = await usersCollection.findOne({
+      email: req.session.email
+    });
   }
-  res.render('resetting-passwords/updatePassword', { code: code, email: email, user: user });
+  res.render('resetting-passwords/updatePassword', {
+    code: code,
+    email: email,
+    user: user
+  });
 })
 
 
@@ -288,15 +508,19 @@ app.post("/updateSettings", async (req, res) => {
         const updatedUser = {
           podProximity: req.body.podProximity * 1000,
         };
-        await usersCollection.updateOne({ email: req.session.email }, { $set: updatedUser });
+        await usersCollection.updateOne({
+          email: req.session.email
+        }, {
+          $set: updatedUser
+        });
         req.session.name = updatedUser.name;
-        res.redirect("/settings");
+        res.redirect("/findPods");
       } catch (error) {
         res.status(500).send("Error updating user settings.<br><a href='/settings'>Go back to settings</a>");
       }
     }
   } else {
-    res.status(403).send("You must be logged in to update your settings.<br><a href='/'>Go back to home page</a>");
+    res.status(403).render("errors/403");
   }
 });
 
@@ -309,9 +533,21 @@ app.post("/signup", async (req, res) => {
     password: Joi.string().min(6).max(50).required(),
   });
   const validationResult = schema.validate(req.body);
+  usersCollection.createIndex({
+    "email": 1
+  }, {
+    unique: true
+  });
+  usersCollection.createIndex({
+    "username": 1
+  }, {
+    unique: true
+  });
 
   if (validationResult.error) {
-    res.status(400).send(validationResult.error.details[0].message + "<br><a href='/signup'>Go back to sign up</a>");
+    res.render('splash/signup', {
+      errorMessage: validationResult.error.details[0].message
+    });
   } else {
     try {
       const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -323,35 +559,58 @@ app.post("/signup", async (req, res) => {
         admin: false,
         eventsAttended: [],
         interests: [],
-        podProximity: 10000
+        podProximity: 3000000
       };
       const result = await usersCollection.insertOne(newUser);
       req.session.loggedIn = true;
       req.session.name = newUser.name;
       req.session.email = newUser.email;
-      res.redirect("/");
+      res.redirect("/home");
     } catch (error) {
-      res.status(500).send("Error signing up.");
+      if (error.code == 11000) {
+        var problemField = Object.keys(error.keyValue);
+        res.render('splash/signup', {
+          errorMessage: `${problemField} is already in use.`
+        });
+      } else {
+        res.render('splash/signup', {
+          errorMessage: 'Error signing up.'
+        });
+      }
     }
   }
 });
 
 // POST request for the "/savePod" URL
 app.post('/savePod', async (req, res) => {
-  var pod = req.body.pod;  // assuming your body contains a 'pod' field
+  var pod = req.body.pod; // assuming your body contains a 'pod' field
   var email = req.session.email;
 
-  const user = await usersCollection.findOne({ email: email });
+  const user = await usersCollection.findOne({
+    email: email
+  });
   if (!user) {
     console.error('User not found');
     return res.sendStatus(500);
   }
 
-  usersCollection.updateOne({ email: email }, { $push: { eventsAttended: pod } })
+  usersCollection.updateOne({
+      email: email
+    }, {
+      $push: {
+        eventsAttended: pod
+      }
+    })
     .then(() => {
       const attendee = [];
       // update the attenders field in the pod (CHANGE THIS LATER TO HAVE FULL USER INFO)
-      podsCollection.updateOne({ _id: new ObjectId(pod._id) }, { $push: { attenders: user._id } })
+      podsCollection.updateOne({
+          _id: new ObjectId(pod._id)
+        }, {
+          $push: {
+            attenders: user._id
+          }
+        })
         .then(() => {
           res.sendStatus(200);
         })
@@ -368,7 +627,9 @@ app.post('/savePod', async (req, res) => {
 
 // GET request for the "/login" URL
 app.get("/login", (req, res) => {
-  res.render("splash/login", { currentPage: 'login' });
+  res.render("splash/login", {
+    currentPage: 'login'
+  });
 });
 
 // POST request for the "/login" URL
@@ -384,14 +645,19 @@ app.post("/login", async (req, res) => {
     res.status(400).send(validationResult.error.details[0].message + "<br><a href='/login'>Go back to log in</a>");
   } else {
     try {
-      const user = await usersCollection.findOne({ username: req.body.username });
+      const user = await usersCollection.findOne({
+        username: req.body.username
+      });
       if (user && (await bcrypt.compare(req.body.password, user.password))) {
         req.session.loggedIn = true;
         req.session.name = user.name;
         req.session.email = user.email;
         res.redirect("/findPods");
       } else {
-        res.status(401).send("Incorrect username and password.<br><a href='/login'>Go back to log in</a>");
+        res.status(401).render('errors/incorrect', {
+          error: "Incorrect username and password.",
+          link: "/login"
+        });
       }
     } catch (error) {
       res.status(500).send("Error logging in.<br><a href='/login'>Go back to log in</a>");
@@ -414,15 +680,20 @@ app.get("/logout", (req, res) => {
 // GET request for the "/admin" URL
 app.get("/admin", async (req, res) => {
   if (req.session.loggedIn) {
-    const currentUser = await usersCollection.findOne({ email: req.session.email });
+    const currentUser = await usersCollection.findOne({
+      email: req.session.email
+    });
     if (currentUser && currentUser.admin) {
       const users = await usersCollection.find({}).toArray();
-      res.render("admin/admin", { users: users, currentPage: 'admin' });
+      res.render("admin/admin", {
+        users: users,
+        currentPage: 'admin'
+      });
     } else {
       res.status(403).send("You must be an admin to access this page.<br><a href='/'>Go back to home page</a>");
     }
   } else {
-    res.status(403).send("You must be logged in to access this page.<br><a href='/'>Go back to home page</a>");
+    res.status(403).render("errors/403");
   }
 });
 
@@ -430,7 +701,13 @@ app.get("/admin", async (req, res) => {
 app.get("/promote/:userId", async (req, res) => {
   const userId = req.params.userId;
   try {
-    await usersCollection.updateOne({ _id: new ObjectId(userId) }, { $set: { admin: true } });
+    await usersCollection.updateOne({
+      _id: new ObjectId(userId)
+    }, {
+      $set: {
+        admin: true
+      }
+    });
     res.redirect("/admin");
   } catch (error) {
     res.status(500).send("Error promoting user.");
@@ -441,7 +718,13 @@ app.get("/promote/:userId", async (req, res) => {
 app.get("/demote/:userId", async (req, res) => {
   const userId = req.params.userId;
   try {
-    await usersCollection.updateOne({ _id: new ObjectId(userId) }, { $set: { admin: false } });
+    await usersCollection.updateOne({
+      _id: new ObjectId(userId)
+    }, {
+      $set: {
+        admin: false
+      }
+    });
     res.redirect("/admin");
   } catch (error) {
     res.status(500).send("Error demoting user.");
@@ -452,30 +735,45 @@ app.get("/demote/:userId", async (req, res) => {
 app.get("/settings", async (req, res) => {
   if (req.session.loggedIn) {
     try {
-      const user = await usersCollection.findOne({ email: req.session.email });
-      res.render("settings", { user: user, currentPage: 'settings' });
+      const user = await usersCollection.findOne({
+        email: req.session.email
+      });
+      res.render("settings", {
+        user: user,
+        currentPage: 'settings'
+      });
     } catch (error) {
       res.status(500).send("Error retrieving user data.");
     }
   } else {
-    res.status(403).send("You must be logged in to access this page.<br><a href='/'>Go back to home page</a>");
+    res.status(403).render("errors/403");
   }
 });
 
 app.get("/members", async (req, res) => {
   if (req.session.loggedIn) {
-    let user = await usersCollection.findOne({ email: req.session.email });
-    res.render("members", { name: req.session.name, currentPage: 'members', user: user });
+    let user = await usersCollection.findOne({
+      email: req.session.email
+    });
+    res.render("members", {
+      name: req.session.name,
+      currentPage: 'members',
+      user: user
+    });
   } else {
-    res.status(403).send("You must be logged in to access the members area.<br><a href='/'>Go back to home page</a>");
+    res.status(403).render("errors/403");
   }
 });
 
 // GET request for the "/pods" URL
 app.get("/attendedpods", async (req, res) => {
   if (req.session.loggedIn) {
-    const user = await usersCollection.findOne({ email: req.session.email });
-    const attendedPods = await podsCollection.find({ attenders: user._id }).toArray();
+    const user = await usersCollection.findOne({
+      email: req.session.email
+    });
+    const attendedPods = await podsCollection.find({
+      attenders: user._id
+    }).toArray();
     if (!user) {
       console.log(`User email from session: ${req.session.email}`);
       console.log('User from DB: ', user);
@@ -488,7 +786,75 @@ app.get("/attendedpods", async (req, res) => {
       user: user,
     });
   } else {
-    res.status(403).send("You must be logged in to access the pods page.<br><a href='/'>Go back to home page</a>")
+    res.status(403).render("errors/403");
+  }
+});
+
+
+// POST request for upvoting a specific pod
+app.post("/pod/:podId/upvote", async (req, res) => {
+  if (!req.session.loggedIn) {
+    return
+  } else {
+    res.status(403).render("errors/403");
+  }
+
+  const user = await usersCollection.findOne({
+    email: req.session.email
+  });
+  const podId = req.params.podId;
+
+  if (!user) {
+    return res.status(404).send('User not found');
+  }
+
+  try {
+    await podsCollection.updateOne({
+      _id: new ObjectId(podId)
+    }, {
+      $addToSet: {
+        upvotes: user._id
+      },
+      $pull: {
+        downvotes: user._id
+      }
+    });
+    res.status(200).send();
+  } catch (error) {
+    res.status(500).send('Error voting on pod');
+  }
+});
+
+
+// POST request for downvoting a specific pod
+app.post("/pod/:podId/downvote", async (req, res) => {
+  if (!req.session.loggedIn) {
+    return res.status(403).send("You must be logged in to vote.<br><a href='/'>Go back to home page</a>")
+  }
+
+  const user = await usersCollection.findOne({
+    email: req.session.email
+  });
+  const podId = req.params.podId;
+
+  if (!user) {
+    return res.status(404).send('User not found');
+  }
+
+  try {
+    await podsCollection.updateOne({
+      _id: new ObjectId(podId)
+    }, {
+      $addToSet: {
+        downvotes: user._id
+      },
+      $pull: {
+        upvotes: user._id
+      }
+    });
+    res.status(200).send();
+  } catch (error) {
+    res.status(500).send('Error voting on pod');
   }
 });
 
@@ -497,34 +863,44 @@ app.get("/createdpods", async (req, res) => {
   if (req.session.loggedIn) {
     const user = await fetchUserData(req);
     try {
-      const createdPods = await podsCollection.find({ creator: req.session.email }).toArray();
-      res.render("createdpods", { activeTab: 'createdpods', currentPage: 'createdPods', createdPods: createdPods, user });
+      const createdPods = await podsCollection.find({
+        creator: req.session.email
+      }).toArray();
+      res.render("createdpods", {
+        activeTab: 'createdpods',
+        currentPage: 'createdPods',
+        createdPods: createdPods,
+        user
+      });
     } catch (error) {
       res.status(500).send("Error retrieving created pods.<br><a href='/'>Go back to home page</a>")
     }
   } else {
-    res.status(403).send("You must be logged in to access the create pods page.<br><a href='/'>Go back to home page</a>")
+    res.status(403).render("errors/403");
   }
 });
 
-app.post('/deletePod', async (req, res) => {
-  // const documents = await usersCollection.find({}).toArray();
-  // await testUsersCollection.deleteMany();
-  // await testUsersCollection.insertMany(documents);
 
-  // const podDocs = await podsCollection.find({}).toArray();
-  // await testPodsCollection.deleteMany();
-  // await testPodsCollection.insertMany(podDocs);
+// POST request to delete a pod
+app.post('/deletePod', async (req, res) => {
 
   const schema = Joi.object({
     id: Joi.string().hex().length(24)
   })
-  var validationResult = schema.validate({ id: req.body.podID });
+  var validationResult = schema.validate({
+    id: req.body.podID
+  });
 
   if (!(validationResult.error)) {
     console.log(req.body.podID)
     var targetID = new ObjectId(req.body.podID)
-    var query = { $and: [{ _id: targetID }, { creator: req.session.email }] }
+    var query = {
+      $and: [{
+        _id: targetID
+      }, {
+        creator: req.session.email
+      }]
+    }
     var targetPod = await podsCollection.deleteOne(query);
 
     console.log(targetID)
@@ -538,18 +914,26 @@ app.post('/deletePod', async (req, res) => {
           i--;
         }
       }
-      await usersCollection.updateOne({ _id: u._id }, {
-        $set: { eventsAttended: events }
+      await usersCollection.updateOne({
+        _id: u._id
+      }, {
+        $set: {
+          eventsAttended: events
+        }
       })
     })
   }
-  const createdPods = await podsCollection.find({ creator: req.session.email }).toArray();
+  const createdPods = await podsCollection.find({
+    creator: req.session.email
+  }).toArray();
   res.redirect("/createdpods");
 });
 // Fetch the user data
 async function fetchUserData(req) {
   if (req.session.loggedIn) {
-    return await usersCollection.findOne({ email: req.session.email });
+    return await usersCollection.findOne({
+      email: req.session.email
+    });
   }
   return null;
 }
@@ -558,15 +942,27 @@ async function fetchUserData(req) {
 app.get("/createpod", async (req, res) => {
   if (req.session.loggedIn) {
     const user = await fetchUserData(req);
-    res.render("createpod", { currentPage: 'pods', user: user });
+    res.render("createpod", {
+      currentPage: 'pods',
+      user: user
+    });
   }
 });
 
+
+// POST request to create a pod after create pod form is filled out
 app.post("/createpod", upload.single('image'), async (req, res) => {
-  const interests = ['outdoors', 'video games', 'reading', 'cooking', 'music', 'sports', 'art', 'travel', 'coding', 'photography'];
+  console.log(req.body);
+
   if (req.session.loggedIn) {
-    let { name, eventDescription } = req.body;
-    var location = { lat: req.body.lat, lng: req.body.lng };
+    let {
+      name,
+      eventDescription
+    } = req.body;
+    var location = {
+      lat: req.body.lat,
+      lng: req.body.lng
+    };
 
     console.log(req.file);
 
@@ -590,20 +986,38 @@ app.post("/createpod", upload.single('image'), async (req, res) => {
       console.log(`${req.file.filename} uploaded to Firebase.`);
     } // No need for an else block because image is already defined as an empty string
 
-    // If the interest is in req.body, it was checked. Otherwise, it was not.
-    let tags = {}
-    interests.forEach(interest => {
-      tags[interest] = !!req.body[interest];
-    });
+    // Create an array of checked interests.
+    let tags = []
+    if (req.body.interests) {
+      tags = Array.isArray(req.body.interests) ? req.body.interests : [req.body.interests];
+    }
+
 
     const creator = req.session.email;
     let attenders = [];
-    const newPod = { name, tags, eventDescription, attenders, creator, location, image };
+    let upvotes = []; // Empty array for upvotes
+    let downvotes = []; // Empty array for downvotes
+    const date = DateTime.fromISO(`${req.body.date}`);
+    const formattedDate = date.toFormat('yyyy-LL-dd');
+    const time = `${req.body.time}`;
+    const newPod = {
+      name,
+      tags,
+      eventDescription,
+      attenders,
+      creator,
+      location,
+      image,
+      upvotes,
+      downvotes,
+      formattedDate,
+      time
+    };
 
-    // use Joi to validate data
+    // Adjust the Joi validation schema.
     const schema = Joi.object({
       name: Joi.string().required(),
-      tags: Joi.object().pattern(Joi.string(), Joi.boolean()),
+      tags: Joi.array().items(Joi.string()),
       eventDescription: Joi.string().required(),
       attenders: Joi.array(),
       creator: Joi.string(),
@@ -611,7 +1025,11 @@ app.post("/createpod", upload.single('image'), async (req, res) => {
         lat: Joi.number().required(),
         lng: Joi.number().required()
       }),
-      image: Joi.string().uri()  // validates image as a URL
+      image: Joi.string().uri(), // validates image as a URL
+      upvotes: Joi.array(), // Validates upvotes as an array
+      downvotes: Joi.array(), // Validates downvotes as an array
+      formattedDate: Joi.string().required(),
+      time: Joi.string().required()
     });
 
 
@@ -628,7 +1046,7 @@ app.post("/createpod", upload.single('image'), async (req, res) => {
       }
     }
   } else {
-    res.status(403).send("You must be logged in to create a pod.<br><a href='/'>Go back to home page</a>");
+    res.status(403).render("errors/403");
   }
 });
 
@@ -637,13 +1055,18 @@ app.post("/createpod", upload.single('image'), async (req, res) => {
 app.get("/profile", async (req, res) => {
   if (req.session.loggedIn) {
     try {
-      const user = await usersCollection.findOne({ email: req.session.email });
-      res.render("profile", { user: user, currentPage: 'profile' });
+      const user = await usersCollection.findOne({
+        email: req.session.email
+      });
+      res.render("profile", {
+        user: user,
+        currentPage: 'profile'
+      });
     } catch (error) {
       res.status(500).send("Error retrieving user data.");
     }
   } else {
-    res.status(403).send("You must be logged in to access this page.<br><a href='/'>Go back to home page</a>");
+    res.status(403).render("errors/403");
   }
 });
 
@@ -651,52 +1074,69 @@ app.get("/profile", async (req, res) => {
 app.get("/editProfile", async (req, res) => {
   if (req.session.loggedIn) {
     try {
-      const user = await usersCollection.findOne({ email: req.session.email });
-      res.render("editProfile", { user: user, currentPage: 'editProfile' });
+      const user = await usersCollection.findOne({
+        email: req.session.email
+      });
+      res.render("editProfile", {
+        user: user,
+        currentPage: 'editProfile'
+      });
     } catch (error) {
       res.status(500).send("Error retrieving user data.");
     }
   } else {
-    res.status(403).send("You must be logged in to access this page.<br><a href='/'>Go back to home page</a>");
+    res.status(403).render("errors/403");
   }
 });
 
 // POST request for the "/findPods" URL
 app.get("/findPods", async (req, res) => {
   var email = req.session.email;
-  var user = await usersCollection.findOne({ email: email });
+  var user = await usersCollection.findOne({
+    email: email
+  });
   console.log(user)
-  res.render('findPods', { currentPage: 'findPods', maxDist: user.podProximity != null ? user.podProximity : 10000, user: user });
+  res.render('findPods', {
+    currentPage: 'findPods',
+    maxDist: user.podProximity != null ? user.podProximity : 3000000,
+    user: user
+  });
 })
+
+
+// GET request for user's tags
+app.get("/getUserInterests", async (req, res) => {
+  var email = req.session.email;
+  var user = await usersCollection.findOne({
+    email: email
+  });
+  res.json(user.interests);
+});
+
 
 // GET request for the "/getPods" URL
 // (NOT to be confused with /findPods)
 app.get('/getPods', async (req, res) => {
   var email = req.session.email;
-  var user = await usersCollection.findOne({ email: email });
+  var user = await usersCollection.findOne({
+    email: email
+  });
   var attendedPods = user.eventsAttended || [];
-  var userInterests = user.interests;  // Get the user's interests
+  var userInterests = user.interests; // Get the user's interests
 
-  // Prepare a list of keys from user interests where value is true
-  let keys = [];
-  let query;
+  let pods;
 
-  // Prepare a query where at least one key from the list has value true
-  if (userInterests && userInterests.length != 0) {
-    for (let interest of userInterests) {
-      keys.push(`tags.${interest}`);
+  // Prepare a query where at least one tag from the list overlaps with user's interests
+  pods = await podsCollection.find({
+    name: {
+      $nin: attendedPods.map(pod => pod.name)
+    },
+    tags: {
+      $in: userInterests
     }
-    query = { $or: keys.map(key => ({ [key]: true })) };
-    var pods = await podsCollection.find({
-      name: { $nin: attendedPods.map(pod => pod.name) },
-      ...query
-    }).project().toArray();
-  } else {
-    var pods = await podsCollection.find({
-      name: { $nin: attendedPods.map(pod => pod.name) }
-    }).project().toArray();
-  }
+  }).toArray();
 
+  // console.log(pods.length);
   for (var i = 0; i < pods.length; i++) {
     pods[i] = JSON.stringify(pods[i]);
   }
@@ -706,20 +1146,25 @@ app.get('/getPods', async (req, res) => {
 //Populates the show attenders card
 app.get("/pod/:id/attenders", async (req, res) => {
   const podId = new ObjectId(req.params.id);
-  const pod = await podsCollection.findOne({ _id: podId });
+  const pod = await podsCollection.findOne({
+    _id: podId
+  });
 
   if (!pod) {
     return res.status(404).send("Pod not found");
   }
 
-  // Fetch user data for each attender
-  const attenders = await Promise.all(
-    pod.attenders.map(async (userId) => {
-      const user = await usersCollection.findOne({ _id: userId });
-      return user.email;  // return the user's email for example
-    })
-  );
-  res.json(attenders);
+  const attenders = await usersCollection.find({
+    _id: {
+      $in: pod.attenders
+    }
+  }).toArray();
+  const attendersInfo = attenders.map(attender => ({
+    email: attender.email,
+    username: attender.username,
+    profileImage: attender.image,
+  }));
+  res.json(attendersInfo);
 });
 
 //leaving the pod
@@ -727,17 +1172,30 @@ app.post("/pod/:podId/leave", async (req, res) => {
   if (req.session.loggedIn) {
     try {
       const podId = req.params.podId;
-      const user = await usersCollection.findOne({ email: req.session.email });
+      const user = await usersCollection.findOne({
+        email: req.session.email
+      });
 
       if (user) {
-        await podsCollection.updateOne(
-          { _id: new ObjectId(podId) },
-          { $pull: { attenders: user._id } }
-        );
-        await usersCollection.updateOne(
-          { _id: new ObjectId(user._id) },
-          { $pull: { eventsAttended: { _id: podId } } }
-        );
+        await podsCollection.updateOne({
+          _id: new ObjectId(podId)
+        }, {
+          $pull: {
+            attenders: user._id,
+            upvotes: user._id,
+            downvotes: user._id
+          }
+        });
+        await usersCollection.updateOne({
+          _id: new ObjectId(user._id)
+        }, {
+          $pull: {
+            eventsAttended: {
+              _id: podId
+            }
+          }
+        });
+        res.redirect("/attendedPods"); // Add this line
         res.status(200).send();
       } else {
         res.status(404).send('User not found');
@@ -747,7 +1205,7 @@ app.post("/pod/:podId/leave", async (req, res) => {
       res.status(500).send('Error leaving pod');
     }
   } else {
-    res.status(403).send('You must be logged in to leave a pod');
+    res.status(403).render("errors/403");
   }
 });
 
@@ -755,91 +1213,189 @@ app.post("/pod/:podId/leave", async (req, res) => {
 app.get("/viewProfile", async (req, res) => {
   if (req.session.loggedIn) {
     try {
-      const user = await usersCollection.findOne({ email: req.session.email });
-      res.render('viewProfile', { user: user });
+      const user = await usersCollection.findOne({
+        email: req.session.email
+      });
+      res.render('viewProfile', {
+        user: user
+      });
 
     } catch (error) {
       res.status(500).send("Error retrieving user data.");
     }
   } else {
-    res.status(403).send("You must be logged in to access this page.<br><a href='/'>Go back to home page</a>");
+    res.status(403).render("errors/403");
   }
 });
 
 // POST request for the "/updateProfile" URL
 app.post("/updateProfile", upload.single('profilePhoto'), async (req, res) => {
   if (req.session.loggedIn) {
-    let imagePath;
-    if (req.file) {
-      imagePath = 'uploads/' + req.file.filename;
-    }
+    try {
+      const user = await usersCollection.findOne({
+        email: req.session.email
+      });
 
-    const schema = Joi.object({
-      name: Joi.string().max(50).optional(),
-      username: Joi.string().max(50).optional(),
-      email: Joi.string().email().optional(),
-      birthday: Joi.date().optional(),
-      pronouns: Joi.string().max(50).optional(),
-      interests: Joi.array().items(Joi.string()).max(10).optional(),
-      image: Joi.string().optional()
-    });
-
-    if (!Array.isArray(req.body.interests)) {
-      if (typeof req.body.interests != 'undefined') {
-        req.body.interests = [req.body.interests];
-      } else {
-        req.body.interests = [];
+      if (!user) {
+        res.status(401).send("User not found.<br><a href='/editProfile'>Go back to edit profile</a>");
+        return;
       }
-    }
 
-    if (imagePath) {
-      req.body.image = imagePath;
-    }
+      // If the user does not upload a new image, keep the old one.
+      let imagePath;
+      if (req.file) {
+        imagePath = 'uploads/' + req.file.filename;
+      } else {
+        imagePath = user.image;
+      }
 
-    const validationResult = schema.validate(req.body);
+      const schema = Joi.object({
+        name: Joi.string().max(50).optional(),
+        username: Joi.string().max(50).optional(),
+        email: Joi.string().email().optional(),
+        birthday: Joi.date().allow("").optional(),
+        pronouns: Joi.string().max(50).allow('').optional(),
+        interests: Joi.array().items(Joi.string()).max(10).optional(),
+        image: Joi.string().allow(null).optional()
+      });
 
-    if (validationResult.error) {
-      res.status(400).send(validationResult.error.details[0].message + "<br><a href='/editProfile'>Go back to edit profile</a>");
-    } else {
-      try {
-        const user = await usersCollection.findOne({ email: req.session.email });
-        if (user) {
-          const updatedUser = {
-            name: req.body.name,
-            username: req.body.username,
-            email: req.body.email,
-            birthday: new Date(req.body.birthday),
-            pronouns: req.body.pronouns,
-            interests: req.body.interests,
-            image: req.body.image,
-          };
-          await usersCollection.updateOne({ email: req.session.email }, { $set: updatedUser });
-          req.session.name = updatedUser.name;
-          req.session.email = updatedUser.email;
-          res.redirect("/profile");
+      if (!Array.isArray(req.body.interests)) {
+        if (typeof req.body.interests != 'undefined') {
+          req.body.interests = [req.body.interests];
         } else {
-          res.status(401).send("User not found.<br><a href='/editProfile'>Go back to edit profile</a>");
+          req.body.interests = user.interests;
         }
-      } catch (error) {
-        res.status(500).send("Error updating profile.<br><a href='/editProfile'>Go back to edit profile</a>");
+      }
+
+      req.body.image = imagePath;
+
+      const validationResult = schema.validate(req.body);
+
+      if (validationResult.error) {
+        res.status(400).send(validationResult.error.details[0].message + "<br><a href='/editProfile'>Go back to edit profile</a>");
+      } else {
+        const updatedUser = {
+          name: req.body.name || user.name,
+          username: req.body.username || user.username,
+          email: req.body.email || user.email,
+          birthday: req.body.birthday ? new Date(req.body.birthday) : user.birthday,
+          pronouns: req.body.pronouns || user.pronouns,
+          interests: req.body.interests || user.interests,
+          image: req.body.image || user.image,
+        };
+        await usersCollection.updateOne({
+          email: req.session.email
+        }, {
+          $set: updatedUser
+        });
+        req.session.name = updatedUser.name;
+        req.session.email = updatedUser.email;
+        res.redirect("/profile");
+      }
+    } catch (error) {
+      if (error.code == 11000) {
+        var problemField = Object.keys(error.keyValue);
+        res.render('editProfile', {
+          errorMessage: `${problemField} is already in use.`,
+          user: user
+        });
+      } else {
+        res.render('editProfile', {
+          errorMessage: 'Error updating profile.',
+          user: user
+        });
       }
     }
   } else {
-    res.status(403).send("You must be logged in to update your profile.<br><a href='/'>Go back to home page</a>");
+    res.status(403).render("errors/403");
   }
 });
+
 
 // GET request for the "/chat" URL
 app.get("/chat", async (req, res) => {
   if (req.session.loggedIn) {
     try {
-      const user = await usersCollection.findOne({ email: req.session.email });
-      res.render("chat/chat", { user: user, currentPage: 'chat' });
+      const user = await usersCollection.findOne({
+        email: req.session.email
+      });
+      res.render("chat", {
+        user: user,
+        currentPage: 'chat'
+      });
     } catch (error) {
       res.status(500).send("Error retrieving user data.");
     }
   } else {
-    res.status(403).send("You must be logged in to access this page.<br><a href='/'>Go back to home page</a>");
+    res.status(403).render("errors/403");
+  }
+});
+
+app.post('/chatgpt', async (req, res) => {
+  const messages = req.body.messages;
+  const model = req.body.model;
+  const temp = req.body.temp;
+
+  const completion = await openaiapi.createChatCompletion({
+    model: model,
+    messages: messages,
+    temperature: temp,
+  });
+  res.status(200).json({
+    result: completion.data.choices
+  });
+});
+
+// POST request for users updating their profile tags
+app.post('/updateInterests', async (req, res) => {
+  var newInterests = {
+    interests: req.body.holder.split(',')
+  };
+  const schema = Joi.object({
+    interests: Joi.array().items(Joi.string().required()).max(20).optional(),
+  });
+  var validationResult = schema.validate(newInterests);
+
+  if (validationResult.error) {
+    var user = await usersCollection.findOne({
+      email: req.session.email
+    });
+    res.render("home", {
+      loggedIn: req.session.loggedIn,
+      name: req.session.name,
+      currentPage: 'home',
+      user: user,
+      errorMessage: validationResult.error.message
+    });
+  } else if (req.body.holder != []) {
+    try {
+      await usersCollection.updateOne({
+        email: req.session.email
+      }, {
+        $addToSet: {
+          interests: {
+            $each: req.body.holder.split(',')
+          }
+        }
+      })
+      res.redirect('findPods');
+    } catch (error) {
+      res.render("home", {
+        loggedIn: req.session.loggedIn,
+        name: req.session.name,
+        currentPage: 'home',
+        user: user,
+        errorMessage: 'Could not update. Please try again later.'
+      });
+    }
+  } else {
+    res.render("home", {
+      loggedIn: req.session.loggedIn,
+      name: req.session.name,
+      currentPage: 'home',
+      user: user,
+      errorMessage: 'Could not update. Please try again later.'
+    });
   }
 });
 
@@ -847,10 +1403,14 @@ app.get("/chat", async (req, res) => {
 app.get('*', async (req, res) => {
   let user = null;
   if (req.session.loggedIn) {
-    user = await usersCollection.findOne({ email: req.session.email });
+    user = await usersCollection.findOne({
+      email: req.session.email
+    });
   }
   res.status(404);
-  res.render("errors/404", { user: user });
+  res.render("errors/404", {
+    user: user
+  });
 });
 
 // Start server

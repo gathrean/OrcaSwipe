@@ -1,7 +1,7 @@
 /*Based on code from Rob Vermeer at https://codepen.io/RobVermeer/pen/japZpY */
 
 .tinder {
-  width: 100vw;
+  /* width: 100vw; */
   height: 75vh;
   display: grid;
   grid-template-rows: 90% 10%;
@@ -59,13 +59,14 @@
 }
 
 .tinder--card {
+  font-family: 'Montserrat', sans-serif;
   display: inline-block;
   width: 90vw;
   max-width: 400px;
   height: 75vh;
   background: #FFFFFF;
-  padding-bottom: 40px;
-  border-radius: 20px;
+  /* padding-bottom: 40px; */
+  border-radius: 50px;
   overflow: hidden;
   position: absolute;
   will-change: transform;
@@ -73,7 +74,7 @@
   cursor: -webkit-grab;
   cursor: -moz-grab;
   cursor: grab;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.75);
   /* box-shadow: (horizonal) (vertical) (blur radius) (rgb) */
 }
 
@@ -93,23 +94,64 @@
 }
 
 .tinder--card h3 {
-  margin-top: 32px;
-  font-size: 26px;
-  padding: 0 16px;
+  /* margin-top: 32px; */
+  font-size: 32px;
+  font-weight: bolder;
+  padding: 5px 16px 0px 16px;
   pointer-events: none;
   display: flex;
-  justify-content: center;
-  text-align: center;
+  /* justify-content: center; */
+  text-align: left;
 }
 
 .tinder--card p {
-  margin-top: 24px;
-  font-size: 20px;
-  padding: 0 16px;
+  /* margin-top: 24px; */
+  font-size: 16px;
+  padding: 0px 16px;
   pointer-events: none;
   display: flex;
-  justify-content: center;
-  text-align: center;
+  /* justify-content: center; */
+  text-align: left;
+}
+
+.tinder--card p .location {
+  font-size: 20px;
+  font-weight: lighter;
+  color: #575757;
+  display: flex;
+  flex-direction: row;
+  padding-right: 10px;
+}
+
+.tinder--card p .time {
+  font-size: 12px;
+  font-weight: bold;
+  color: #575757;
+  display: flex;
+  flex-direction: row;
+}
+
+.tinder--card .orcascore {
+  color: #02c78f;
+  font-size: 14px;
+  padding: 0px 16px;
+}
+
+.tinder--card .tags {
+  color: #4676EE;
+  font-size: 14px;
+  padding: 0px 16px;
+}
+
+.tags-form {
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 20px;
+  text-align: left;
+  /* width: 90vw; */
 }
 
 .empty-message {
