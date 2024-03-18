@@ -103,6 +103,7 @@ const PORT = process.env.PORT || 3000;
 
 // Set the view engine for the app to EJS
 app.set("view engine", "ejs");
+app.set('views', path.join(__dirname, 'views'));
 
 // Construct the MongoDB connection URI using the provided variables
 const uri = `mongodb+srv://${mongodb_user}:${encodeURIComponent(mongodb_password)}@${mongodb_cluster}/${mongodb_database}`;
@@ -167,7 +168,7 @@ app.use(
 
 // GET request for the root URL
 app.get("/", (req, res) => {
-  res.render("splash/splash.ejs", {
+  res.render("splash/splash", {
     loggedIn: req.session.loggedIn,
     name: req.session.name,
     currentPage: 'splash'
@@ -217,7 +218,7 @@ async function fetchUserData(req) {
 
 // GET request for the "/splash" URL
 app.get("/splash", (req, res) => {
-  res.render("splash/splash.ejs", {
+  res.render("splash/splash", {
     loggedIn: req.session.loggedIn,
     username: req.session.username,
     currentPage: 'splash'
@@ -342,7 +343,7 @@ app.post('/sendResetEmail', async (req, res) => {
   const validationResult = schema.validate(req.body);
 
   if (validationResult.error) {
-    res.render('errors/error.ejs', {
+    res.render('errors/error', {
       link: 'resetting-passwords/resetPassword',
       error: validationResult.error
     });
@@ -1411,7 +1412,7 @@ app.get('*', async (req, res) => {
     });
   }
   res.status(404);
-  res.render("errors/404.ejs", {
+  res.render("errors/404", {
     user: user
   });
 });
