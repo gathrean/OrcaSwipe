@@ -69,10 +69,14 @@ const serviceAccount = {
   universe_domain: process.env.UNIVERSE_DOMAIN
 }
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  storageBucket: `${process.env.PROJECT_ID}.appspot.com`
-});
+// Check if the Firebase app has already been initialized
+if (!admin.apps.length) {
+  // If not initialized, initialize the Firebase app
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    storageBucket: `${process.env.PROJECT_ID}.appspot.com`
+  });
+}
 
 const bucket = admin.storage().bucket();
 
@@ -106,8 +110,8 @@ const uri = `mongodb+srv://${mongodb_user}:${encodeURIComponent(mongodb_password
 
 // Connect to MongoDB using the provided URI and enable unified topology
 MongoClient.connect(uri, {
-    useUnifiedTopology: true
-  })
+  useUnifiedTopology: true
+})
   .then((client) => {
     console.log("Connected to MongoDB");
     const db = client.db("OrcaDB");
@@ -297,11 +301,11 @@ app.post('/submitPassword', async (req, res) => {
 
     const user = await usersCollection.findOne({
       $and: [{
-          email: email
-        },
-        {
-          resetCode: code
-        }
+        email: email
+      },
+      {
+        resetCode: code
+      }
       ]
     });
     if (user == null) {
@@ -595,22 +599,22 @@ app.post('/savePod', async (req, res) => {
   }
 
   usersCollection.updateOne({
-      email: email
-    }, {
-      $push: {
-        eventsAttended: pod
-      }
-    })
+    email: email
+  }, {
+    $push: {
+      eventsAttended: pod
+    }
+  })
     .then(() => {
       const attendee = [];
       // update the attenders field in the pod (CHANGE THIS LATER TO HAVE FULL USER INFO)
       podsCollection.updateOne({
-          _id: new ObjectId(pod._id)
-        }, {
-          $push: {
-            attenders: user._id
-          }
-        })
+        _id: new ObjectId(pod._id)
+      }, {
+        $push: {
+          attenders: user._id
+        }
+      })
         .then(() => {
           res.sendStatus(200);
         })
