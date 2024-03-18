@@ -1411,7 +1411,7 @@ app.get('*', async (req, res) => {
     });
   }
   res.status(404);
-  res.render("errors/404", {
+  res.render("errors/404.ejs", {
     user: user
   });
 });
