@@ -101,6 +101,8 @@ const interests = ['Beach Clean-up', 'Volunteer', 'Charity', 'Clothing drive', '
 // Set up the port
 const PORT = process.env.PORT || 3000;
 
+const path = require('path');
+
 // Set the view engine for the app to EJS
 app.set("view engine", "ejs");
 app.set('views', path.join(__dirname, 'views'));
