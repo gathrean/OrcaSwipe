@@ -82,9 +82,8 @@ const bucket = admin.storage().bucket();
 
 const multer = require('multer');
 const upload = multer({
-  dest: 'uploads/'
+  dest: '/tmp/uploads/'
 });
-
 
 // Environment variables
 const mongodb_user = process.env.MONGODB_USER;
