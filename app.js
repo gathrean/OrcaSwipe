@@ -167,7 +167,7 @@ app.use(
 
 // GET request for the root URL
 app.get("/", (req, res) => {
-  res.render("splash/splash", {
+  res.render("splash/splash.ejs", {
     loggedIn: req.session.loggedIn,
     name: req.session.name,
     currentPage: 'splash'
@@ -217,7 +217,7 @@ async function fetchUserData(req) {
 
 // GET request for the "/splash" URL
 app.get("/splash", (req, res) => {
-  res.render("splash/splash", {
+  res.render("splash/splash.ejs", {
     loggedIn: req.session.loggedIn,
     username: req.session.username,
     currentPage: 'splash'
