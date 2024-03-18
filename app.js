@@ -35,6 +35,9 @@ const mailer = nodemailer.createTransport({
 const app = express();
 const openai = require('openai');
 
+// Serve static files from the 'public' directory
+app.use(express.static('public'));
+
 //// Open AI API ////
 const configuration = new openai.Configuration({
   organization: process.env.OPENAI_ORG,
