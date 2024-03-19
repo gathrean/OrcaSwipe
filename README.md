@@ -2,90 +2,96 @@
 
 # OrcaSwipe
 
-## About the App 
+Discover, join, and host tailored communities and events with a swipe, connecting you with like-minded individuals and enabling easy filtering, finding, and hosting of Pods.
 
-- OrcaSwipe: Discover, join, and host tailored communities and events with a swipe, connecting you with like-minded individuals and enabling easy filtering, finding, and hosting of Pods.
+## 🐋 About the App 
 
-## Features & How to use the product
+This app facilitates the creation and exploration of events, termed pods, tailored to users' preferences. Users can generate preference tags by providing prompts to ChatGPT, receiving tags aligned with their interests. 
 
-<details>
+Key functionalities of each core page are as follows:
 
-  <summary>See more...</summary>
-  
-In summary, this app allows users to create events called pods and to browse and join pod that match their preferences. To generate their preference tags, they can provide a prompt to chatGPT and receive tags they might enjoy. 
+<details> 
+<summary>Splash Page (`/`)</summary>
 
-In this section, we'll guide you on what each core page does.
-
-### `/` (Splash Page)
-
-- Double tap on the Orca icon at the top-most part of the page for a surprise!
-
-### `/login` and `/signup`
-
-- Sign up with your credentials and proceed to log in.
-
-### `/home` (Filtering Pods)
-
-- In the promt box, describe the types of acitivities you like or activities you'd like to try.
-- There are also some suggested tags that align with OrcaSwipe's vision of community involvement
-- For example, "I like going to the beach", then click "Find Pod Tags"
-- The bot will generate some suggested tags based on your prompt. 
-- Click on "Add these interests!". This will be added to your user profile tags.
-
-### `/findPods` (Discover Pods)
-
-- This is the main page where users can browse cards of pods that appear in a stack.
-- If your page is empty, it means no users have created pods that align or match with your interests, or you're too far away from any created pods.
-- You have the option to adjust your tags, adjust your location proximity, or create your own pod.
-- The pod cards that are being rendered show the pod's title, location, distance from your current location, the date and time, a brief description, and the tags that relate to it.
-
-### `createPods` (Host Pods)
-
-- This page shows all the pods you have created, and a path to creating a another pod.
-- You can create a pod by clicking on "Host a new pod"
-- All the fields when creating a pod are required, as indicated by the red asterisk at the top of the fields.
-- You would need to input the following: Pod Name, upload a pod image from your local device, pod description, pod date, pod time, pod tags, and pod location.
-- In alignment with OrcaSwipe's vision of promoting pod types that are beneficial to the community, there are suggested tags for the user to choose from.
-- If you don't wish to choose those tags, you can deselect them. 
-- If you need more info on what pods are or what the suggest tags are, you can click on the "question mark" icon beside those fields.
-- After you're satisfied with your pod details, click on "Create Pod". 
-- If you want to view the pod you just created, click back on the "Host" icon in the sidebar tab.
-
-### `/profile` (Your Profile)
-
-- In either the bottom-left of the sidebar or top right of the header is your profile photo, along with your username. If you click on that it will take you to your profile page.
-- In your profile page your can either Edit details or view your current profile details.
-- The fields are not required.
+- Double tap the Orca icon for a surprise.
 
 </details>
 
-## Technologies Used
+<details>
+<summary>Login and Signup Pages (`/login`, `/signup`)</summary>
 
+- Users can sign up with credentials and proceed to log in.
+
+</details>
 
 <details>
+<summary>Filtering Pods (`/home`)</summary>
 
-  <summary>See more...</summary>
+- Users describe preferred activities or interests in the prompt box, receive suggested tags, and add them to their profile. These tags are used for filtering pods.
 
-### Front End
+</details>
 
-> [![Front End](https://skillicons.dev/icons?i=js,html,css,bootstrap&theme=light)](https://skillicons.dev) and EJS
+<details>
+<summary>Discover Pods (`/findPods`)</summary>
 
-### Backend and Database
+- Main browsing page for pod cards, displaying titles, locations, dates, descriptions, and related tags. Users can adjust tags, location proximity, or create their own pods.
 
-> [![Back End](https://skillicons.dev/icons?i=js,nodejs,express,mongo,firebase&theme=light)](https://skillicons.dev), Realtime Database (Chat), Leaflet.js, and [!Tinder Swipe Cards API](https://codepen.io/RobVermeer/pen/japZpY)
+</details>
 
-### AI
+<details>
+<summary>Host Pods (`/createPods`)</summary>
 
-> ChatGPT-3.5 and GPT-4
+- Users view and create pods, providing required details such as pod name, image, description, date, time, tags, and location. Suggested tags align with the app's community vision.
+
+</details>
+
+<details>
+<summary>Your Profile (`/profile`)</summary>
+
+- Users can access their profile, view/edit details, and see their profile photo and username. Fields are optional.
+
+</details>
+
+
+## 🐋 Technologies Used
+
+<details><summary>Front End</summary>
+  
+> [![Front End](https://skillicons.dev/icons?i=js,html,css,bootstrap&theme=light)](https://skillicons.dev)
+- JavaScript, HTML, CSS, [Bootstrap 5.3](https://getbootstrap.com/), EJS
   
 </details>
 
-## Install (Developer)
+<details><summary>Back End</summary>
+  
+> [![Back End](https://skillicons.dev/icons?i=js,nodejs,express,mongo,firebase&theme=light)](https://skillicons.dev)
+- JavaScript, Node.JS, Express.JS
+- Map API: [Leaflet](https://leafletjs.com/)
+- [Tinder Swipe Cards API](https://codepen.io/RobVermeer/pen/japZpY)
+
+</details>
+
+<details><summary>Database</summary>
+
+> [![Back End](https://skillicons.dev/icons?i=mongo,firebase&theme=light)](https://skillicons.dev)
+- MongoDB for everything
+- Firebase for image uploads
+- Realtime Database for Chat feature
+   - https://danielkhv.com/blog/createyourownchatbot
+  
+</details>
+
+<details><summary>Artificial Intelligence</summary>
+  
+- ChatGPT-3.5
+- GPT-4
+  
+</details>
+
+## 🐋 Install (For Development)
 
 <details>
-  <summary>See more...</summary>
-  
-Before you run anything, make sure you have installed the following:
+  <summary>What do I install from npm?</summary>
 
 ```terminal
     npm install bcrypt
@@ -94,6 +100,9 @@ Before you run anything, make sure you have installed the following:
     npm i luxon
     npm install dotenv
 ```
+</details>
+
+<details> <summary>How should my .env file consist of?</summary>
 
 In your local .env, make sure you have the following fields filled in with your own keys:
 Note: OrcaSwipe is set to port 3000
@@ -131,30 +140,26 @@ Note: OrcaSwipe is set to port 3000
     CLIENT_X509_CERT_URL
     UNIVERSE_DOMAIN
 ```
+  
+</details>
 
-For Firebase storage, do the following: 
-Go to Project Overview -> Project Settings -> Service Accounts -> Firebase Admin SDK -> choose Node.js
--> Generate new private key
-This will generate a .json file with the keys that you need to add to in the firebase fields in your .env
+<details> <summary>How do I use the Firebase Storage?</summary>
+
+1. Go to Project Overview 
+2. Go to Project Settings 
+3. Go to Service Accounts 
+4. Go to Firebase Admin SDK
+5. Choose Node.js
+6. Finally, generate new private key
+  
+This will generate a `.json` file with the keys that you need to add to in the firebase fields in your `.env`
+
 This does NOT go into you public repo.
 
 </details>
 
-## Credits, References, and Licenses
-
-<details>
-  <summary>See more...</summary>
-
-- Swiping Cards Stack effect: [Tinder-like swipable cards Rob Vermeer](https://codepen.io/RobVermeer/pen/japZpY).
-- CSS Framework: [Bootstrap 5.3](https://getbootstrap.com/).
-- Map API: [Leaflet](https://leafletjs.com/).
-- Open AI and Chat gpt integration for OrcaAI: https://danielkhv.com/blog/createyourownchatbot 
-  
-</details>
-
-## Contact Info
-
-Thank you for reading our README! Please contact us if you have further questions or concerns regarding OrcaSwipe. We can be reached at the following links:
+## 🐋 Roles & Contact Info
+<details> <summary>Reveal table</summary>
 
 | Name               | Role in the Project                                     | LinkedIn                                            |
 |--------------------|---------------------------------------------------------|-----------------------------------------------------|
@@ -163,4 +168,8 @@ Thank you for reading our README! Please contact us if you have further question
 | Alex Sichitiu      | Full-stack                                              | [LinkedIn](https://www.linkedin.com/in/alex-s-60056491/) |
 | Ozan Yurtisigi     | Database                                                | [LinkedIn](https://www.linkedin.com/in/ozan-yurtisigi/) |
 
-## ![OrcaSwipe](https://github.com/gathrean/2800-202310-BBY38/assets/77172769/342627a2-d3ce-48b9-af8b-f39e5a742f9b)
+</details>
+
+## Thank you for checking out this Repo!
+
+![OrcaSwipe](https://github.com/gathrean/2800-202310-BBY38/assets/77172769/342627a2-d3ce-48b9-af8b-f39e5a742f9b)
