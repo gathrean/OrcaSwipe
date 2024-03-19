@@ -6,8 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- FAVICON -->
-    <link rel="icon" type="image/png"
-        href="https://cdn.discordapp.com/attachments/828116217285836825/1107541475576791100/favicon-32x32.png">
+    <link rel="icon" type="image/png" href="images/favicon.ico">
 
     <!-- TITLE -->
     <title>Welcome to OrcaSwipe</title>
@@ -18,12 +17,13 @@
     <link rel="stylesheet" href="/style/splash.css">
     <link rel="stylesheet" href="/style/splash-style.css">
     <script>
-        var errorMessage = <%- (typeof errorMessage != 'undefined') ? JSON.stringify(errorMessage) : undefined %>
-        this.addEventListener('load', () => {
-          if (errorMessage){
-            setTimeout(() => {window.alert(errorMessage);}, 800)
-          }});
-      </script>
+        var errorMessage = <% - (typeof errorMessage != 'undefined') ? JSON.stringify(errorMessage) : undefined %>
+            this.addEventListener('load', () => {
+                if (errorMessage) {
+                    setTimeout(() => { window.alert(errorMessage); }, 800)
+                }
+            });
+    </script>
 </head>
 
 <body>
@@ -53,8 +53,7 @@
         <div class="login-container">
             <!-- Orca! -->
             <div class="animate-orca">
-                <img onclick="redirectToFlappyOrca()"
-                    src="images/OrcaSwipe_Logo(1000x606).png"
-                    alt="logo" class="logo" height="100px">
+                <img onclick="redirectToFlappyOrca()" src="images/OrcaSwipe_Logo(1000x606).png" alt="logo" class="logo"
+                    height="100px">
             </div>
             <br>
