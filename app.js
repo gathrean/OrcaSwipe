@@ -1427,6 +1427,6 @@ app.get('*', async (req, res) => {
   });
 });
 
-app.listen(port, () => {
+app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
