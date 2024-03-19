@@ -1,4 +1,4 @@
-# ![1-Title](https://github.com/gathrean/2800-202310-BBY38/assets/77172769/342627a2-d3ce-48b9-af8b-f39e5a742f9b)
+# ![OrcaSwipe](https://github.com/gathrean/OrcaSwipe/assets/77172769/40370498-041c-4c1b-bd09-355a2345c431)
 
 - OrcaSwipe
 - Team BBY-38 for COMP 2800
