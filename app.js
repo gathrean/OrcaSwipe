@@ -35,9 +35,6 @@ const mailer = nodemailer.createTransport({
 const app = express();
 const openai = require('openai');
 
-// Serve static files from the 'public' directory
-app.use(express.static('public'));
-
 //// Open AI API ////
 const configuration = new openai.Configuration({
   organization: process.env.OPENAI_ORG,
@@ -105,6 +102,9 @@ const interests = ['Beach Clean-up', 'Volunteer', 'Charity', 'Clothing drive', '
 const PORT = process.env.PORT || 3000;
 
 const path = require('path');
+
+app.use(express.static('public'));
+
 
 // Set the view engine for the app to EJS
 app.set("view engine", "ejs");
