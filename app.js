@@ -105,6 +105,8 @@ const path = require('path');
 
 app.use(express.static('public'));
 
+// Serve static files from the 'public' directory
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Set the view engine for the app to EJS
 app.set("view engine", "ejs");
@@ -1422,7 +1424,6 @@ app.get('*', async (req, res) => {
   });
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log('server is running on port 3000');
+app.listen(port, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
