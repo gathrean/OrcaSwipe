@@ -139,6 +139,9 @@ app.use(express.urlencoded({
   extended: false
 }));
 
+// Serve static files from the 'public' directory
+app.use('/styles', express.static(path.join(__dirname, 'public', 'styles')));
+
 // Serve static files from the "public" directory
 app.use(express.static("public"));
 
