@@ -10,7 +10,7 @@
 
 <details>
 
-  <summary>📖 Click Me</summary>
+  <summary>See more...</summary>
   
 In summary, this app allows users to create events called pods and to browse and join pod that match their preferences. To generate their preference tags, they can provide a prompt to chatGPT and receive tags they might enjoy. 
 
@@ -64,7 +64,7 @@ In this section, we'll guide you on what each core page does.
 
 <details>
 
-  <summary>📖 Click Me</summary>
+  <summary>See more...</summary>
 
 ### Front End
 
@@ -83,7 +83,7 @@ In this section, we'll guide you on what each core page does.
 ## Install (Developer)
 
 <details>
-  <summary>📖 Click Me</summary>
+  <summary>See more...</summary>
   
 Before you run anything, make sure you have installed the following:
 
@@ -143,7 +143,7 @@ This does NOT go into you public repo.
 ## Credits, References, and Licenses
 
 <details>
-  <summary>📖 Click Me</summary>
+  <summary>See more...</summary>
 
 - Swiping Cards Stack effect: [Tinder-like swipable cards Rob Vermeer](https://codepen.io/RobVermeer/pen/japZpY).
 - CSS Framework: [Bootstrap 5.3](https://getbootstrap.com/).
